@@ -1,145 +1,28 @@
-;; (defwindow example
-;;   :monitor 1
-;;   :geometry (geometry
-;;               :x "10%"
-;;               :y "10%"
-;;               :width "80%"
-;;               :height "20%"
-;;               :anchor "center center")
-;;   :stacking "overlay"
-;;   :exclusive false
-;;   :namespace "example-window"
-;;   "Hello, Wayland Layer Shell!")
+; >>> Variables and constants
+; ---------------------------
+(include "colors.yuck")
+(include "globals.yuck")
 
-(defpoll wired_con :interval "10s"
-              :initial "N/A"  ; optional, defaults to poll at startup
-  `/home/sylflo/.config/eww/scripts/wired_con.sh`)
+;; ; >>> Widgets
+;; ; -----------
+;; (include "widgets/circular-symbol-icon.yuck")
+;; (include "widgets/circular-symbol-with-text.yuck")
 
-(defvar my_reveal false)
+;; ; >>> Windows
+;; ; -----------
+;; ; >> Bars
+;; (include "windows/workspaces.yuck")
+(include "windows/bottom-bar.yuck")
 
-(defwindow sidebar
-  :monitor 0
-  :stacking "fg"
-  :windowtype "dock"
-  :wm-ignore true
-  :geometry (geometry
-              :x "0px"
-              :y "0px"
-              :anchor "top left"
-              :width "10%"
-              :height "100%")
-  (sidebar))
+;; ; >> Toggleable windows
+;; (include "windows/powermenu.yuck")
+;; (include "windows/sidebar.yuck")
+;; (include "windows/alarms.yuck")
+;; (include "windows/networks.yuck")
+;; (include "windows/microphone-indicator.yuck")
+;; (include "windows/split-indicator.yuck")
+;; (include "windows/mode-indicator.yuck")
 
-(defwidget sidebar []
-  (box :class "sidebar-box" :space-evenly false :orientation "vertical"
-    ;; TOP
-    (box :class "top" :space-evenly false :orientation "vertical" :halign "start"
-
-        ;; Applications with icon and text inside an eventbox
-        (eventbox :onclick "eww open applications"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "󰀻" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Applications" :class "label-text")))
-
-        ;; Workspaces with icon and text inside an eventbox
-        (eventbox :onclick "eww open workspaces"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Workspaces" :class "label-text")))
-
-        ;; Music Player with icon and text inside an eventbox
-        (eventbox :onclick "eww open music_player"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "󰝚" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Music Player" :class "label-text")))
-
-        ;; Calendar with icon and text inside an eventbox
-        (eventbox :onclick "eww open calendar"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Calendar" :class "label-text")))
-
-        ;; Notifications with icon and text inside an eventbox
-        (eventbox :onclick "eww open notifications"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Notifications" :class "label-text")))
-
-        ;; System health with icon and text inside an eventbox
-        (eventbox :onclick "eww open system_health"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "System" :class "label-text")))
-    )
-    ;; SPACER (To push the bottom section to the bottom)
-    (box :class "spacer" :hexpand true :vexpand true)
-    ;; BOTTOM
-    (box :class "bottom" :space-evenly false :orientation "vertical" :halign "start"
-        ;; Settings with icon and text inside an eventbox
-        (eventbox :onclick "eww open settings"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Settings" :class "label-text")))
-        (eventbox :onclick "eww open logout"
-            :class "label-eventbox"
-            (box :orientation "horizontal" :space-evenly false :halign "start" :valign "center" :class "label-inner-eventbox"
-                ;; Icon
-                (label :text "󰗽" :font "Nerd Font Mono 16" :class "label-icon")
-                ;; Text
-                (label :text "Log Out" :class "label-text")))
-    )
-  ))
-
-(defwindow settings
-  :monitor 0
-  :stacking "fg"
-  :windowtype "normal"
-  :wm-ignore false
-  :geometry (geometry
-              :x "0%"
-              :y "0%"
-              :anchor "center center"
-              :width "50%"
-              :height "50%")
-  (settings_widget))
-
-
-(defwidget settings_widget []
-    (box :class "settings-box" :orientation "vertical" :space-evenly false
-      (box :class "card-row" :orientation "horizontal" :space-evenly false
-        (box :class "settings-card" :hexpand true :halign "start"
-          (label :text "Ethernet" :class "title")
-          (toggle_button)
-          (label :text "Status: ${wired_con}")
-          (label :text "IP Address: 192.168.0.101")
-          (button :onclick "open_network_settings" :class "network-button"
-                  (label :text "Open"))))))
-
-
-(defvar is_toggled false) ;; Variable to track toggle state
-
-(defwidget toggle_button []
-  (eventbox :onclick "eww update is_toggled $( [ ${is_toggled} = false ] && echo true || echo false )"
-    (box :class "toggle-button" :orientation "horizontal"
-      (label :text "${is_toggled == true ? 'ON' : 'OFF'}" :class "toggle-label"))))
+;; ; >> Invisible utility windows
+;; ; (include "windows/background.yuck")
+;; (include "windows/dismiss.yuck")
