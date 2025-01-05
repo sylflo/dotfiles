@@ -171,26 +171,26 @@
         :class "button logout"
         :cursor "hand2"
         :onclick "${eww-scripts}/manage show powermenu"
-        (box
-          :space-evenly false
-          :halign "center"
-          :valign "center"
-          (box :class "symbol" "${charger ? "" : ""}")
-          (box :class "battery"
-               :orientation "vertical"
-               :spacing 4
-            (battery-progress-bar-part :min 66 :half 83)
-            (battery-progress-bar-part :min 33 :half 49)
-            (battery-progress-bar-part :min 0 :half 16))
-          )
+        ;; (box
+        ;;   :space-evenly false
+        ;;   :halign "center"
+        ;;   :valign "center"
+        ;;   (box :class "symbol" "${charger ? "" : ""}")
+        ;;   (box :class "battery"
+        ;;        :orientation "vertical"
+        ;;        :spacing 4
+        ;;     (battery-progress-bar-part :min 66 :half 83)
+        ;;     (battery-progress-bar-part :min 33 :half 49)
+        ;;     (battery-progress-bar-part :min 0 :half 16))
+        ;;   )
         ))
       )
     ))
 
-(defwidget battery-progress-bar-part [min half]
-  (box
-    :class "battery-progress-bar-part ${(round(EWW_BATTERY.total_avg, 0) > "${min}") ? "${(round(EWW_BATTERY.total_avg, 0) > "${half}") ? "full" : "half"}" : ""}"
-    ))
+;; (defwidget battery-progress-bar-part [min half]
+;;   (box
+;;     :class "battery-progress-bar-part ${(round(EWW_BATTERY.total_avg, 0) > "${min}") ? "${(round(EWW_BATTERY.total_avg, 0) > "${half}") ? "full" : "half"}" : ""}"
+;;     ))
 
 (defwidget signal-strength-part [min]
   (box

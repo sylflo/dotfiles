@@ -26,15 +26,15 @@ $sidebar_corner_radius: dpi(20px);
 @import 'colors.scss';
 @import 'animations.scss';
 
-// // @import 'widgets/circular-symbol-icon.scss';
-// // @import 'widgets/circular-symbol-with-text.scss';
+@import 'widgets/circular-symbol-icon.scss';
+@import 'widgets/circular-symbol-with-text.scss';
 
-// // @import 'windows/sidebar.scss';
-// // @import 'windows/workspaces.scss';
+@import 'windows/sidebar.scss';
+@import 'windows/workspaces.scss';
 @import 'windows/bottom-bar.scss';
-// // @import 'windows/alarms.scss';
-// // @import 'windows/networks.scss';
-// // @import 'windows/powermenu.scss';
+@import 'windows/alarms.scss';
+@import 'windows/networks.scss';
+// @import 'windows/powermenu.scss';
 // // @import 'windows/split-indicator.scss';
 // // @import 'windows/microphone-indicator.scss';
 // // @import 'windows/mode-indicator.scss';

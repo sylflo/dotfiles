@@ -28,9 +28,6 @@
 
 (defvar brightness "0") ; updated by brightness.sh script
 
-(defvar kdeconnect-battery "") ; updated by kdeconnect.sh script
-(defvar kdeconnect-reachable "") ; updated by kdeconnect.sh script
-
 (defvar uptime "") ; updated by uptime.sh script
 
 ; We use charger.sh instead of EWW_BATTERY because charger status updates
