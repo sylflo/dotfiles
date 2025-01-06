@@ -31,8 +31,9 @@ open_all() {
         bottom-bar \
         workspaces \
         ;
-        # sidebar-activator \
-        # background \
+    sleep 3
+#         # sidebar-activator \
+#         # background \
 }
 
 # Start eww and widgets
@@ -65,25 +66,24 @@ start() {
 
 sleep 1
 
-# # Initial updates
+# Initial updates
 # "$eww/networks.sh" update_networks
 
 # Daemons
 start workspaces.py
-# start sway-dock.py # TODO
-# start microphone.sh # TODO
-# start brightness.sh # TODO
+# # start sway-dock.py # TODO
+# # start microphone.sh # TODO
+start brightness.sh
 start volume.sh
-# start charger.sh # TODO
+start charger.sh
 start weather.sh
-# start vpn.sh # TODO
+# # start vpn.sh # TODO
 start days-of-the-week.sh
 start gpu.sh
 start uptime.sh
-# start media.sh # TODO
+start media.sh
 start alarms.sh
-start agenda.sh # TO FINSH
-# start network-scan.sh # TODO
-# start network-events.sh # TODO
+start agenda.sh
+# # start network-scan.sh # TODO
+# # start network-events.sh # TODO
 # start input-buffer.sh alarms # TODO
-# start input-buffer.sh lockscreen # TODO

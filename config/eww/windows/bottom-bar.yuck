@@ -33,11 +33,13 @@
             :space-evenly false
             :halign "center"
             :valign "center"
-            (box :class "symbol" "")
+            (label :class "symbol" :text "\\uE92B")
             (box :class "value clock"
-              (box :class "text"
-              "${date-json.hour}${date-json.min}"))
-            ))
+              (label :class "text"
+                :text "${date-json.hour}${date-json.min}")
+            )
+          )
+        )
         (eventbox
           :halign "baseline"
           :class "button tasks"
@@ -47,7 +49,7 @@
             :space-evenly false
             :halign "center"
             :valign "center"
-            (box :class "symbol" "")
+            (box :class "symbol" "\\uE92B")
             (box :class "value date"
               (box :class "text"
               "${date-json.month_day_number}"))
@@ -55,7 +57,7 @@
           )
         (eventbox
           :halign "baseline"
-        ;;   :class "button media ${media-json.status}"
+          ; :class "button media ${media-json.status}"
           :cursor "hand2"
           :onclick "${eww-scripts}/toggle-sidebar-with-page 2 &"
           :onscroll "[ '{}' = 'up' ] && swaymsg -q 'exec $cmd_volume_raise' || swaymsg -q 'exec $cmd_volume_lower'"
@@ -64,7 +66,7 @@
             :space-evenly false
             :halign "center"
             :valign "center"
-            (box :class "symbol" "")
+            (box :class "symbol" "\\uE943")
             (box :class "volume ${volume-muted}"
               (overlay
                 (circular-progress
@@ -79,7 +81,8 @@
                 )
               )
             )
-          ))
+          )
+        )
       (box
       :class "dock"
       :halign "center"
@@ -113,7 +116,8 @@
               )
             )
           )
-        ))
+        )
+      )
 
       (box
         :class "right-buttons"
@@ -130,7 +134,7 @@
           :space-evenly false
           :halign "center"
           :valign "center"
-          (box :class "symbol" "${vpn-status == "on" ? "" : ""}")
+          (box :class "symbol" "${vpn-status == "on" ? '\\uEE50' : '\\uEC79'}")
           (box :class "signal-strength"
                :spacing 4
                :valign "center"
@@ -150,7 +154,7 @@
           :space-evenly false
           :halign "center"
           :valign "center"
-          (box :class "symbol" "")
+          (box :class "symbol" "\\uED38")
           (box :class "value alarms-number"
             (box :class "text"
               :visible "${arraylength(alarms-json) > 0}"
@@ -175,7 +179,7 @@
         ;;   :space-evenly false
         ;;   :halign "center"
         ;;   :valign "center"
-        ;;   (box :class "symbol" "${charger ? "" : ""}")
+        ;;   (box :class "symbol" "${charger ? "\\uE9A0" : "\\uE904"}")
         ;;   (box :class "battery"
         ;;        :orientation "vertical"
         ;;        :spacing 4
@@ -183,9 +187,11 @@
         ;;     (battery-progress-bar-part :min 33 :half 49)
         ;;     (battery-progress-bar-part :min 0 :half 16))
         ;;   )
-        ))
+        )
       )
-    ))
+      )
+    )
+  )
 
 ;; (defwidget battery-progress-bar-part [min half]
 ;;   (box

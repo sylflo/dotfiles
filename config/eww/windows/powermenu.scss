@@ -1,7 +1,8 @@
 $powermenu_border_color: rgba($x8, 0.3);
 
+
 window.powermenu {
-  background: transparent;
+  // background: transparent;
 }
 
 .powermenu {
@@ -146,9 +147,6 @@ window.powermenu {
       &.exit {
         transition: color 0.5s 0.6s;
       }
-      &.hibernate {
-        transition: color 0.5s 0.8s;
-      }
       &.suspend {
         transition: color 0.5s 1.0s;
       }
@@ -182,10 +180,6 @@ window.powermenu {
         &.exit {
           transition: color 0.5s 0.3s, opacity 0.4s;
           color: $x4;
-        }
-        &.hibernate {
-          transition: color 0.5s 0.4s, opacity 0.4s;
-          color: $x6;
         }
         &.suspend {
           transition: color 0.5s 0.5s, opacity 0.4s;

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # Alarm manager for eww
 eww="$HOME/.config/eww/scripts"
 alarm_sound="$HOME/.config/mpv/alarm.mp3"
@@ -59,7 +60,7 @@ fi
 
 alarm_file="${alarm_dir}/$alarm_time_timestamp"
 echo -e "$$\n$alarm_label" > "$alarm_file"
-notify-send -t 2000 -a eww-alarm "Alarm" "Will ring at $(date -d @"${alarm_time_timestamp}" "+%H:%M")"
+~/.config/eww/bin/notify-send.sh -t 2000 -a eww-alarm "Alarm" "Will ring at $(date -d @"${alarm_time_timestamp}" "+%H:%M")"
 
 # We use safe-sleep since with normal sleep, if the computer is suspended in the
 # middle of a long sleep, the alarm will not ring at the right time.
@@ -72,7 +73,7 @@ else
 fi
 
 "${eww}"/safe-sleep until "$alarm_time_timestamp" with-interval "$sleep_interval"
-playsound "$alarm_sound"
-notify-send -t 0 -a eww-alarm "Alarm" "$alarm_label"
+mpv "$alarm_sound"
+~/.config/eww/bin/notify-send.sh -t 0 -a eww-alarm "Alarm" "$alarm_label"
 
 rm "$alarm_file"

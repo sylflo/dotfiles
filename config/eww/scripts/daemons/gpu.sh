@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh
+
 update() {
     eww update gpu="$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits)"
 

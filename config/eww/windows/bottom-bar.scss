@@ -1,6 +1,7 @@
 $button_content_size: dpi(23px);
 $button_content_spacing: dpi(10px);
 
+
 window .bottom-bar {
   background: transparent;
   min-height: dpi(43px);
@@ -16,6 +17,7 @@ window .bottom-bar {
     }
 
     .clock {
+      color: green;
       padding: 0 dpi(6px);
       .text {
         min-width: dpi(34px);

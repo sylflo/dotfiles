@@ -14,15 +14,9 @@
 (include "windows/workspaces.yuck")
 (include "windows/bottom-bar.yuck")
 
-;; ; >> Toggleable windows
-;; (include "windows/powermenu.yuck")
+;; ;; ; >> Toggleable windows
+(include "windows/powermenu.yuck")
 (include "windows/sidebar.yuck")
 (include "windows/alarms.yuck")
-(include "windows/networks.yuck")
+;; (include "windows/networks.yuck")
 ;; (include "windows/microphone-indicator.yuck")
-;; (include "windows/split-indicator.yuck")
-;; (include "windows/mode-indicator.yuck")
-
-;; ; >> Invisible utility windows
-;; ; (include "windows/background.yuck")
-;; (include "windows/dismiss.yuck")

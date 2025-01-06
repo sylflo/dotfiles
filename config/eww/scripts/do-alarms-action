@@ -11,7 +11,7 @@ action=$1
 
 alarm-quick() {
     builtin echo alarms > /tmp/eww-widget-input-active
-    swaymsg mode _eww_input
+    #swaymsg mode _eww_input
     eww update \
         alarms-state=select-time-quick \
         alarms-total-minutes=0 \
@@ -26,7 +26,7 @@ alarm-quick() {
 
 alarm-standard() {
     builtin echo alarms > /tmp/eww-widget-input-active
-    swaymsg mode _eww_input
+    #swaymsg mode _eww_input
     eww update \
         alarms-state=select-time-standard \
         alarms-total-minutes=0 \
@@ -64,7 +64,7 @@ delete() {
 }
 
 cancel() {
-    swaymsg mode _alarms
+    #swaymsg mode _alarms
     eww update \
         alarms-state=select-type
 }
@@ -83,7 +83,7 @@ confirm() {
         exit 1
     fi
 
-    swaymsg mode _alarms
+    #swaymsg mode _alarms
     # Normally we would also `eww update alarms-state=select-type` here but
     # this can cause flickering since alarms-state may update before
     # alarms-json changes in alarms.sh. Therefore, we have moved this update to

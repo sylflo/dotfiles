@@ -44,12 +44,12 @@
                 :cursor "${alarms-state =~ "select-time-*" ? "hand2" : "default"}"
                 :onclick "${eww-scripts}/do-alarms-action cancel &"
                 (box :class "button cancel"
-                  (box :class "symbol" "")))
+                  (box :class "symbol" "❌")))
               (eventbox
                 :cursor "${alarms-state =~ "select-time-*" ? "hand2" : "default"}"
                 :onclick "${eww-scripts}/do-alarms-action confirm &"
                 (box :class "button confirm"
-                  (box :class "symbol" "")))
+                  (box :class "symbol" "✓")))
               )
 
             (alarms-button-dual

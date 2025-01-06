@@ -147,12 +147,6 @@
 
                 (box
                   (powermenu-button
-                    :extra-class "hibernate"
-                    :text "hibernate"
-                    :symbol ""
-                    :onclick "${eww-scripts}/do-powermenu-action hibernate &"
-                    )
-                  (powermenu-button
                     :extra-class "suspend"
                     :text "suspend"
                     :symbol ""
