@@ -70,8 +70,12 @@ MY OWN GUI:
     Login manager
 
     WALLPAPER:
-    - change wallpaper every day, waypaper, swww try animated wallpaper from r/animewallpaper, try multi monitor wallpaper
+    - change wallpaper every day from r/animewallpaper, try multi monitor wallpaper
     https://www.reddit.com/r/Animewallpaper/top/?t=all =>   wallpaper using redlib instance and grab a random one on r/Animewallpaper
+    multipl monitor => https://github.com/LGFae/swww/issues/121
+    swww transiation => random
+    also change on hyprlock
+    wallapaper => custom theme
 
 
     MELA planning:
@@ -102,3 +106,14 @@ https://www.youtube.com/watch?v=AnyRdOqzLpc
 https://github.com/dharmx/vile
 https://www.youtube.com/watch?v=Qcl_9k_RaS0
 
+swww = pkgs.fetchFromGitHub {
+    owner = "LGFae";
+    repo = "swww";
+    tag = "v0.9.5";
+    sha256 = lib.fakeSha256;
+    #sha256 = "567e2ac76203ad47df5aaafab7d9d0e4e283a74e34690930a4730ecf0a667428";
+  };
+
+nix flake prefetch github:LGFae/swww/v0.9.5
+
+Downloaded 'github:LGFae/swww/3ee69e3286d9aeb0614f32fe28eee4477d661b02?narHash=sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q%2BYX5wJXbsc%3D' to '/nix/store/0317hqv83fz530bjbnmjpxvahh52k7jm-source' (hash 'sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q+YX5wJXbsc=').
