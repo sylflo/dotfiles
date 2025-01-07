@@ -13,4 +13,3 @@ rofi -show combi \
      -display-drun "$drun_prefix" \
      -display-run "$run_prefix" \
      -display-combi "$combi_prompt" \
-
