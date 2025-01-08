@@ -1,0 +1,22 @@
+(defvar workspaces '[]')
+
+(defwindow workspaces
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "0%"
+                               :width "100%"
+                               :height "100%"
+                               :anchor "top left")
+           :stacking "fg"
+           :wm-ignore true
+           :focusable true
+  (workspaces))
+
+(defvar workspaces_template
+  "")
+
+(defwidget workspaces []
+  (scroll :vscroll true :class "workspaces"
+    (literal :content workspaces_template)
+  )
+)
