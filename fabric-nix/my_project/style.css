@@ -1,0 +1,37 @@
+:vars {
+    --foreground: rgb(255, 255, 255);
+    --background: rgb(26, 28, 30);
+    --border-color: rgb(42, 43, 45);
+    --button-color: var(--border-color);
+}
+
+
+* {
+    all: unset;
+    /* transition: color 0.5s ease;
+    color: alpha(var(--foreground), 0.8);
+    font-family: "Jost*", sans-serif;
+    font-weight: 700; */
+}
+
+
+.img {
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 2px solid #007acc; 
+}
+
+
+#outer-box {
+    /* background-color: rgba(255, 255, 255, 0.1); */
+    /*background-color: rgba(255, 255, 255,  0.7);*/
+    background-image: url("./images/fantasy-woods.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    /* padding: 0.8rem;
+    border: solid 1px var(--border-color);
+    border-radius: 1rem;
+    background-color: var(--background); */
+}
