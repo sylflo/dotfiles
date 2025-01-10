@@ -1,4 +1,0 @@
-(defwidget circular-symbol-icon [?extra-class symbol]
-  (box :class "circular-symbol-icon ${extra-class}"
-       :valign "center"
-    (box :class "symbol" "${symbol}")))
