@@ -5,7 +5,6 @@
     --button-color: var(--border-color);
 }
 
-
 * {
     all: unset;
     /* transition: color 0.5s ease;
@@ -14,26 +13,28 @@
     font-weight: 700; */
 }
 
-
 .img {
     margin-right: 10px;
     margin-left: 10px;
     padding-top: 0px;
 }
 
-
 .selected-image {
-    border: 10px solid black;
+    opacity: 0.5;
 }
 
 .selected-screen {
-    border: 10px solid blue;   
+    opacity: 0.5;
 }
-
 
 #outer-box {
     background-image: url("./images/fantasy-woods.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+#wallpaper-settings {
+    all: unset;
+    background-color: white;
 }

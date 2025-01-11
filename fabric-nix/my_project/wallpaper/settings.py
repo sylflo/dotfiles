@@ -6,8 +6,6 @@ from fabric.widgets.box import Box
 from fabric.widgets.scale import Scale, ScaleMark
 
 
-
-
 class WallpaperSettings(Window):
     def __init__(self, **kwargs):
         super().__init__(
@@ -18,6 +16,12 @@ class WallpaperSettings(Window):
         )
         # TODO add random stuff for all value when possible
         # TODO add submit button and store value in a text
+        scale_1 = Scale(
+            value=90, min_value=0, max_value=255,
+        )
+        scale_2 = Scale(
+            value=10, min_value=0, max_value=300,
+        )
         box = Box(
             name="outer-box",
             open_inspector=True,
@@ -36,14 +40,11 @@ class WallpaperSettings(Window):
                 ComboBox(items=["none", "simple", "fade", "left", "right", "top", "bottom", "wipe", "wave", "grow", "center", "any", "outer", "random"]),
                 # Transtion step
                 Label(label="Transition step"),
-                Scale(
-                    value=90, min_value=0, max_value=255,
-                ),
+                scale_1,
                 # Transtion duration
                 Label(label="Transition duration (in seconds)"),
-                Scale(
-                    value=0, min_value=0, max_value=300,
-                ),
+                scale_2,
+                Label(label=f"value is {scale_2.get_value()}")
             ],
         )
         self.add(box)
