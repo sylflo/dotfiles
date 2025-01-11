@@ -18,20 +18,22 @@
 .img {
     margin-right: 10px;
     margin-left: 10px;
-    border: 2px solid #007acc; 
+    padding-top: 0px;
+}
+
+
+.selected-image {
+    border: 10px solid black;
+}
+
+.selected-screen {
+    border: 10px solid blue;   
 }
 
 
 #outer-box {
-    /* background-color: rgba(255, 255, 255, 0.1); */
-    /*background-color: rgba(255, 255, 255,  0.7);*/
     background-image: url("./images/fantasy-woods.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    
-    /* padding: 0.8rem;
-    border: solid 1px var(--border-color);
-    border-radius: 1rem;
-    background-color: var(--background); */
 }
