@@ -15,7 +15,7 @@ import subprocess
 # TODO separate component using class check example https://github.com/Fabric-Development/fabric/blob/c81e4f148add9d2d15820a4a1a704931315f24de/examples/bar/config.py#L51
 # TODO change cursor
 # TODO type evetything
-#TODO maybe use sytle classes instead of 
+#TODO maybe use sytle classes instead of WallPaperRow
 # Image(image_file="./images/36592_serial_experiments_lain.png", size=250).build().add_style_class("img").unwrap(
 # TODO add border radius om img except screens => img need to be set as bacgkround :/
 
