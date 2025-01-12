@@ -5,7 +5,8 @@ from fabric.widgets.label import Label
 from fabric.widgets.box import Box
 from fabric.widgets.scale import Scale, ScaleMark
 
-
+# TODO add tooltip and get it from the help, just copy paste => Description
+# TODO disable/enable optins in function of value of animation
 class WallpaperSettings(Window):
     def __init__(self, **kwargs):
         super().__init__(
@@ -27,6 +28,13 @@ class WallpaperSettings(Window):
             open_inspector=True,
             orientation="vertical",
             children=[
+                Label(label="Settings").build().add_style_class("title").unwrap(),
+                  #     --fill-color <FILL_COLOR>
+  #         Which color to fill the padding with when output image does not fill screen
+          
+  #         [default: 000000]
+
+
                 # Resize
                 Label(label="Resize"),
                 ComboBox(items=["no", "crop", "fit"]),
@@ -44,7 +52,32 @@ class WallpaperSettings(Window):
                 # Transtion duration
                 Label(label="Transition duration (in seconds)"),
                 scale_2,
-                Label(label=f"value is {scale_2.get_value()}")
+                Label(label=f"value is {scale_2.get_value()}"),
+                # Transition fps
+                Label(label="Transition fps"),
+                Scale(value=90, min_value=0, max_value=1000),
+                # Transition angle
+                Label(label="Transition angle"),
+                Scale(value=0, min_value=0, max_value=360),
+                # Transition pos
+                Label(label="Transition pos in %"),
+                Scale(value=0, min_value=0, max_value=100),
+                # Invert Y
+                Label(label="Invert the Y")
+                # TODO booelan
+  #     --transition-bezier <TRANSITION_BEZIER>
+  #         bezier curve to use for the transition https://cubic-bezier.com is a good website to get these values from
+          
+  #         eg: 0.0,0.0,1.0,1.0 for linear animation
+          
+  #         [env: SWWW_TRANSITION_BEZIER=]
+  #         [default: .54,0,.34,.99]
+
+  #     --transition-wave <TRANSITION_WAVE>
+  #         currently only used for 'wave' transition to control the width and height of each wave
+          
+  #         [env: SWWW_TRANSITION_WAVE=]
+  #         [default: 20,20]
             ],
         )
         self.add(box)
