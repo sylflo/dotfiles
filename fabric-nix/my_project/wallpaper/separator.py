@@ -1,21 +1,19 @@
-import gi
-from typing import Literal
 from collections.abc import Iterable
-from fabric.widgets.widget import Widget
+from typing import Literal
 
-gi.require_version("Gtk", "3.0")
+import gi
+from fabric.widgets.widget import Widget
 from gi.repository import Gtk
 
-class ComboBox(Gtk.ComboBoxText, Widget):
+gi.require_version("Gtk", "3.0")
+
+
+class Separator(Gtk.Separator, Widget):
+    """A separator widget."""
+
     def __init__(
         self,
         name: str | None = None,
-        visible: bool = True,
-        all_visible: bool = False,
-        style: str | None = None,
-        style_classes: Iterable[str] | str | None = None,
-        tooltip_text: str | None = None,
-        tooltip_markup: str | None = None,
         h_align: Literal["fill", "start", "end", "center", "baseline"]
         | Gtk.Align
         | None = None,
@@ -24,11 +22,15 @@ class ComboBox(Gtk.ComboBoxText, Widget):
         | None = None,
         h_expand: bool = False,
         v_expand: bool = False,
-        size: Iterable[int] | int | None = None,
-        items: Iterable[str] = [],
+        tooltip_text: str | None = None,
+        tooltip_markup: str | None = None,
+        visible: bool = True,
+        all_visible: bool = False,
+        style: str | None = None,
+        style_classes: Iterable[str] | str | None = None,
         **kwargs,
     ):
-        Gtk.ComboBoxText.__init__(self)  # type: ignore
+        Gtk.Separator.__init__(self)  # type: ignore
         Widget.__init__(
             self,
             name,
@@ -42,12 +44,5 @@ class ComboBox(Gtk.ComboBoxText, Widget):
             v_align,
             h_expand,
             v_expand,
-            size,
             **kwargs,
         )
-        [self.append_text(item) for item in items]
-        self.set_active(0)
-
-
-
- 
