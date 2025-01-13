@@ -1,4 +1,4 @@
-/* :vars {
+ /* :vars {
     --foreground: rgb(255, 255, 255);
     --background: rgb(26, 28, 30);
     --border-color: rgb(42, 43, 45);
@@ -21,25 +21,38 @@
 
 .selected-screen {
     opacity: 0.5;
-} */
+} 
 
-/* #outer-box {
+ #outer-box {
     background-image: url("./images/fantasy-woods.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 } */
 
-#wallpaper-settings {
+
+/* #wallpaper-settings {
     all: unset;
-    background-color: white;
-    color: black;
+    background-color: #121212;
+    color: white;
 }
 
 .title {
     font-size: 40px;
-    font-weight: bold;
 }
+
+.settings-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.separator {
+    background-color: #C0C0C0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 
 .label-title {
     font-size: 30px;
@@ -47,4 +60,24 @@
 
 .label-description {
     font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
+
+
+
+combobox button {
+    background: #121212;
+    color: white;
+}
+
+combobox window menu {
+    background: #121212;
+    color: white;
+} */
+
+/*
+entry {
+    background: #121212;
+    color: white;
+}*/

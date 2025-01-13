@@ -11,6 +11,10 @@ TODO:
   add isort
 
 WAllapper
+    ESCAPE SHOULD clsoe window
+    use pagination, remove scrollview, use viewprot, not only fullscreen (should be in the parameter)
+    check default for settings and aslso check which optins is dependant on other
+    use custom font, Roboto
     animation
     parameters
     Refresh button to refresh doirectory
