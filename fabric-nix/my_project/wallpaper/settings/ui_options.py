@@ -30,11 +30,13 @@ OPTIONS = [
     Options(
         title="Filter",
         content="Determines the scaling filter for resizing, with options optimized for pixel art or general use",
+        # TODO use enum
         widget=ComboBox(items=["Nearest", "Bilinear", "CatmullRom", "Mitchell", "Lanczos3"]),
     ),
     Options(
         title="Transition type",
         content="Chooses the type of image transition effect, such as fade, wipe, wave, or random effects",
+        # TODO use enum
         widget=ComboBox(items=["none", "simple", "fade", "left", "right", "top", "bottom", "wipe", "wave", "grow", "center", "any", "outer", "random"]),
     ),
     Options(

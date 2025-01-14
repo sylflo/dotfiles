@@ -17,6 +17,9 @@ pkgs.mkShell {
     cinnamon.cinnamon-desktop
     (python3.withPackages (
       ps: with ps; [
+        python311Packages.pip
+        python311Packages.isort
+        python311Packages.black
         setuptools
         wheel
         build

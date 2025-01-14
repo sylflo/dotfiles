@@ -11,6 +11,8 @@ TODO:
   add isort
 
 WAllapper
+    NAME: SwwwTuningUI
+    SHORTCUT KEY => should be configurable also
     ESCAPE SHOULD clsoe window
     use pagination, remove scrollview, use viewprot, not only fullscreen (should be in the parameter)
     check default for settings and aslso check which optins is dependant on other
