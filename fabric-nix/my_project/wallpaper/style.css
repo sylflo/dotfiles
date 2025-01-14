@@ -1,4 +1,4 @@
- /* :vars {
+ :vars {
     --foreground: rgb(255, 255, 255);
     --background: rgb(26, 28, 30);
     --border-color: rgb(42, 43, 45);
@@ -28,7 +28,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-} */
+}
 
 
 /* #wallpaper-settings {

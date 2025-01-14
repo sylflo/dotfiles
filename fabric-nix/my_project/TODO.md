@@ -11,6 +11,7 @@ TODO:
   add isort
 
 WAllapper
+    COnfig dataclass => each option should be checked
     NAME: SwwwTuningUI
     SHORTCUT KEY => should be configurable also
     ESCAPE SHOULD clsoe window
