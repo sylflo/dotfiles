@@ -1,11 +1,20 @@
- :vars {
+@import url("variables.css");
+
+
+/* :vars {
     --foreground: rgb(255, 255, 255);
     --background: rgb(26, 28, 30);
     --border-color: rgb(42, 43, 45);
     --button-color: var(--border-color);
+} */
+
+
+
+#outer-box {
+    background-color: var(--background);
 }
 
-* {
+/* * {
     all: unset;
 }
 
@@ -21,14 +30,14 @@
 
 .selected-screen {
     opacity: 0.5;
-} 
+}  */
 
- #outer-box {
+ /* #outer-box {
     background-image: url("./images/fantasy-woods.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-}
+} */
 
 
 /* #wallpaper-settings {

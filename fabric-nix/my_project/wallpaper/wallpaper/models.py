@@ -2,6 +2,44 @@ import subprocess
 import json
 import os
 
+from dataclasses import asdict, dataclass, field, fields
+from typing import Optional
+from configparser import ConfigParser
+from pathlib import Path
+
+DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
+
+@dataclass
+class Settings:
+    img_per_row: int = 3
+
+    config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
+
+    @classmethod
+    def load(cls, config_path=DEFAULT_CONFIG_FILE):
+        if os.path.exists(config_path):
+            config = ConfigParser()
+            config.read(config_path)
+
+            data = {}
+            for field_ in fields(cls):
+                if field_.name == "config_file":
+                    continue
+                data[field_.name] = field_.type(config.get("View", field_.name))
+            return cls(**data)
+        else:
+            default_settings = cls(config_file=config_path)
+            default_settings.save()
+
+    def save(self):
+        config = ConfigParser()
+        config["View"] = {k: str(v) for k, v in asdict(self).items() if k != "config_file"}
+
+        config_path = Path(self.config_file)
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.config_file, "w") as f:
+            config.write(f)
+
 # @dataclass
 # class Settings:
 #     # min_width:

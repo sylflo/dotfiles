@@ -7,8 +7,8 @@ from fabric.utils import invoke_repeater, get_relative_path
 
 
 if __name__ == "__main__":
-    controller = WallpaperController(model=WallpaperModel())
-    view = controller.create_view()
+    controller = WallpaperController()
+    view = controller.view
     app = Application("wallpaper", view)
     app.set_stylesheet_from_file(get_relative_path("./style.css"))
     app.run()

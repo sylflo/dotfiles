@@ -3,6 +3,8 @@ LATER
     Image per rows should be configuable
     Image background should be configurable
     image folder need to be configurable
+    Daermon to change wallpaper every x seconds
+    Possibilty to split wallpaper between n screens
 
 TODO:
   add ruff
