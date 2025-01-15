@@ -29,7 +29,7 @@
 }
 
 .background-color {
-    background: red;
+    background: var(--background-color);
 }
 
 

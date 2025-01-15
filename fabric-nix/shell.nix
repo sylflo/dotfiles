@@ -20,6 +20,7 @@ pkgs.mkShell {
         python311Packages.pip
         python311Packages.isort
         python311Packages.black
+        python311Packages.jinja2
         setuptools
         wheel
         build
