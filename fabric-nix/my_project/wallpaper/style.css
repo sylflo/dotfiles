@@ -20,11 +20,16 @@
     opacity: 0.5;
 }
 
-#outer-box {
+
+.background-img {
     background-image: url("./images/fantasy-woods.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.background-color {
+    background: red;
 }
 
 

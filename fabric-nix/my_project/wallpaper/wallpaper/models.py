@@ -15,6 +15,8 @@ class Settings:
     wallpaper_img_size: int = 250
     monitor_img_size: int = 250
     wallpapers_folder: Path = Path.home() / "Pictures"
+    background_img: str = ""
+    background_color: str = "#f2f2f2"
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
@@ -50,8 +52,6 @@ class Settings:
 #     # min_height
 #     # max_width
 #     # max_heigth
-#     # background_color: Optional[str]
-#     bacgkround_img: Optional[str] = None
 #     # color_text:
 #     scroll: Optional[bool] = False # if False pagination
 #     animation: Optional[bool] = True

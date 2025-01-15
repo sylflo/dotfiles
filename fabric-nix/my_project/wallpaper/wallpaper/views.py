@@ -21,6 +21,42 @@ import time
 from pathlib import Path
 
 
+# def set_wallpaper(monitors: list[str], image_name: str):
+#     if image_name is None:
+#         ...
+#     # TODO pass image as parameter
+#     for monitor in monitors:
+#         # os.system(f"swww img -o \"{monitor}\" --transition-type random ./images/{image_name}")
+#         os.system(f"swww img -o \"{monitor}\" --transition-type fade --transition-duration 10 --transition-fps 120 ./images/{image_name}")
+#         #swww img --transition-type fade --transition-duration 3000 --transition-fps 120 wallpaper.jpg
+#     #subprocess.run(["ls", "-l"])
+#     #swww img -o "DP-2" --transition-type random /tmp/output-0.png
+#     #swww img -o "DP-1" --transition-type random /tmp/output-1.png
+# def on_screen_click(widget, event, monitor, *args):
+#     global SCREENS_SELECTED
+#     selected_monitor = SCREENS_SELECTED.pop(monitor, None)
+#     if selected_monitor:
+#         selected_monitor.remove_style_class("selected-screen")
+#     else:
+#         widget.add_style_class("selected-screen")
+#         SCREENS_SELECTED[monitor] = widget
+#     set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
+# def on_image_click(widget, event, image, *args):
+#     global IMAGE_SELECTED
+#     if  IMAGE_SELECTED['name']:
+#         IMAGE_SELECTED['widget'].remove_style_class("selected-image")
+#         IMAGE_SELECTED = {
+#             'name': None,
+#             'widget': None
+#         }
+#     widget.add_style_class("selected-image")
+#     IMAGE_SELECTED = {
+#         'name': image,
+#         'widget': widget
+#     }
+#     set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
+
+
 class BaseRow(Box):
     def __init__(self, **kwargs):
         super().__init__(
@@ -67,40 +103,41 @@ class MonitorsRow(BaseRow):
 
 
 class MainContent(Box):
-    def __init__(self, wallpaper_folder: Path, img_size: int, monitor_size: int, monitors, wallpaper_rows, **kwargs):
+    def __init__(self, settings, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
         settings_button = Button(label="Open settings")
         self.add(Box(children=[settings_button]))
 
-        self.add(MonitorsRow(monitors, monitor_size))
+        self.add(MonitorsRow(monitors, settings.monitor_img_size))
         for row in wallpaper_rows:
-            self.add(WallpaperRow(wallpaper_folder, img_size, images=row))
+            self.add(WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row))
 
 
 class Wallpaper(Window):
-    def __init__(self, wallpapers_folder: Path, img_size: int, monitor_size: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
+    def __init__(self, settings, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
         super().__init__(
             layer="top",
             anchor="left bottom top right",
             exclusivity="auto",
             **kwargs
         )
-        main_content = MainContent(wallpapers_folder, img_size, monitor_size, monitors, wallpaper_rows)
+        main_content = MainContent(settings, monitors, wallpaper_rows)
 
         self.revealer = Revealer(transition_type='crossfade', transition_duration=2000, child=main_content)
         self.connect("draw", self.on_draw)
 
         outer_box = Box(
-            name="outer-box",
             orientation="vertical",
             children=[self.revealer],
         )
-
+        if settings.background_img:
+            outer_box.add_style_class("background-img")
+        else:
+            outer_box.add_style_class("background-color")
         self.children = ScrolledWindow(
             child=outer_box
         )
-
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
