@@ -13,7 +13,5 @@ if __name__ == "__main__":
     settings = Settings.load()
     controller = WallpaperController(settings)
     app = Application("wallpaper", controller.view)
-
     app.set_stylesheet_from_file(get_relative_path("./style.css"))
-
     app.run()

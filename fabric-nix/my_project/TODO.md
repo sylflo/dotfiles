@@ -21,6 +21,7 @@ WAllapper
     set_wallpaper => reaplce os.sytem.call with subprocess and put it in the controller
     Refresh button to refresh doirectory
     NAME: SwwwUiTuning
+    check background_img exists do it in the post init method from the dataclass settings
 
 
 MUSIC PLAYER:
