@@ -12,6 +12,8 @@ DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 @dataclass
 class Settings:
     img_per_row: int = 3
+    img_size: int = 250
+    wallpapers_folder: Path = Path.home() / "Pictures"
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
@@ -26,6 +28,7 @@ class Settings:
                 if field_.name == "config_file":
                     continue
                 data[field_.name] = field_.type(config.get("View", field_.name))
+                print(data[field_.name])
             return cls(**data)
         else:
             default_settings = cls(config_file=config_path)
@@ -47,16 +50,14 @@ class Settings:
 #     # max_width
 #     # max_heigth
 #     # background_color: Optional[str]
-#     img_size: Optional[int] = 250
 #     bacgkround_img: Optional[str] = None
 #     # color_text:
-#     img_per_row: Optional[int] = 3
 #     scroll: Optional[bool] = False # if False pagination
 #     animation: Optional[bool] = True
 
 class Wallpaper:
     # TODO should be set in config and wuith a default in conig
-    def __init__(self, directory="./images"):
+    def __init__(self, directory):
         self.directory = directory
         self.image_selected = None
         self.screens_selected = {}

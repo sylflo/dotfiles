@@ -1,10 +1,8 @@
 LATER
   WALLPAPER
-    Image per rows should be configuable
-    Image background should be configurable
-    image folder need to be configurable
     Daermon to change wallpaper every x seconds
     Possibilty to split wallpaper between n screens
+    SHORTCUT KEY => should be configurable also
 
 TODO:
   add ruff
@@ -13,19 +11,15 @@ TODO:
   add isort
 
 WAllapper
-    COnfig dataclass => each option should be checked
-    NAME: SwwwTuningUI
-    SHORTCUT KEY => should be configurable also
+    Setting check when one or multiple option are not there
+    Image background should be configurable
+    NAME: SwwwUiTuning
     ESCAPE SHOULD clsoe window
     use pagination, remove scrollview, use viewprot, not only fullscreen (should be in the parameter)
-    check default for settings and aslso check which optins is dependant on other
     use custom font, Roboto
     animation
-    parameters
     Refresh button to refresh doirectory
-    USER SERVICE ????
-    Escape key => check hyprland.conf when using cmd+c
-  
+
 
 MUSIC PLAYER:
   background => album image

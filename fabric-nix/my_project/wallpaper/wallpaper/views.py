@@ -18,9 +18,7 @@ import subprocess
 import json
 import time
 
-
-# TODO use config file
-DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/wallpaper/images"
+from pathlib import Path
 
 
 class BaseRow(Box):
@@ -33,12 +31,12 @@ class BaseRow(Box):
         )
 
 class WallpaperRow(BaseRow):
-    def __init__(self, images, **kwargs):
+    def __init__(self, wallpapers_folder: Path, img_size: int, images, **kwargs):
         super().__init__(**kwargs)
         for image in images:
             event_box = EventBox(
                 events="button-press",
-                child=Image(image_file=f"{DIRECTORY}/{image}", size=250).build().add_style_class("img").unwrap(),
+                child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size).build().add_style_class("img").unwrap(),
             )
             #event_box.connect("button-press-event", lambda widget, event, img=image: on_image_click(widget, event, img))
             # event_box.connect("button-press-event", on_image_click)
@@ -69,7 +67,7 @@ class MonitorsRow(BaseRow):
 
 
 class MainContent(Box):
-    def __init__(self, monitors, wallpaper_rows, **kwargs):
+    def __init__(self, wallpaper_folder: Path, img_size: int, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
         settings_button = Button(label="Open settings")
@@ -77,18 +75,18 @@ class MainContent(Box):
 
         self.add(MonitorsRow(monitors))
         for row in wallpaper_rows:
-            self.add(WallpaperRow(images=row))
+            self.add(WallpaperRow(wallpaper_folder, img_size, images=row))
 
 
 class Wallpaper(Window):
-    def __init__(self, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
+    def __init__(self, wallpapers_folder: Path, img_size: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
         super().__init__(
             layer="top",
             anchor="left bottom top right",
             exclusivity="auto",
             **kwargs
         )
-        main_content = MainContent(monitors, wallpaper_rows)
+        main_content = MainContent(wallpapers_folder, img_size, monitors, wallpaper_rows)
 
         self.revealer = Revealer(transition_type='crossfade', transition_duration=2000, child=main_content)
         self.connect("draw", self.on_draw)
