@@ -94,7 +94,7 @@ class MonitorsRow(BaseRow):
                         Overlay(
                             child=Image(
                                 # TODO should not be hardcoded get it from monitor name
-                                image_file="./images/DP-3",
+                                image_file="../images/DP-3",
                                 size=img_size,
                                 ).build().add_style_class("img").unwrap(),
                             overlays=Label(label=monitor)
