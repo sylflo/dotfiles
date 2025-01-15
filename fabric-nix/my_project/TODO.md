@@ -13,9 +13,8 @@ TODO:
   add isort
 
 WAllapper
-    use pagination, remove scrollview,, not only fullscreen (should be in the parameter)
-    ESCAPE SHOULD clsoe window
     try scrollview with 100 items
+    not only fullscreen (should be in the parameter)
     use custom font, Roboto
     Setting check when one or multiple option are not there
     get_monitors => should work with any wm
@@ -23,6 +22,7 @@ WAllapper
     Refresh button to refresh doirectory
     Customize all CSS
     NAME: SwwwUiTuning
+
 
 
 MUSIC PLAYER:

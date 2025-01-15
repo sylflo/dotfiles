@@ -20,6 +20,9 @@ import time
 
 from pathlib import Path
 
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, Gdk
 
 # def set_wallpaper(monitors: list[str], image_name: str):
 #     if image_name is None:
@@ -127,20 +130,24 @@ class Pagination(Box):
             **kwargs
         )
 
+
 class Wallpaper(Window):
     def __init__(self, settings, pagination_service, total_pages: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
         super().__init__(
             layer="top",
             anchor="left bottom top right",
             exclusivity="auto",
+            keyboard_mode='on-demand',
             **kwargs
         )
+
         self.main_content = MainContent(settings, monitors, wallpaper_rows)
         if settings.pagination:
             self.main_content.add(Pagination(pagination_service, total_pages))
 
         self.revealer = Revealer(transition_type=settings.transition_type, transition_duration=settings.transition_duration, child=self.main_content)
         self.connect("draw", self.on_draw)
+        self.add_keybinding("Escape", lambda *_: self.close_window())
         outer_box = Box(
             orientation="vertical",
             children=[self.revealer],
@@ -159,10 +166,12 @@ class Wallpaper(Window):
 
 
     def update_content(self, settings, page_index, wallpaper_rows):
+        # page_index # TODO show curretn selected page
         self.main_content.update(settings, wallpaper_rows)
-        page_index
 
       
-    # TODO use service
     def on_draw(self, *args):
         self.revealer.child_revealed = True
+
+    def close_window(self):
+        self.close()
