@@ -12,7 +12,8 @@ DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 @dataclass
 class Settings:
     img_per_row: int = 3
-    img_size: int = 250
+    wallpaper_img_size: int = 250
+    monitor_img_size: int = 250
     wallpapers_folder: Path = Path.home() / "Pictures"
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
@@ -56,7 +57,6 @@ class Settings:
 #     animation: Optional[bool] = True
 
 class Wallpaper:
-    # TODO should be set in config and wuith a default in conig
     def __init__(self, directory):
         self.directory = directory
         self.image_selected = None
@@ -67,12 +67,10 @@ class Wallpaper:
         return [images[i:i + img_per_row] for i in range(0, len(images), img_per_row)]
 
     def get_monitors(self):
-        # TODO should work any WM
         result = subprocess.run(["hyprctl", "-j", "monitors"], capture_output=True, text=True)
         return [monitor['name'] for monitor in json.loads(result.stdout)]
 
     # def set_wallpaper(self, monitors, image_name):
-    #     # # TODO image_name should be manadatyory
     #     # This should be in controller
     #     if image_name:
     #         for monitor in monitors:

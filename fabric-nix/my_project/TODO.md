@@ -19,6 +19,8 @@ WAllapper
     use custom font, Roboto
     animation
     Refresh button to refresh doirectory
+    get_monitors => should work with any wm
+    set_wallpaper => reaplce os.sytem.call with subprocess and put it in the controller
 
 
 MUSIC PLAYER:

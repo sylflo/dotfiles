@@ -44,7 +44,7 @@ class WallpaperRow(BaseRow):
 
 
 class MonitorsRow(BaseRow):
-    def __init__(self, monitors: list[str], **kwargs):
+    def __init__(self, monitors: list[str], img_size: int, **kwargs):
         super().__init__(**kwargs)
         for monitor in monitors:
             event_box = EventBox(
@@ -55,7 +55,7 @@ class MonitorsRow(BaseRow):
                             child=Image(
                                 # TODO should not be hardcoded get it from monitor name
                                 image_file="./images/DP-3",
-                                size=250, # TODO get thiss from config
+                                size=img_size,
                                 ).build().add_style_class("img").unwrap(),
                             overlays=Label(label=monitor)
                         )
@@ -67,26 +67,26 @@ class MonitorsRow(BaseRow):
 
 
 class MainContent(Box):
-    def __init__(self, wallpaper_folder: Path, img_size: int, monitors, wallpaper_rows, **kwargs):
+    def __init__(self, wallpaper_folder: Path, img_size: int, monitor_size: int, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
         settings_button = Button(label="Open settings")
         self.add(Box(children=[settings_button]))
 
-        self.add(MonitorsRow(monitors))
+        self.add(MonitorsRow(monitors, monitor_size))
         for row in wallpaper_rows:
             self.add(WallpaperRow(wallpaper_folder, img_size, images=row))
 
 
 class Wallpaper(Window):
-    def __init__(self, wallpapers_folder: Path, img_size: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
+    def __init__(self, wallpapers_folder: Path, img_size: int, monitor_size: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
         super().__init__(
             layer="top",
             anchor="left bottom top right",
             exclusivity="auto",
             **kwargs
         )
-        main_content = MainContent(wallpapers_folder, img_size, monitors, wallpaper_rows)
+        main_content = MainContent(wallpapers_folder, img_size, monitor_size, monitors, wallpaper_rows)
 
         self.revealer = Revealer(transition_type='crossfade', transition_duration=2000, child=main_content)
         self.connect("draw", self.on_draw)

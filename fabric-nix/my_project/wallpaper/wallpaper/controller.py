@@ -10,6 +10,7 @@ class Wallpaper:
         self._view = WallpaperView(
             wallpapers_folder=self._get_wallpapers_folder(),
             img_size=self._get_wallpapers_size(),
+            monitor_size=self._get_monitor_size(),
             monitors=self._get_monitors(),
             wallpaper_rows=self._get_wallpaper_rows(),
         )
@@ -18,7 +19,10 @@ class Wallpaper:
         return self._settings.wallpapers_folder
 
     def _get_wallpapers_size(self) -> int:
-        return self._settings.img_size
+        return self._settings.wallpaper_img_size
+
+    def _get_monitor_size(self) -> int:
+        return self._settings.monitor_img_size
 
     def _get_monitors(self):
         return self._model.get_monitors()
