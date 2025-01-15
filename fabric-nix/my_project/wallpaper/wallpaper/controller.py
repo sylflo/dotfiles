@@ -13,7 +13,7 @@ class Wallpaper:
         self._pagination_service = PaginationService()
         self._pagination_service.connect("next-page", self.next_page)
         self._pagination_service.connect("previous-page", self.previous_page)
-        #self._pagination_service.connect("go-to-page", self.go_to_page)
+        self._pagination_service.connect("go-to-page", self.go_to_page)
         self._current_page = 1
         self._total_pages = self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page)
         if self._settings.pagination:
@@ -65,10 +65,15 @@ class Wallpaper:
             self._current_page = self._current_page - 1
             self._update_view()
 
+    def go_to_page(self, service, page_index: int):
+        if page_index > 0 and page_index <  self._total_pages - 1:
+            self._current_page = page_index
+            self._update_view()
 
     def _update_view(self):
         self._view.update_content(
             settings=self._settings,
+            page_index=self._current_page,
             wallpaper_rows=self._get_pagination_wallpaper_rows(self._current_page, self._settings.img_per_row, self._settings.row_per_page),
         )
 

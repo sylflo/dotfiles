@@ -122,7 +122,7 @@ class Pagination(Box):
             orientation="horizontal",
             h_align="center",
             children=[Button(label="Previous", on_clicked=lambda widget: pagination_service.previous_page())] +
-                [Button(label=str(i)) for i in range(1, nb_pages + 1)] +
+                [Button(label=str(i), on_clicked=lambda widget, page=i: pagination_service.go_to_page(page)) for i in range(1, nb_pages + 1)] +
                 [Button(label="Next", on_clicked=lambda widget: pagination_service.next_page())],
             **kwargs
         )
@@ -158,8 +158,9 @@ class Wallpaper(Window):
             )
 
 
-    def update_content(self, settings, wallpaper_rows):
+    def update_content(self, settings, page_index, wallpaper_rows):
         self.main_content.update(settings, wallpaper_rows)
+        page_index
 
       
     # TODO use service
