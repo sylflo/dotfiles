@@ -57,6 +57,7 @@ from pathlib import Path
 #     set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
 
 
+
 class BaseRow(Box):
     def __init__(self, **kwargs):
         super().__init__(
@@ -110,30 +111,35 @@ class MainContent(Box):
         for row in wallpaper_rows:
             self.add(WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row))
 
+    def update(self, settings, wallpaper_rows):
+        self.children = [self.children[0]] + [WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row) for row in wallpaper_rows] + [self.children[-1]]
+
 
 class Pagination(Box):
-    def __init__(self, nb_pages: int, **kwargs):
+    def __init__(self, pagination_service, nb_pages: int, **kwargs):
         super().__init__(
             name="pagination",
             orientation="horizontal",
             h_align="center",
-            children=[Button(label="Previous")] + [Button(label=str(i)) for i in range(1, nb_pages + 1)] + [Button(label="Next")],
+            children=[Button(label="Previous", on_clicked=lambda widget: pagination_service.previous_page())] +
+                [Button(label=str(i)) for i in range(1, nb_pages + 1)] +
+                [Button(label="Next", on_clicked=lambda widget: pagination_service.next_page())],
             **kwargs
         )
 
 class Wallpaper(Window):
-    def __init__(self, settings, total_pages: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
+    def __init__(self, settings, pagination_service, total_pages: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
         super().__init__(
             layer="top",
             anchor="left bottom top right",
             exclusivity="auto",
             **kwargs
         )
-        main_content = MainContent(settings, monitors, wallpaper_rows)
+        self.main_content = MainContent(settings, monitors, wallpaper_rows)
         if settings.pagination:
-            main_content.add(Pagination(total_pages))
+            self.main_content.add(Pagination(pagination_service, total_pages))
 
-        self.revealer = Revealer(transition_type=settings.transition_type, transition_duration=settings.transition_duration, child=main_content)
+        self.revealer = Revealer(transition_type=settings.transition_type, transition_duration=settings.transition_duration, child=self.main_content)
         self.connect("draw", self.on_draw)
         outer_box = Box(
             orientation="vertical",
@@ -151,5 +157,11 @@ class Wallpaper(Window):
                 child=outer_box
             )
 
+
+    def update_content(self, settings, wallpaper_rows):
+        self.main_content.update(settings, wallpaper_rows)
+
+      
+    # TODO use service
     def on_draw(self, *args):
         self.revealer.child_revealed = True

@@ -1,5 +1,6 @@
 from wallpaper.views import Wallpaper as WallpaperView
 from wallpaper.models import Wallpaper as WallpaperModel, Settings
+from wallpaper.services import Pagination as PaginationService
 from jinja2 import Template
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
@@ -9,14 +10,20 @@ class Wallpaper:
     def __init__(self, settings):
         self._settings = settings
         self._model = WallpaperModel(self._settings.wallpapers_folder)
-        self._current_page_index = 1
+        self._pagination_service = PaginationService()
+        self._pagination_service.connect("next-page", self.next_page)
+        self._pagination_service.connect("previous-page", self.previous_page)
+        #self._pagination_service.connect("go-to-page", self.go_to_page)
+        self._current_page = 1
+        self._total_pages = self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page)
         if self._settings.pagination:
-            wallpaper_rows = self._get_pagination_wallpaper_rows(self._current_page_index, self._settings.img_per_row, self._settings.row_per_page)
+            wallpaper_rows = self._get_pagination_wallpaper_rows(self._current_page, self._settings.img_per_row, self._settings.row_per_page)
         else:
             wallpaper_rows = self._get_scrolling_wallpaper_rows(self._settings.img_per_row)
         self._view = WallpaperView(
             settings=self._settings,
-            total_pages=self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page),
+            pagination_service=self._pagination_service,
+            total_pages=self._total_pages,
             monitors=self._get_monitors(),
             wallpaper_rows=wallpaper_rows,
         )
@@ -48,6 +55,22 @@ class Wallpaper:
         rows = [page_images[i:i + img_per_row] for i in range(0, len(page_images), img_per_row)]
         return rows
 
+    def next_page(self, service):
+        if self._current_page < self._total_pages - 1:
+            self._current_page = self._current_page + 1
+            self._update_view()
+
+    def previous_page(self, service):
+        if self._current_page > 0:
+            self._current_page = self._current_page - 1
+            self._update_view()
+
+
+    def _update_view(self):
+        self._view.update_content(
+            settings=self._settings,
+            wallpaper_rows=self._get_pagination_wallpaper_rows(self._current_page, self._settings.img_per_row, self._settings.row_per_page),
+        )
 
     def _set_stylesheet_vars(self):
         template_folder = "templates/"
