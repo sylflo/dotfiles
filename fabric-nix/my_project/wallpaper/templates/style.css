@@ -6,6 +6,48 @@
     all: unset;
 }
 
+
+/* Pagination container */
+.pagination {
+    margin: 20px 0;
+    padding: 10px 0;
+    font-family: Arial, sans-serif;
+}
+
+/* General button styles */
+#pagination button {
+    background-color: #ffffff;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    padding: 6px 12px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover effect for buttons */
+#pagination button:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Active page button */
+#pagination .current-page {
+    background-color: #007bff;
+    color: #ffffff;
+    border-color: #007bff;
+    font-weight: bold;
+}
+
+/* Disabled buttons */
+#pagination button:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #e9ecef;
+}
+
+
+
 .img {
     margin-right: 10px;
     margin-left: 10px;
@@ -32,57 +74,3 @@
 .background-color {
     background: var(--background-color);
 }
-
-
-#wallpaper-settings {
-    all: unset;
-    background-color: #121212;
-    color: white;
-}
-
-
-/*
-.title {
-    font-size: 40px;
-}
-
-.settings-title {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-
-.separator {
-    background-color: #C0C0C0;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-
-.label-title {
-    font-size: 30px;
-}
-
-.label-description {
-    font-size: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-
-
-combobox button {
-    background: #121212;
-    color: white;
-}
-
-combobox window menu {
-    background: #121212;
-    color: white;
-} */
-
-/*
-entry {
-    background: #121212;
-    color: white;
-}*/

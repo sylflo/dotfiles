@@ -3,6 +3,8 @@ LATER
     Daermon to change wallpaper every x seconds
     Possibilty to split wallpaper between n screens
     SHORTCUT KEY => should be configurable also
+    try scrolling with 100 wallapaer
+    respomsive layout
 
 TODO:
   add ruff
@@ -11,14 +13,15 @@ TODO:
   add isort
 
 WAllapper
-    animation configurable enable/dosable
+    use pagination, remove scrollview,, not only fullscreen (should be in the parameter)
     ESCAPE SHOULD clsoe window
-    use pagination, remove scrollview, use viewprot, not only fullscreen (should be in the parameter)
+    try scrollview with 100 items
     use custom font, Roboto
     Setting check when one or multiple option are not there
     get_monitors => should work with any wm
     set_wallpaper => reaplce os.sytem.call with subprocess and put it in the controller
     Refresh button to refresh doirectory
+    Customize all CSS
     NAME: SwwwUiTuning
 
 
