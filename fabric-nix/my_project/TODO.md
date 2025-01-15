@@ -11,16 +11,16 @@ TODO:
   add isort
 
 WAllapper
-    Setting check when one or multiple option are not there
     Image background should be configurable
-    NAME: SwwwUiTuning
+    animation configurable enable/dosable
     ESCAPE SHOULD clsoe window
     use pagination, remove scrollview, use viewprot, not only fullscreen (should be in the parameter)
     use custom font, Roboto
-    animation
-    Refresh button to refresh doirectory
+    Setting check when one or multiple option are not there
     get_monitors => should work with any wm
     set_wallpaper => reaplce os.sytem.call with subprocess and put it in the controller
+    Refresh button to refresh doirectory
+    NAME: SwwwUiTuning
 
 
 MUSIC PLAYER:
