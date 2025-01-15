@@ -147,7 +147,6 @@ class Wallpaper(Window):
 
         self.revealer = Revealer(transition_type=settings.transition_type, transition_duration=settings.transition_duration, child=self.main_content)
         self.connect("draw", self.on_draw)
-        self.add_keybinding("Escape", lambda *_: self.close_window())
         outer_box = Box(
             orientation="vertical",
             children=[self.revealer],
@@ -173,5 +172,5 @@ class Wallpaper(Window):
     def on_draw(self, *args):
         self.revealer.child_revealed = True
 
-    def close_window(self):
-        self.close()
+    # def close_window(self):
+    #     self.close()
