@@ -124,7 +124,7 @@ class Wallpaper(Window):
         )
         main_content = MainContent(settings, monitors, wallpaper_rows)
 
-        self.revealer = Revealer(transition_type='crossfade', transition_duration=2000, child=main_content)
+        self.revealer = Revealer(transition_type=settings.transition_type, transition_duration=settings.transition_duration, child=main_content)
         self.connect("draw", self.on_draw)
 
         outer_box = Box(

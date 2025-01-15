@@ -3,11 +3,16 @@ import json
 import os
 
 from dataclasses import asdict, dataclass, field, fields
-from typing import Optional
+from typing import Optional, Literal
 from configparser import ConfigParser
 from pathlib import Path
 
+
+
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
+
+
+TransitionType = ['none', 'crossfade', 'slide-right', 'slide-left', 'slide-up', 'slide-down']
 
 @dataclass
 class Settings:
@@ -17,6 +22,8 @@ class Settings:
     wallpapers_folder: Path = Path.home() / "Pictures"
     background_img: str = ""
     background_color: str = "#f2f2f2"
+    transition_type: str = 'none'
+    transition_duration: int = 2000
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
@@ -32,10 +39,16 @@ class Settings:
                     continue
                 data[field_.name] = field_.type(config.get("View", field_.name))
                 print(data[field_.name])
-            return cls(**data)
+            settings = cls(**data)
         else:
-            default_settings = cls(config_file=config_path)
-            default_settings.save()
+            settings = cls(config_file=config_path)
+            settings.save()
+
+        if settings.background_img and not Path(settings.background_img).exists():
+            raise FileNotFoundError(f"Background image '{settings.background_img}' does not exist.")
+        if settings.transition_type not in TransitionType:
+            raise ValueError(f"Transition type {settings.transition_type} not in TransitionType")
+        return settings
 
     def save(self):
         config = ConfigParser()
@@ -54,7 +67,6 @@ class Settings:
 #     # max_heigth
 #     # color_text:
 #     scroll: Optional[bool] = False # if False pagination
-#     animation: Optional[bool] = True
 
 class Wallpaper:
     def __init__(self, directory):

@@ -1,5 +1,5 @@
 :vars {
-    --background-color: #fffaaa;
+    --background-color: {{ background_color }};
   }
 
  * {
@@ -23,7 +23,7 @@
 
 
 .background-img {
-    background-image: url( '/home/sylflo/Projects/dotfiles/fabric-nix/my_project/wallpaper/images/cute-town-dark.png' );
+    background-image: url( '{{ background_img }}' );
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

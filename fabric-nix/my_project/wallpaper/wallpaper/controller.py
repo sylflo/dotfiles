@@ -22,12 +22,15 @@ class Wallpaper:
         return self._model.get_images_as_row(self._settings.img_per_row)
 
     def _set_stylesheet_vars(self):
+        template_folder = "templates/"
+        filename = "style.css"
         environment = Environment(loader=FileSystemLoader("templates/"))
-        template = environment.get_template("variables.css")
+        template = environment.get_template(filename)
         content = template.render(
             background_color=self._settings.background_color,
+            background_img=self._settings.background_img,
         )
-        with open("./variables.css", mode="w", encoding="utf-8") as file:
+        with open(filename, mode="w", encoding="utf-8") as file:
             file.write(content)
 
     @property
