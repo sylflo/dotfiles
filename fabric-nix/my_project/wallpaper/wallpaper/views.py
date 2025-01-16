@@ -96,6 +96,10 @@ class MainContent(Box):
                 )
             )
 
+    def get_wallpaper_rows(self) -> WallpaperRow:
+        return self.children[1]
+
+
 class Pagination(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
         super().__init__(
@@ -170,13 +174,12 @@ class Wallpaper(Window):
         widget.remove_style_class("selected-screen")
 
     def set_selected_image(self, widget):
-        for child in self.main_content.children[1]:
+        for child in self.main_content.get_wallpaper_rows():
             if isinstance(child, EventBox):
                 child.remove_style_class("selected-image")
         widget.add_style_class("selected-image")
 
     def update_monitor_image(self, monitor, image_name):
-
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
             f"{self.settings.wallpapers_folder}/{image_name}",
