@@ -4,6 +4,7 @@ from wallpaper.services import Pagination as WallpaperService
 from jinja2 import Template
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
+import subprocess
 
 
 class Wallpaper:
@@ -20,6 +21,7 @@ class Wallpaper:
         self._total_pages = self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page)
         #self._selected_monitor = None
         self._selected_monitors = []
+        self._selected_monitors_name = []
         self._selected_image = None
         if self._settings.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(self._current_page, self._settings.img_per_row, self._settings.row_per_page)
@@ -79,9 +81,11 @@ class Wallpaper:
         if widget in self._selected_monitors:
             self._view.set_unselected_monitor(widget)
             self._selected_monitors.remove(widget)
+            self._selected_monitors_name.remove(monitor_name)
         else:
             self._view.set_selected_monitor(widget)
             self._selected_monitors.append(widget)
+            self._selected_monitors_name.append(monitor_name)
         self.update_monitor_image()
      
     def select_image(self, service, widget, image_name):
@@ -91,8 +95,17 @@ class Wallpaper:
 
     def update_monitor_image(self):
         if self._selected_image:
-            for monitor in self._selected_monitors:
-                self._view.update_monitor_image(monitor, self._selected_image)
+            for widget, name in zip(self._selected_monitors, self._selected_monitors_name):
+                # TODO call the build command for swww
+                command = [
+                    "swww",
+                    "img",
+                    "-o",
+                    name,
+                    f"{self._settings.wallpapers_folder}/{self._selected_image}"
+                ]
+                subprocess.run(command)
+                self._view.update_monitor_image(widget, self._selected_image)
 
     def _update_view(self):
         self._view.update_content(
