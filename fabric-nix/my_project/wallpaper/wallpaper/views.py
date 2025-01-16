@@ -141,7 +141,7 @@ class Pagination(Box):
 
 
 class Wallpaper(Window):
-    def __init__(self, settings, pagination_service, total_pages: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
+    def __init__(self, settings, service, total_pages: int, monitors: list[str], wallpaper_rows: list[list[str]], **kwargs):
         super().__init__(
             layer="top",
             anchor="left bottom top right",
@@ -152,7 +152,7 @@ class Wallpaper(Window):
 
         self.main_content = MainContent(settings, monitors, wallpaper_rows)
         if settings.pagination:
-            self.main_content.add(Pagination(pagination_service, total_pages))
+            self.main_content.add(Pagination(service, total_pages))
 
         self.revealer = Revealer(transition_type=settings.transition_type, transition_duration=settings.transition_duration, child=self.main_content)
         self.connect("draw", self.on_draw)
