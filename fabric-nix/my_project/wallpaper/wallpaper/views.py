@@ -24,48 +24,6 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
-# def set_wallpaper(monitors: list[str], image_name: str):
-#     if image_name is None:
-#         ...
-#     # TODO pass image as parameter
-#     for monitor in monitors:
-#         # os.system(f"swww img -o \"{monitor}\" --transition-type random ./images/{image_name}")
-#         os.system(f"swww img -o \"{monitor}\" --transition-type fade --transition-duration 10 --transition-fps 120 ./images/{image_name}")
-#         #swww img --transition-type fade --transition-duration 3000 --transition-fps 120 wallpaper.jpg
-#     #subprocess.run(["ls", "-l"])
-#     #swww img -o "DP-2" --transition-type random /tmp/output-0.png
-#     #swww img -o "DP-1" --transition-type random /tmp/output-1.png
-
-
-IMAGE_SELECTED = {'name': None, 'widget': None}
-SCREENS_SELECTED = {}
-
-def on_image_click(widget, event, image, *args):
-    global IMAGE_SELECTED
-    if  IMAGE_SELECTED['name']:
-        IMAGE_SELECTED['widget'].remove_style_class("selected-image")
-        IMAGE_SELECTED = {
-            'name': None,
-            'widget': None
-        }
-    widget.add_style_class("selected-image")
-    IMAGE_SELECTED = {
-        'name': image,
-        'widget': widget
-    }
-    # set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
-
-def on_screen_click(widget, event, monitor, *args):
-    global SCREENS_SELECTED
-    selected_monitor = SCREENS_SELECTED.pop(monitor, None)
-    if selected_monitor:
-        selected_monitor.remove_style_class("selected-screen")
-    else:
-        widget.add_style_class("selected-screen")
-        SCREENS_SELECTED[monitor] = widget
-    #set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
-
-
 class BaseRow(Box):
     def __init__(self, **kwargs):
         super().__init__(
@@ -83,8 +41,6 @@ class WallpaperRow(BaseRow):
                 events="button-press",
                 child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size).build().add_style_class("img").unwrap(),
             )
-            event_box.connect("button-press-event", lambda widget, event, img=image: on_image_click(widget, event, img))
-            # event_box.connect("button-press-event", on_image_click)
             self.add(event_box)
 
 
@@ -98,7 +54,9 @@ class MonitorsRow(BaseRow):
             else:
                 image_name = "./images/default.png"
             event_box = EventBox(
-                events="button-press",
+                #events="button-press",
+                #on_button_press_event=lambda widgetr: service.select_monitor(),
+                on_button_press_event=lambda widget, _, monitor_name=monitor: service.select_monitor(widget, monitor_name),
                 child=Box(
                     children=[
                         Overlay(
@@ -112,8 +70,6 @@ class MonitorsRow(BaseRow):
                 )
             )
             self.add(event_box)
-            # [Button(label=str(i), on_clicked=lambda widget, page=i: service.go_to_page(page)) for i in range(1, nb_pages + 1)] +
-            event_box.connect("button-press-event", lambda widget, event, monitor=monitor: on_screen_click(widget, event, monitor))
 
 
 class MainContent(Box):
@@ -173,6 +129,11 @@ class Wallpaper(Window):
                 child=outer_box
             )
 
+    def set_selected_monitor(self, widget):
+        for child in self.main_content.children[0].children:  # Assuming monitors are in the first child of main_content
+            if isinstance(child, EventBox):
+                child.remove_style_class("selected-screen")
+        widget.add_style_class("selected-screen")
 
     def update_content(self, settings, page_index, wallpaper_rows):
         # page_index # TODO show curretn selected page

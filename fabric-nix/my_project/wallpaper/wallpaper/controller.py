@@ -14,6 +14,7 @@ class Wallpaper:
         self._service.connect("next-page", self.next_page)
         self._service.connect("previous-page", self.previous_page)
         self._service.connect("go-to-page", self.go_to_page)
+        self._service.connect("select-monitor", self.select_monitor)
         self._current_page = 1
         self._total_pages = self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page)
         if self._settings.pagination:
@@ -69,6 +70,9 @@ class Wallpaper:
         if page_index > 0 and page_index <  self._total_pages:
             self._current_page = page_index
             self._update_view()
+
+    def select_monitor(self, service, widget, monitor_name):
+        self._view.set_selected_monitor(widget)
 
     def _update_view(self):
         self._view.update_content(

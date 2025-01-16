@@ -1,4 +1,6 @@
 from fabric.core.service import Service, Signal
+from fabric.widgets.eventbox import EventBox
+
 
 class Pagination(Service):
     @Signal
@@ -14,8 +16,9 @@ class Pagination(Service):
         pass
 
     @Signal
-    def image_selected(self, image_name: str) -> None:
+    def select_monitor(self, widget: EventBox, monitor_name: str) -> None:
         pass
+        #raise Exception(self, widget, monitor_name)
 
     # def select_image(self, image_name: str):
     #     if self._selected_image != image_name:
