@@ -96,19 +96,6 @@ class MainContent(Box):
                 )
             )
 
-    def update(self, settings, wallpaper_rows):
-        self.children = (
-            [self.children[0]]
-            + [
-                WallpaperRow(
-                    settings.wallpapers_folder, settings.wallpaper_img_size, images=row
-                )
-                for row in wallpaper_rows
-            ]
-            + [self.children[-1]]
-        )
-
-
 class Pagination(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
         super().__init__(
@@ -150,6 +137,7 @@ class Wallpaper(Window):
             **kwargs,
         )
         self.settings = settings
+        self.service = service
 
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
         if settings.pagination:
@@ -199,7 +187,18 @@ class Wallpaper(Window):
 
     def update_content(self, settings, page_index, wallpaper_rows):
         # page_index # TODO show curretn selected page
-        self.main_content.update(settings, wallpaper_rows)
+        children = self.main_content.children
+
+        self.main_content.children = (
+            [children[0]]
+            + [
+                WallpaperRow(
+                    self.service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row
+                )
+                for row in wallpaper_rows
+            ]
+            + [children[-1]]
+        )
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
