@@ -13,16 +13,17 @@ TODO:
   add isort
 
 WAllapper
-    try scrollview with 100 items
-    not only fullscreen (should be in the parameter)
+    1) Add fullscrren or not inside config
+    2)  set_wallpaper => reaplce os.sytem.call with subprocess and put it in the controller
+    3) get_monitors => should work with any wm
+    4)     Setting check when one or multiple option are not there
+    5)  Refresh button to refresh doirectory
+
     use custom font, Roboto
-    Setting check when one or multiple option are not there
-    get_monitors => should work with any wm
-    set_wallpaper => reaplce os.sytem.call with subprocess and put it in the controller
-    Refresh button to refresh doirectory
+    try scrollview with 100 items
+      Layout should adapt to screen size
     Customize all CSS
     NAME: SwwwUiTuning
-    Layout should adapt to screen size
 
 
 MUSIC PLAYER:

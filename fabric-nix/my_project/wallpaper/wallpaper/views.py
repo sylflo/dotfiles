@@ -89,7 +89,7 @@ class WallpaperRow(BaseRow):
 
 
 class MonitorsRow(BaseRow):
-    def __init__(self, config_file, monitors: list[str], img_size: int, **kwargs):
+    def __init__(self, service, config_file, monitors: list[str], img_size: int, **kwargs):
 
         super().__init__(**kwargs)
         for monitor in monitors:
@@ -112,14 +112,15 @@ class MonitorsRow(BaseRow):
                 )
             )
             self.add(event_box)
+            # [Button(label=str(i), on_clicked=lambda widget, page=i: service.go_to_page(page)) for i in range(1, nb_pages + 1)] +
             event_box.connect("button-press-event", lambda widget, event, monitor=monitor: on_screen_click(widget, event, monitor))
 
 
 class MainContent(Box):
-    def __init__(self, settings, monitors, wallpaper_rows, **kwargs):
+    def __init__(self, service, settings, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
-        self.add(MonitorsRow(settings.config_file, monitors, settings.monitor_img_size))
+        self.add(MonitorsRow(service, settings.config_file, monitors, settings.monitor_img_size))
         for row in wallpaper_rows:
             self.add(WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row))
 
@@ -150,7 +151,7 @@ class Wallpaper(Window):
             **kwargs
         )
 
-        self.main_content = MainContent(settings, monitors, wallpaper_rows)
+        self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
         if settings.pagination:
             self.main_content.add(Pagination(service, total_pages))
 
