@@ -102,6 +102,8 @@ class MainContent(Box):
 
 class Pagination(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
+        self.max_pages = nb_pages
+
         super().__init__(
             name="pagination",
             orientation="horizontal",
@@ -109,18 +111,49 @@ class Pagination(Box):
             children=[
                 Button(
                     label="Previous", on_clicked=lambda widget: service.previous_page()
-                )
+                ).build().add_style_class("pagination-button").add_style_class("pagination-disabled").unwrap()
             ]
             + [
                 Button(
                     label=str(i),
                     on_clicked=lambda widget, page=i: service.go_to_page(page),
-                )
+                ).build().add_style_class("pagination-button").unwrap()
                 for i in range(1, nb_pages + 1)
             ]
-            + [Button(label="Next", on_clicked=lambda widget: service.next_page())],
+            + [Button(label="Next", on_clicked=lambda widget: service.next_page()).build().add_style_class("pagination-button").unwrap()],
             **kwargs,
         )
+        self.get_page_button(1).add_style_class("pagination-selected-page")
+
+    def get_prev_button(self):
+        return self.children[0]
+
+    def get_next_button(self):
+        return self.children[-1]
+
+    def get_all_page_button(self):
+        return self.children[1:-1]
+
+    def get_page_button(self, index: int):
+        return self.children[index]
+
+    def _update_nav_button(self, button, disabled):
+        if disabled:
+            button.add_style_class("pagination-disabled")
+        else:
+            button.remove_style_class("pagination-disabled")     
+
+    def reset_pagination(self, page_index):
+        # Prev and next
+        self._update_nav_button(self.get_prev_button(), page_index == 1)
+        self._update_nav_button(self.get_next_button(), page_index == (self.max_pages - 1))
+
+        # Pagination number
+        for index, button in enumerate(self.get_all_page_button()):
+            if (index + 1) == page_index:
+                button.add_style_class("pagination-selected-page")
+            else:
+                button.remove_style_class("pagination-selected-page")
 
 
 class Wallpaper(Window):
@@ -140,12 +173,13 @@ class Wallpaper(Window):
             keyboard_mode="on-demand",
             **kwargs,
         )
-        settings = settings
         self.service = service
+        self.pagination = None
 
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
         if settings.pagination:
-            self.main_content.add(Pagination(service, total_pages))
+            self.pagination = Pagination(service, total_pages)
+            self.main_content.add(self.pagination)
 
         self.revealer = Revealer(
             transition_type=settings.transition_type,
@@ -202,6 +236,8 @@ class Wallpaper(Window):
             ]
             + [children[-1]]
         )
+
+        self.pagination.reset_pagination(page_index)
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
