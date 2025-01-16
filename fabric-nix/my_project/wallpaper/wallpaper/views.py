@@ -198,7 +198,6 @@ class Wallpaper(Window):
         self.pagination = None
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
 
-
         self.revealer = Revealer(
             transition_type=settings.transition_type,
             transition_duration=settings.transition_duration,
