@@ -35,30 +35,35 @@ from gi.repository import Gtk, Gdk
 #     #subprocess.run(["ls", "-l"])
 #     #swww img -o "DP-2" --transition-type random /tmp/output-0.png
 #     #swww img -o "DP-1" --transition-type random /tmp/output-1.png
-# def on_screen_click(widget, event, monitor, *args):
-#     global SCREENS_SELECTED
-#     selected_monitor = SCREENS_SELECTED.pop(monitor, None)
-#     if selected_monitor:
-#         selected_monitor.remove_style_class("selected-screen")
-#     else:
-#         widget.add_style_class("selected-screen")
-#         SCREENS_SELECTED[monitor] = widget
-#     set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
-# def on_image_click(widget, event, image, *args):
-#     global IMAGE_SELECTED
-#     if  IMAGE_SELECTED['name']:
-#         IMAGE_SELECTED['widget'].remove_style_class("selected-image")
-#         IMAGE_SELECTED = {
-#             'name': None,
-#             'widget': None
-#         }
-#     widget.add_style_class("selected-image")
-#     IMAGE_SELECTED = {
-#         'name': image,
-#         'widget': widget
-#     }
-#     set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
 
+
+IMAGE_SELECTED = {'name': None, 'widget': None}
+SCREENS_SELECTED = {}
+
+def on_image_click(widget, event, image, *args):
+    global IMAGE_SELECTED
+    if  IMAGE_SELECTED['name']:
+        IMAGE_SELECTED['widget'].remove_style_class("selected-image")
+        IMAGE_SELECTED = {
+            'name': None,
+            'widget': None
+        }
+    widget.add_style_class("selected-image")
+    IMAGE_SELECTED = {
+        'name': image,
+        'widget': widget
+    }
+    # set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
+
+def on_screen_click(widget, event, monitor, *args):
+    global SCREENS_SELECTED
+    selected_monitor = SCREENS_SELECTED.pop(monitor, None)
+    if selected_monitor:
+        selected_monitor.remove_style_class("selected-screen")
+    else:
+        widget.add_style_class("selected-screen")
+        SCREENS_SELECTED[monitor] = widget
+    #set_wallpaper(SCREENS_SELECTED.keys(), IMAGE_SELECTED['name'])
 
 
 class BaseRow(Box):
@@ -78,23 +83,27 @@ class WallpaperRow(BaseRow):
                 events="button-press",
                 child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size).build().add_style_class("img").unwrap(),
             )
-            #event_box.connect("button-press-event", lambda widget, event, img=image: on_image_click(widget, event, img))
+            event_box.connect("button-press-event", lambda widget, event, img=image: on_image_click(widget, event, img))
             # event_box.connect("button-press-event", on_image_click)
             self.add(event_box)
 
 
 class MonitorsRow(BaseRow):
-    def __init__(self, monitors: list[str], img_size: int, **kwargs):
+    def __init__(self, config_file, monitors: list[str], img_size: int, **kwargs):
+
         super().__init__(**kwargs)
         for monitor in monitors:
+            if os.path.exists(f"{config_file}/{monitor}"):
+                image_name = f"{config_file}/{monitor}"
+            else:
+                image_name = "./images/default.png"
             event_box = EventBox(
                 events="button-press",
                 child=Box(
                     children=[
                         Overlay(
                             child=Image(
-                                # TODO should not be hardcoded get it from monitor name
-                                image_file="../images/DP-3",
+                                image_file=image_name,
                                 size=img_size,
                                 ).build().add_style_class("img").unwrap(),
                             overlays=Label(label=monitor)
@@ -103,14 +112,14 @@ class MonitorsRow(BaseRow):
                 )
             )
             self.add(event_box)
-            #event_box.connect("button-press-event", lambda widget, event, monitor=monitor: on_screen_click(widget, event, monitor))
+            event_box.connect("button-press-event", lambda widget, event, monitor=monitor: on_screen_click(widget, event, monitor))
 
 
 class MainContent(Box):
     def __init__(self, settings, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
-        self.add(MonitorsRow(monitors, settings.monitor_img_size))
+        self.add(MonitorsRow(settings.config_file, monitors, settings.monitor_img_size))
         for row in wallpaper_rows:
             self.add(WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row))
 
@@ -171,6 +180,3 @@ class Wallpaper(Window):
       
     def on_draw(self, *args):
         self.revealer.child_revealed = True
-
-    # def close_window(self):
-    #     self.close()

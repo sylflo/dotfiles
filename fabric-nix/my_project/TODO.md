@@ -22,7 +22,7 @@ WAllapper
     Refresh button to refresh doirectory
     Customize all CSS
     NAME: SwwwUiTuning
-
+    Layout should adapt to screen size
 
 
 MUSIC PLAYER:
