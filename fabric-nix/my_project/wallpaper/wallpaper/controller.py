@@ -18,7 +18,8 @@ class Wallpaper:
         self._service.connect("select-image", self.select_image)
         self._current_page = 1
         self._total_pages = self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page)
-        self._selected_monitor = None
+        #self._selected_monitor = None
+        self._selected_monitors = []
         self._selected_image = None
         if self._settings.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(self._current_page, self._settings.img_per_row, self._settings.row_per_page)
@@ -75,19 +76,23 @@ class Wallpaper:
             self._update_view()
 
     def select_monitor(self, service, widget, monitor_name):
-        self._view.set_selected_monitor(widget)
-        self._selected_monitor = widget
+        if widget in self._selected_monitors:
+            self._view.set_unselected_monitor(widget)
+            self._selected_monitors.remove(widget)
+        else:
+            self._view.set_selected_monitor(widget)
+            self._selected_monitors.append(widget)
         self.update_monitor_image()
-
-
+     
     def select_image(self, service, widget, image_name):
         self._view.set_selected_image(widget)
         self._selected_image = image_name
         self.update_monitor_image()
 
     def update_monitor_image(self):
-        if self._selected_monitor and self._selected_image:
-            self._view.update_monitor_image(self._selected_monitor, self._selected_image)
+        if self._selected_image:
+            for monitor in self._selected_monitors:
+                self._view.update_monitor_image(monitor, self._selected_image)
 
     def _update_view(self):
         self._view.update_content(

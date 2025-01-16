@@ -132,11 +132,13 @@ class Wallpaper(Window):
             )
 
     def set_selected_monitor(self, widget):
-        for child in self.main_content.children[0].children:
-            if isinstance(child, EventBox):
-                child.remove_style_class("selected-screen")
+        # for child in self.main_content.children[0].children:
+        #     if isinstance(child, EventBox):
+        #         child.remove_style_class("selected-screen")
         widget.add_style_class("selected-screen")
 
+    def set_unselected_monitor(self, widget):
+        widget.remove_style_class("selected-screen")
 
     def set_selected_image(self, widget):
         for child in self.main_content.children[1]:
