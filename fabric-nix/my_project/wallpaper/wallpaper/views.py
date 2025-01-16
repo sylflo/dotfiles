@@ -111,7 +111,7 @@ class Pagination(Box):
             children=[
                 Button(
                     label="Previous", on_clicked=lambda widget: service.previous_page()
-                ).build().add_style_class("pagination-button").add_style_class("pagination-disabled").unwrap()
+                ).build().add_style_class("pagination-button").unwrap()
             ]
             + [
                 Button(
@@ -123,6 +123,7 @@ class Pagination(Box):
             + [Button(label="Next", on_clicked=lambda widget: service.next_page()).build().add_style_class("pagination-button").unwrap()],
             **kwargs,
         )
+        self.get_prev_button().add_style_class("pagination-disabled")
         self.get_page_button(1).add_style_class("pagination-selected-page")
 
     def get_prev_button(self):
