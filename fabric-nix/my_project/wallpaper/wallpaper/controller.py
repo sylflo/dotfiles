@@ -19,7 +19,7 @@ class Wallpaper:
         self._service.connect("go-to-page", self.go_to_page)
         self._service.connect("select-monitor", self.select_monitor)
         self._service.connect("select-image", self.select_image)
-        self._current_page = 1
+        self._current_page = 0
         self._total_pages = self._get_total_pages(
             self._settings.img_per_row, self._settings.row_per_page
         )
