@@ -124,13 +124,13 @@ class Wallpaper:
                     image_location,
                 ]
                 subprocess.run(command)
-                self._view.update_monitor_image(widget, self._selected_image)
+                self._view.update_monitor_image(self._settings, widget, self._selected_image)
                 shutil.copy(
                     image_location, Path(self._settings.config_file).parent / name
                 )
 
     def _update_view(self):
-        self._view.update_content(
+        self._view.update_wallpaper_rows(
             settings=self._settings,
             page_index=self._current_page,
             wallpaper_rows=self._get_pagination_wallpaper_rows(

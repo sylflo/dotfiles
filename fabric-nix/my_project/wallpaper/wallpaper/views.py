@@ -140,7 +140,7 @@ class Wallpaper(Window):
             keyboard_mode="on-demand",
             **kwargs,
         )
-        self.settings = settings
+        settings = settings
         self.service = service
 
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
@@ -179,16 +179,16 @@ class Wallpaper(Window):
                 child.remove_style_class("selected-image")
         widget.add_style_class("selected-image")
 
-    def update_monitor_image(self, monitor, image_name):
+    def update_monitor_image(self, settings, monitor, image_name):
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-            f"{self.settings.wallpapers_folder}/{image_name}",
-            width=self.settings.monitor_img_size,
-            height=self.settings.monitor_img_size,
+            f"{settings.wallpapers_folder}/{image_name}",
+            width=settings.monitor_img_size,
+            height=settings.monitor_img_size,
         )
         image_widget.set_from_pixbuf(pixbuf)
 
-    def update_content(self, settings, page_index, wallpaper_rows):
+    def update_wallpaper_rows(self, settings, page_index, wallpaper_rows):
         # page_index # TODO show curretn selected page
         children = self.main_content.children
 
