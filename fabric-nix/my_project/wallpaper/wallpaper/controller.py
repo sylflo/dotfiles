@@ -131,6 +131,7 @@ class Wallpaper:
 
     def _update_view(self):
         self._view.update_wallpaper_rows(
+            service=self._service,
             settings=self._settings,
             page_index=self._current_page,
             wallpaper_rows=self._get_pagination_wallpaper_rows(

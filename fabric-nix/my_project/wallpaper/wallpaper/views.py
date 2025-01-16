@@ -195,7 +195,6 @@ class Wallpaper(Window):
             keyboard_mode="on-demand",
             **kwargs,
         )
-        self.service = service
         self.pagination = None
 
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
@@ -244,8 +243,8 @@ class Wallpaper(Window):
         )
         image_widget.set_from_pixbuf(pixbuf)
 
-    def update_wallpaper_rows(self, settings, page_index, wallpaper_rows):
-        self.main_content.update_wallpaper_rows(self.service, settings, wallpaper_rows)
+    def update_wallpaper_rows(self, service, settings, page_index, wallpaper_rows):
+        self.main_content.update_wallpaper_rows(service, settings, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 
     def on_draw(self, *args):
