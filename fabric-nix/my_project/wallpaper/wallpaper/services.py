@@ -18,12 +18,8 @@ class Pagination(Service):
     @Signal
     def select_monitor(self, widget: EventBox, monitor_name: str) -> None:
         pass
-        #raise Exception(self, widget, monitor_name)
 
-    # def select_image(self, image_name: str):
-    #     if self._selected_image != image_name:
-    #         self._selected_image = image_name
-    #         self.image_selected.emit(image_name)
+    @Signal
+    def select_image(self, widget: EventBox, image_name: str) -> None:
+        pass
 
-    # def get_selected_image(self):
-    #     return self._selected_image

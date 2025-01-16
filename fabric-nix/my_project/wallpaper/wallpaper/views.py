@@ -34,11 +34,11 @@ class BaseRow(Box):
         )
 
 class WallpaperRow(BaseRow):
-    def __init__(self, wallpapers_folder: Path, img_size: int, images, **kwargs):
+    def __init__(self, service, wallpapers_folder: Path, img_size: int, images, **kwargs):
         super().__init__(**kwargs)
         for image in images:
             event_box = EventBox(
-                events="button-press",
+                on_button_press_event=lambda widget, _, image_name=image: service.select_image(widget, image_name),
                 child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size).build().add_style_class("img").unwrap(),
             )
             self.add(event_box)
@@ -54,8 +54,6 @@ class MonitorsRow(BaseRow):
             else:
                 image_name = "./images/default.png"
             event_box = EventBox(
-                #events="button-press",
-                #on_button_press_event=lambda widgetr: service.select_monitor(),
                 on_button_press_event=lambda widget, _, monitor_name=monitor: service.select_monitor(widget, monitor_name),
                 child=Box(
                     children=[
@@ -78,7 +76,7 @@ class MainContent(Box):
 
         self.add(MonitorsRow(service, settings.config_file, monitors, settings.monitor_img_size))
         for row in wallpaper_rows:
-            self.add(WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row))
+            self.add(WallpaperRow(service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row))
 
     def update(self, settings, wallpaper_rows):
         self.children = [self.children[0]] + [WallpaperRow(settings.wallpapers_folder, settings.wallpaper_img_size, images=row) for row in wallpaper_rows] + [self.children[-1]]
@@ -130,15 +128,21 @@ class Wallpaper(Window):
             )
 
     def set_selected_monitor(self, widget):
-        for child in self.main_content.children[0].children:  # Assuming monitors are in the first child of main_content
+        for child in self.main_content.children[0].children:
             if isinstance(child, EventBox):
                 child.remove_style_class("selected-screen")
         widget.add_style_class("selected-screen")
+
+
+    def set_selected_image(self, widget):
+        for child in self.main_content.children[1]:
+            if isinstance(child, EventBox):
+                child.remove_style_class("selected-image")
+        widget.add_style_class("selected-image")
 
     def update_content(self, settings, page_index, wallpaper_rows):
         # page_index # TODO show curretn selected page
         self.main_content.update(settings, wallpaper_rows)
 
-      
     def on_draw(self, *args):
         self.revealer.child_revealed = True
