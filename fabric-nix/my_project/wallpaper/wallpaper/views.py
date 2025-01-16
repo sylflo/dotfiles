@@ -99,6 +99,27 @@ class MainContent(Box):
     def get_wallpaper_rows(self) -> WallpaperRow:
         return self.children[1]
 
+    def get_monitors_row(self) -> MonitorsRow:
+        return self.children[0]
+
+    def get_pagination_row(self):
+        return self.children[-1]
+
+    def update_wallpaper_rows(self, service, settings, wallpaper_rows):
+        #self.children = []
+        children = self.children
+
+        self.children = (
+            [self.get_monitors_row()]
+            + [
+                WallpaperRow(
+                    service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row
+                )
+                for row in wallpaper_rows
+            ]
+            + [self.get_pagination_row()]
+        )
+
 
 class Pagination(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
@@ -224,20 +245,7 @@ class Wallpaper(Window):
         image_widget.set_from_pixbuf(pixbuf)
 
     def update_wallpaper_rows(self, settings, page_index, wallpaper_rows):
-        # page_index # TODO show curretn selected page
-        children = self.main_content.children
-
-        self.main_content.children = (
-            [children[0]]
-            + [
-                WallpaperRow(
-                    self.service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row
-                )
-                for row in wallpaper_rows
-            ]
-            + [children[-1]]
-        )
-
+        self.main_content.update_wallpaper_rows(self.service, settings, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 
     def on_draw(self, *args):
