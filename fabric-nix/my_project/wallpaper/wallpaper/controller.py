@@ -20,7 +20,6 @@ class Wallpaper:
         self._service.connect("select-image", self.select_image)
         self._current_page = 1
         self._total_pages = self._get_total_pages(self._settings.img_per_row, self._settings.row_per_page)
-        #self._selected_monitor = None
         self._selected_monitors = []
         self._selected_monitors_name = []
         self._selected_image = None
