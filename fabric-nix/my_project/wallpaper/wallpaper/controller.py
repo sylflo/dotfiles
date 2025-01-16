@@ -5,6 +5,7 @@ from jinja2 import Template
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 import subprocess
+import shutil
 
 
 class Wallpaper:
@@ -96,16 +97,20 @@ class Wallpaper:
     def update_monitor_image(self):
         if self._selected_image:
             for widget, name in zip(self._selected_monitors, self._selected_monitors_name):
+                image_location = f"{self._settings.wallpapers_folder}/{self._selected_image}"
                 # TODO call the build command for swww
                 command = [
                     "swww",
                     "img",
                     "-o",
                     name,
-                    f"{self._settings.wallpapers_folder}/{self._selected_image}"
+                    image_location,
                 ]
                 subprocess.run(command)
                 self._view.update_monitor_image(widget, self._selected_image)
+                # TODO should not be hardcoded
+                shutil.copy(image_location, f"/home/sylflo/.config/sww_ui_ricing/{name}")
+
 
     def _update_view(self):
         self._view.update_content(

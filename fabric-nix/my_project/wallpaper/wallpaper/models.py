@@ -76,9 +76,3 @@ class Wallpaper:
     def get_monitors(self):
         result = subprocess.run(["hyprctl", "-j", "monitors"], capture_output=True, text=True)
         return [monitor['name'] for monitor in json.loads(result.stdout)]
-
-    # def set_wallpaper(self, monitors, image_name):
-    #     # This should be in controller
-    #     if image_name:
-    #         for monitor in monitors:
-    #             os.system(f"swww img -o \"{monitor}\" ./images/{image_name}")
