@@ -1,18 +1,23 @@
-import subprocess
 import json
 import os
-
-from dataclasses import asdict, dataclass, field, fields
-from typing import Optional, Literal
+import subprocess
 from configparser import ConfigParser
+from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
-
-
+from typing import Literal, Optional
 
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
 
-TransitionType = ['none', 'crossfade', 'slide-right', 'slide-left', 'slide-up', 'slide-down']
+TransitionType = [
+    "none",
+    "crossfade",
+    "slide-right",
+    "slide-left",
+    "slide-up",
+    "slide-down",
+]
+
 
 @dataclass
 class Settings:
@@ -24,7 +29,7 @@ class Settings:
     wallpapers_folder: Path = Path.home() / "Pictures"
     background_img: str = ""
     background_color: str = "#f2f2f2"
-    transition_type: str = 'none'
+    transition_type: str = "none"
     transition_duration: int = 2000
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
@@ -49,14 +54,20 @@ class Settings:
             settings.save()
 
         if settings.background_img and not Path(settings.background_img).exists():
-            raise FileNotFoundError(f"Background image '{settings.background_img}' does not exist.")
+            raise FileNotFoundError(
+                f"Background image '{settings.background_img}' does not exist."
+            )
         if settings.transition_type not in TransitionType:
-            raise ValueError(f"Transition type {settings.transition_type} not in TransitionType")
+            raise ValueError(
+                f"Transition type {settings.transition_type} not in TransitionType"
+            )
         return settings
 
     def save(self):
         config = ConfigParser()
-        config["View"] = {k: str(v) for k, v in asdict(self).items() if k != "config_file"}
+        config["View"] = {
+            k: str(v) for k, v in asdict(self).items() if k != "config_file"
+        }
 
         config_path = Path(self.config_file)
         config_path.parent.mkdir(parents=True, exist_ok=True)
@@ -74,5 +85,7 @@ class Wallpaper:
         return os.listdir(self.directory)
 
     def get_monitors(self):
-        result = subprocess.run(["hyprctl", "-j", "monitors"], capture_output=True, text=True)
-        return [monitor['name'] for monitor in json.loads(result.stdout)]
+        result = subprocess.run(
+            ["hyprctl", "-j", "monitors"], capture_output=True, text=True
+        )
+        return [monitor["name"] for monitor in json.loads(result.stdout)]
