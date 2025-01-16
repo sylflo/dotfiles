@@ -108,8 +108,7 @@ class Wallpaper:
                 ]
                 subprocess.run(command)
                 self._view.update_monitor_image(widget, self._selected_image)
-                # TODO should not be hardcoded
-                shutil.copy(image_location, f"/home/sylflo/.config/sww_ui_ricing/{name}")
+                shutil.copy(image_location, Path(self._settings.config_file).parent / name)
 
 
     def _update_view(self):

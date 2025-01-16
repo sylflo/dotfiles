@@ -52,8 +52,9 @@ class MonitorsRow(BaseRow):
 
         super().__init__(**kwargs)
         for monitor in monitors:
-            if os.path.exists(f"{config_file}/{monitor}"):
-                image_name = f"{config_file}/{monitor}"
+            image = Path(config_file).parent / monitor
+            if image.exists():
+                image_name = str(image)
             else:
                 image_name = "./images/default.png"
             event_box = EventBox(
