@@ -66,7 +66,7 @@ class Wallpaper:
             self._update_view()
 
     def go_to_page(self, service, page_index: int):
-        if page_index > 0 and page_index <  self._total_pages - 1:
+        if page_index > 0 and page_index <  self._total_pages:
             self._current_page = page_index
             self._update_view()
 
