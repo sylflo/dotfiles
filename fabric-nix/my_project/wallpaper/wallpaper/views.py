@@ -23,6 +23,9 @@ from pathlib import Path
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
+from gi.repository import GdkPixbuf
+
+
 
 class BaseRow(Box):
     def __init__(self, **kwargs):
@@ -104,6 +107,7 @@ class Wallpaper(Window):
             keyboard_mode='on-demand',
             **kwargs
         )
+        self.settings = settings
 
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
         if settings.pagination:
@@ -139,6 +143,16 @@ class Wallpaper(Window):
             if isinstance(child, EventBox):
                 child.remove_style_class("selected-image")
         widget.add_style_class("selected-image")
+
+    def update_monitor_image(self, monitor, image_name):
+
+        image_widget = monitor.children[0].children[0].children[0]
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+            f"{self.settings.wallpapers_folder}/{image_name}",
+            width=self.settings.monitor_img_size,
+            height=self.settings.monitor_img_size,
+        )
+        image_widget.set_from_pixbuf(pixbuf)
 
     def update_content(self, settings, page_index, wallpaper_rows):
         # page_index # TODO show curretn selected page
