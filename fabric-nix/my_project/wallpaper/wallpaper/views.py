@@ -106,9 +106,6 @@ class MainContent(Box):
         return self.children[-1]
 
     def update_wallpaper_rows(self, service, settings, wallpaper_rows):
-        #self.children = []
-        children = self.children
-
         self.children = (
             [self.get_monitors_row()]
             + [
