@@ -1,28 +1,18 @@
-import json
-import os
-import subprocess
-import time
 from pathlib import Path
 
 import gi
-from fabric import Application
-from fabric.utils import get_relative_path, invoke_repeater
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
-from fabric.widgets.centerbox import CenterBox
-from fabric.widgets.datetime import DateTime
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from fabric.widgets.shapes.corner import Corner
-from fabric.widgets.shapes.star import Star
 from fabric.widgets.wayland import WaylandWindow as Window
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gdk, GdkPixbuf, Gtk
+from gi.repository import GdkPixbuf
 
 
 class BaseRow(Box):

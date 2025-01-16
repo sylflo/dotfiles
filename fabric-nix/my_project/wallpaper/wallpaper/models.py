@@ -4,7 +4,6 @@ import subprocess
 from configparser import ConfigParser
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
-from typing import Literal, Optional
 
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 

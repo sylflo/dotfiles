@@ -1,10 +1,8 @@
 from fabric import Application
-from fabric.utils import get_relative_path, invoke_repeater
+from fabric.utils import get_relative_path
 
 from wallpaper.controller import Wallpaper as WallpaperController
 from wallpaper.models import Settings
-from wallpaper.models import Wallpaper as WallpaperModel
-from wallpaper.views import Wallpaper as WallpaperView
 
 
 def close_app(app):

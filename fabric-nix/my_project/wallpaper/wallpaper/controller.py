@@ -2,9 +2,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, Template
+from jinja2 import Environment, FileSystemLoader
 
-from wallpaper.models import Settings
 from wallpaper.models import Wallpaper as WallpaperModel
 from wallpaper.services import Pagination as WallpaperService
 from wallpaper.views import Wallpaper as WallpaperView
@@ -142,7 +141,6 @@ class Wallpaper:
         )
 
     def _set_stylesheet_vars(self):
-        template_folder = "templates/"
         filename = "style.css"
         environment = Environment(loader=FileSystemLoader("templates/"))
         template = environment.get_template(filename)
