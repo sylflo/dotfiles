@@ -128,14 +128,14 @@ class MainContent(Box):
 
 
 class Pagination(Box):
-    def __init__(self, pagination_service, nb_pages: int, **kwargs):
+    def __init__(self, service, nb_pages: int, **kwargs):
         super().__init__(
             name="pagination",
             orientation="horizontal",
             h_align="center",
-            children=[Button(label="Previous", on_clicked=lambda widget: pagination_service.previous_page())] +
-                [Button(label=str(i), on_clicked=lambda widget, page=i: pagination_service.go_to_page(page)) for i in range(1, nb_pages + 1)] +
-                [Button(label="Next", on_clicked=lambda widget: pagination_service.next_page())],
+            children=[Button(label="Previous", on_clicked=lambda widget: service.previous_page())] +
+                [Button(label=str(i), on_clicked=lambda widget, page=i: service.go_to_page(page)) for i in range(1, nb_pages + 1)] +
+                [Button(label="Next", on_clicked=lambda widget: service.next_page())],
             **kwargs
         )
 
