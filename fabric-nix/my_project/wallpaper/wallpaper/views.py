@@ -196,11 +196,8 @@ class Wallpaper(Window):
             **kwargs,
         )
         self.pagination = None
-
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
-        if settings.pagination:
-            self.pagination = Pagination(service, total_pages)
-            self.main_content.add(self.pagination)
+
 
         self.revealer = Revealer(
             transition_type=settings.transition_type,
@@ -218,6 +215,8 @@ class Wallpaper(Window):
             outer_box.add_style_class("background-color")
 
         if settings.pagination:
+            self.pagination = Pagination(service, total_pages)
+            self.main_content.add(self.pagination)
             self.children = outer_box
         else:
             self.children = ScrolledWindow(child=outer_box)
