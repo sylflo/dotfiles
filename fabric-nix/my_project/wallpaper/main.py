@@ -17,31 +17,3 @@ if __name__ == "__main__":
         "Escape", lambda widget, key, app=app, *_: close_app(app)
     )
     app.run()
-
-
-# from fabric import Application
-# from fabric.widgets.datetime import DateTime
-# from fabric.widgets.centerbox import CenterBox
-# from fabric.widgets.label import Label
-# from fabric.widgets.wayland import WaylandWindow
-# from fabric.widgets.window import Window
-
-
-# # class StatusBar(Window):
-# class StatusBar(WaylandWindow):
-#     def __init__(self, **kwargs):
-#         super().__init__(
-#             title='fuck',
-#             size=500,
-#             keyboard_mode="on-demand",
-#             # pass_through=False,
-#         )
-#         self.title = 'fuck'
-#         self.set_resizable(False)  
-#         self.date_time = DateTime()
-#         self.children = Label(label="PLOP")
-
-# if __name__ == "__main__":
-#     bar = StatusBar()
-#     app = Application("bar-example", bar)
-#     app.run()

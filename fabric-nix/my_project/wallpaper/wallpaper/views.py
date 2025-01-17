@@ -34,12 +34,29 @@ class WallpaperRow(BaseRow):
         self, service, wallpapers_folder: Path, img_size: int, images, **kwargs
     ):
         super().__init__(**kwargs)
+        max_width = 200
+        max_height = 200
         for image in images:
+
+            # Load and resize the image while maintaining aspect ratio
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(f"{wallpapers_folder}/{image}")
+            original_width = pixbuf.get_width()
+            original_height = pixbuf.get_height()
+            width_ratio = max_width / original_width
+            height_ratio = max_height / original_height
+            scale_ratio = min(width_ratio, height_ratio)
+            new_width = int(original_width * scale_ratio)
+            new_height = int(original_height * scale_ratio)
+            scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
+            image = Image(image_file=f"{wallpapers_folder}/{image}")
+            image.set_from_pixbuf(scaled_pixbuf)
+
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, image_name=image: service.select_image(
                     widget, image_name
                 ),
-                child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size)
+                #child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size)
+                child=image
                 .build()
                 .add_style_class("img")
                 .unwrap(),
