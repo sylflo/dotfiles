@@ -1,5 +1,6 @@
 LATER
   WALLPAPER
+    ADD centerbox (start => monitor, center => layout, end_ => pagination)
     1) Fullscreonn => boolean, scrolling => min_content_size, max_content_size also confgigurable
     2) spacing should be configurable
     2) responsive layout

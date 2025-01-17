@@ -103,7 +103,7 @@ class MainContent(Box):
                 SETTINGS.main.wallpapers_folder,
                 SETTINGS.layout.wallpaper_img_size,
                 images=row,
-            ) for row in wallpaper_rows]
+            ).build().add_style_class("wallpaper-row").unwrap() for row in wallpaper_rows]
 
         self.add(
             MonitorsRow(
@@ -144,7 +144,7 @@ class MainContent(Box):
                 children=[
                     WallpaperRow(
                         service, SETTINGS.main.wallpapers_folder, SETTINGS.layout.wallpaper_img_size, images=row
-                    )
+                    ).build().add_style_class("wallpaper-row").unwrap()
                     for row in wallpaper_rows
                 ]
             ),

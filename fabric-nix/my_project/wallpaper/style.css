@@ -73,6 +73,11 @@
     background-color: var(--selected-screen);
 }
 
+.wallpaper-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .background-img {
     background-image: url( '/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images/wide-girl.png' );
     background-size: cover;
