@@ -12,6 +12,9 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.centerbox import CenterBox
 
+from wallpaper.models import SETTINGS
+
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import GdkPixbuf
 
@@ -79,21 +82,20 @@ class MonitorsRow(BaseRow):
 
 
 class MainContent(Box):
-    def __init__(self, service, settings, monitors, wallpaper_rows, **kwargs):
+    def __init__(self, service, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
-        self.settings = settings
         self.add(
             MonitorsRow(
-                service, self.settings.config_file, monitors, self.settings.layout.monitor_img_size
+                service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
             )
         )
         for row in wallpaper_rows:
             self.add(
                 WallpaperRow(
                     service,
-                    self.settings.main.wallpapers_folder,
-                    self.settings.layout.wallpaper_img_size,
+                    SETTINGS.main.wallpapers_folder,
+                    SETTINGS.layout.wallpaper_img_size,
                     images=row,
                 )
             )
@@ -109,13 +111,13 @@ class MainContent(Box):
 
     def update_wallpaper_rows(self, service, wallpaper_rows):
         self.revealer = Revealer(
-            transition_type=self.settings.animation.init_transition_type,
-            transition_duration=self.settings.animation.init_transition_duration,
+            transition_type=SETTINGS.animation.init_transition_type,
+            transition_duration=SETTINGS.animation.init_transition_duration,
             child=Box(
                 orientation="vertical",
                 children=[
                     WallpaperRow(
-                        service, self.settings.main.wallpapers_folder, self.settings.layout.wallpaper_img_size, images=row
+                        service, SETTINGS.main.wallpapers_folder, SETTINGS.layout.wallpaper_img_size, images=row
                     )
                     for row in wallpaper_rows
                 ]
@@ -133,8 +135,8 @@ class MainContent(Box):
 
     def on_draw(self, *args):
         if self.revealer:
-            self.revealer.transition_type = self.settings.animation.prev_transition_type
-            self.revealer.transition_duration = self.settings.animation.prev_transition_duration
+            self.revealer.transition_type = SETTINGS.animation.prev_transition_type
+            self.revealer.transition_duration = SETTINGS.animation.prev_transition_duration
             self.revealer.child_revealed = True
 
 class Pagination(Box):
@@ -197,7 +199,6 @@ class Pagination(Box):
 class Wallpaper(Window):
     def __init__(
         self,
-        settings,
         service,
         total_pages: int,
         monitors: list[str],
@@ -212,23 +213,23 @@ class Wallpaper(Window):
             **kwargs,
         )
         self.pagination = None
-        self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
+        self.main_content = MainContent(service, monitors, wallpaper_rows)
 
         self.revealer = Revealer(
-            transition_type=settings.animation.init_transition_type,
-            transition_duration=settings.animation.init_transition_duration,
+            transition_type=SETTINGS.animation.init_transition_type,
+            transition_duration=SETTINGS.animation.init_transition_duration,
             child=self.main_content,
         )
         self.connect("draw", self.on_draw)
         outer_box = CenterBox(
             center_children=self.revealer,
         )
-        if settings.layout.background_img:
+        if SETTINGS.layout.background_img:
             outer_box.add_style_class("background-img")
         else:
             outer_box.add_style_class("background-color")
 
-        if settings.main.pagination:
+        if SETTINGS.main.pagination:
             self.pagination = Pagination(service, total_pages)
             self.main_content.add(self.pagination)
             self.children = outer_box
@@ -247,17 +248,16 @@ class Wallpaper(Window):
                 child.remove_style_class("selected-image")
         widget.add_style_class("selected-image")
 
-    def update_monitor_image(self, settings, monitor, image_name):
+    def update_monitor_image(self, monitor, image_name):
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-            f"{settings.main.wallpapers_folder}/{image_name}",
-            width=settings.layout.monitor_img_size,
-            height=settings.layout.monitor_img_size,
+            f"{SETTINGS.main.wallpapers_folder}/{image_name}",
+            width=SETTINGS.layout.monitor_img_size,
+            height=SETTINGS.layout.monitor_img_size,
         )
         image_widget.set_from_pixbuf(pixbuf)
 
-    # TODO remove settings
-    def update_wallpaper_rows(self, service, settings, page_index, wallpaper_rows):
+    def update_wallpaper_rows(self, service, page_index, wallpaper_rows):
         self.main_content.update_wallpaper_rows(service, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 

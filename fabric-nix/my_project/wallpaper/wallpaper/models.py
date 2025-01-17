@@ -130,3 +130,7 @@ class Wallpaper:
 
     def get_monitors(self):
         return [monitor.name for monitor in get_monitors()]
+
+
+# Global variable for settings
+SETTINGS = Settings.load()
