@@ -14,7 +14,6 @@ TODO:
 
 WAllapper
     1) Add fullscrren or not inside config
-    3) get_monitors => should work with any wm
     4)     Setting check when one or multiple option are not there
     5)  Refresh button to refresh doirectory
     6) SELECTION change css
@@ -24,6 +23,10 @@ WAllapper
       Layout should adapt to screen size
     Customize all CSS
     NAME: SwwwUiTuning
+
+    Add this to settings
+    click on right => slide right
+    cliking on left -=> slide left
 
 
 .selected-image {

@@ -4,6 +4,7 @@ import subprocess
 from configparser import ConfigParser
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
+from screeninfo import get_monitors
 
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
@@ -84,7 +85,4 @@ class Wallpaper:
         return os.listdir(self.directory)
 
     def get_monitors(self):
-        result = subprocess.run(
-            ["hyprctl", "-j", "monitors"], capture_output=True, text=True
-        )
-        return [monitor["name"] for monitor in json.loads(result.stdout)]
+        return [monitor.name for monitor in get_monitors()]
