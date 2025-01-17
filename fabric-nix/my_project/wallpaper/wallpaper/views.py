@@ -148,7 +148,7 @@ class Pagination(Box):
             + [
                 Button(
                     label=str(i),
-                    on_clicked=lambda widget, page=i: service.go_to_page(page),
+                    on_clicked=lambda widget, page=(i): service.go_to_page(page),
                 ).build().add_style_class("pagination-button").unwrap()
                 for i in range(1, nb_pages + 1)
             ]
@@ -179,7 +179,7 @@ class Pagination(Box):
     def reset_pagination(self, page_index):
         # Prev and next
         self._update_nav_button(self.get_prev_button(), page_index == 1)
-        self._update_nav_button(self.get_next_button(), page_index == (self.max_pages - 1))
+        self._update_nav_button(self.get_next_button(), page_index == self.max_pages)
 
         # Pagination number
         for index, button in enumerate(self.get_all_page_button()):

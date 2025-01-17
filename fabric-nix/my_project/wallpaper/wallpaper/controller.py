@@ -19,7 +19,7 @@ class Wallpaper:
         self._service.connect("go-to-page", self.go_to_page)
         self._service.connect("select-monitor", self.select_monitor)
         self._service.connect("select-image", self.select_image)
-        self._current_page = 0
+        self._current_page = 1
         self._total_pages = self._get_total_pages(
             self._settings.img_per_row, self._settings.row_per_page
         )
@@ -28,7 +28,7 @@ class Wallpaper:
         self._selected_image = None
         if self._settings.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(
-                self._current_page,
+                self._current_page - 1,
                 self._settings.img_per_row,
                 self._settings.row_per_page,
             )
@@ -77,17 +77,17 @@ class Wallpaper:
         return rows
 
     def next_page(self, service):
-        if self._current_page < self._total_pages - 1:
+        if self._current_page < self._total_pages:
             self._current_page = self._current_page + 1
             self._update_view()
 
     def previous_page(self, service):
-        if self._current_page > 0:
+        if self._current_page > 1:
             self._current_page = self._current_page - 1
             self._update_view()
 
     def go_to_page(self, service, page_index: int):
-        if page_index > 0 and page_index < self._total_pages:
+        if page_index > 0 and page_index <= self._total_pages:
             self._current_page = page_index
             self._update_view()
 
@@ -135,7 +135,7 @@ class Wallpaper:
             settings=self._settings,
             page_index=self._current_page,
             wallpaper_rows=self._get_pagination_wallpaper_rows(
-                self._current_page,
+                self._current_page - 1,
                 self._settings.img_per_row,
                 self._settings.row_per_page,
             ),
