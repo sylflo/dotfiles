@@ -10,6 +10,7 @@ from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.wayland import WaylandWindow as Window
+from fabric.widgets.centerbox import CenterBox
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import GdkPixbuf
@@ -106,17 +107,30 @@ class MainContent(Box):
         return self.children[-1]
 
     def update_wallpaper_rows(self, service, settings, wallpaper_rows):
-        self.children = (
-            [self.get_monitors_row()]
-            + [
+        self.revealer = Revealer(
+            #child_revealed = True,
+            transition_type=settings.transition_type,
+            transition_duration=settings.transition_duration,
+            child=Box(children=[
                 WallpaperRow(
                     service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row
                 )
                 for row in wallpaper_rows
-            ]
+            ]),
+        )
+        self.connect("draw", self.on_draw)
+        box = CenterBox(
+            center_children=self.revealer,
+        )
+        self.children = (
+            [self.get_monitors_row()]
+            + [box]
             + [self.get_pagination_row()]
         )
 
+    def on_draw(self, *args):
+        if self.revealer:
+            self.revealer.child_revealed = True
 
 class Pagination(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
@@ -201,9 +215,8 @@ class Wallpaper(Window):
             child=self.main_content,
         )
         self.connect("draw", self.on_draw)
-        outer_box = Box(
-            orientation="vertical",
-            children=[self.revealer],
+        outer_box = CenterBox(
+            center_children=self.revealer,
         )
         if settings.background_img:
             outer_box.add_style_class("background-img")

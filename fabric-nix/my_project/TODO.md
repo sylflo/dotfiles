@@ -17,12 +17,22 @@ WAllapper
     3) get_monitors => should work with any wm
     4)     Setting check when one or multiple option are not there
     5)  Refresh button to refresh doirectory
+    6) SELECTION change css
 
     use custom font, Roboto
     try scrollview with 100 items
       Layout should adapt to screen size
     Customize all CSS
     NAME: SwwwUiTuning
+
+
+.selected-image {
+    opacity: 0.5;
+}
+
+.selected-screen {
+    opacity: 0.5;
+}
 
 
 MUSIC PLAYER:
