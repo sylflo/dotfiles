@@ -8,9 +8,9 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
-from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.centerbox import CenterBox
+from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from wallpaper.models import SETTINGS
 
@@ -85,20 +85,28 @@ class MainContent(Box):
     def __init__(self, service, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
+        wallpaper_rows = [
+            WallpaperRow(
+                service,
+                SETTINGS.main.wallpapers_folder,
+                SETTINGS.layout.wallpaper_img_size,
+                images=row,
+            ) for row in wallpaper_rows]
+
         self.add(
             MonitorsRow(
                 service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
             )
         )
-        for row in wallpaper_rows:
-            self.add(
-                WallpaperRow(
-                    service,
-                    SETTINGS.main.wallpapers_folder,
-                    SETTINGS.layout.wallpaper_img_size,
-                    images=row,
-                )
+
+        self.add(ScrolledWindow(
+            min_content_size=(280, 320),
+            max_content_size=(1000, 1000),
+            child=Box(
+                orientation="vertical",
+                children=wallpaper_rows,
             )
+        ))
 
     def get_wallpaper_rows(self) -> WallpaperRow:
         return self.children[1:-1]
@@ -210,13 +218,21 @@ class Wallpaper(Window):
         **kwargs,
     ):
         super().__init__(
-            layer="top",
-            anchor="left bottom top right",
+            size=800,
+            anchor="top left",
+            # anchor="left bottom top right",
             exclusivity="auto",
             keyboard_mode="on-demand",
-            **kwargs,
+            **kwargs
         )
+        self.set_resizable(False)  
+    
         self.pagination = None
+        # self.main_content = ScrolledWindow(
+        #     min_content_size=(280, 320),
+        #     max_content_size=(280 * 2, 320),
+        #     child=MainContent(service, monitors, wallpaper_rows),
+        # )
         self.main_content = MainContent(service, monitors, wallpaper_rows)
 
         self.revealer = Revealer(
@@ -238,7 +254,10 @@ class Wallpaper(Window):
             self.main_content.add(self.pagination)
             self.children = outer_box
         else:
-            self.children = ScrolledWindow(child=outer_box)
+            self.children = outer_box
+            #self.children = ScrolledWindow(child=outer_box)
+
+
 
     def set_selected_monitor(self, widget):
         widget.add_style_class("selected-screen")

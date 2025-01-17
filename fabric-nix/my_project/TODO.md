@@ -1,6 +1,7 @@
 LATER
   WALLPAPER
-    1) Not fullscreen
+    1) Fullscreonn => boolean, scrolling => min_content_size, max_content_size also confgigurable
+    2.1) fix position for screen, should only scroll wallpaper rows
     2) responsive layout
     3) Try scrolling with 100 items
     3.1) Font family, color screen name
@@ -18,10 +19,6 @@ TODO:
   add isort
 
     NAME: SwwwUiTuning
-
-SEttings sww configurable in file
-
-Check everyuthign and correct bug go from default to non default
 
 MUSIC PLAYER:
   background => album image
