@@ -108,15 +108,17 @@ class MainContent(Box):
 
     def update_wallpaper_rows(self, service, settings, wallpaper_rows):
         self.revealer = Revealer(
-            #child_revealed = True,
             transition_type=settings.init_transition_type,
             transition_duration=settings.init_transition_duration,
-            child=Box(children=[
-                WallpaperRow(
-                    service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row
-                )
-                for row in wallpaper_rows
-            ]),
+            child=Box(
+                orientation="vertical",
+                children=[
+                    WallpaperRow(
+                        service, settings.wallpapers_folder, settings.wallpaper_img_size, images=row
+                    )
+                    for row in wallpaper_rows
+                ]
+            ),
         )
         self.connect("draw", self.on_draw)
         box = CenterBox(
