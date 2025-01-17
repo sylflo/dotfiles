@@ -27,7 +27,7 @@ WAllapper
     Add this to settings
     click on right => slide right
     cliking on left -=> slide left
-
+    Settihns => should be a singleton
 
 .selected-image {
     opacity: 0.5;

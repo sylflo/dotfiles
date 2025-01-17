@@ -31,6 +31,10 @@ class Settings:
     background_color: str = "#f2f2f2"
     init_transition_type: str = "none"
     init_transition_duration: int = 2000
+    prev_transition_type: str = "none"
+    prev_transition_duration: int = 2000
+    next_transition_type: str = "none"
+    next_transition_duration: int = 2000
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
@@ -59,7 +63,7 @@ class Settings:
             )
         if settings.init_transition_type not in TransitionType:
             raise ValueError(
-                f"Transition type {settings.transition_type} not in TransitionType"
+                f"Transition type {settings.init_transition_type} not in TransitionType"
             )
         return settings
 
