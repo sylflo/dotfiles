@@ -3,6 +3,7 @@ LATER
     1) Not fullscreen
     2) responsive layout
     3) Try scrolling with 100 items
+    3.1) Font family, color screen name
     4) Refresh button wallpaper folder
     5) Shortcut key => configurable
     6) Possiobility to split wallpaper between n screens
@@ -18,6 +19,8 @@ TODO:
     NAME: SwwwUiTuning
 
 SEttings sww configurable in file
+
+Check everyuthign and correct bug go from default to non default
 
 MUSIC PLAYER:
   background => album image

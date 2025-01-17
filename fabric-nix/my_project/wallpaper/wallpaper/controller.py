@@ -116,14 +116,8 @@ class Wallpaper:
                 image_location = (
                     f"{SETTINGS.main.wallpapers_folder}/{self._selected_image}"
                 )
-                # TODO call the build command for swww
-                command = [
-                    "swww",
-                    "img",
-                    "-o",
-                    name,
-                    image_location,
-                ]
+                command = SETTINGS.swww.build_command(name, image_location)
+                print(command)
                 subprocess.run(command)
                 self._view.update_monitor_image(widget, self._selected_image)
                 shutil.copy(

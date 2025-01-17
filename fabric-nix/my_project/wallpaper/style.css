@@ -1,18 +1,18 @@
 :vars {
-    --background: #000000;
-    --selected-image: #abcdef;
+    --background: #f2f2f2;
+    --selected-image: #ffffff;
     --selected-screen: #ffffff;
-    --pagination-background: green;
-    --pagination: red;
-    --pagination-border: yellow;
-    --pagination-hover-background: blue;
-    --pagination-hover-color: purple;
+    --pagination-background: #ffffff;
+    --pagination: #495057;
+    --pagination-border: #dee2e6;
+    --pagination-hover-background: #f8f9fa;
+    --pagination-hover-color: #212529;
     --pagination-selected-background: #007bff;
-    --pagination-selected: red;
-    --pagination-selected-border: red;
-    --pagination-disabled-background: red;
-    --pagination-disabled: yellow;
-    --pagination-disabled-border: green;
+    --pagination-selected: #ffffff;
+    --pagination-selected-border: #007bff;
+    --pagination-disabled-background: #e9ecef;
+    --pagination-disabled: #6c757d;
+    --pagination-disabled-border: #e9ecef;
 }
 
  * {
@@ -74,7 +74,7 @@
 }
 
 .background-img {
-    background-image: url( '/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images/wide-girl.png' );
+    background-image: url( '' );
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

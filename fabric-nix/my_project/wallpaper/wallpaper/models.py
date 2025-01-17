@@ -8,6 +8,8 @@ from screeninfo import get_monitors
 
 from wallpaper.swww import SWWW as SwwwSettings
 
+from typing import Union
+
 
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
@@ -72,10 +74,11 @@ class Settings:
 
     @classmethod
     def load(cls, config_path=DEFAULT_CONFIG_FILE):
+        from enum import Enum
+
         if os.path.exists(config_path):
             config = ConfigParser()
             config.read(config_path)
-
 
             def get_or_default(section, field_, default):
                 if section in config and field_.name in config[section]:
@@ -99,11 +102,16 @@ class Settings:
                 field_.name: get_or_default("Animation", field_, field_.default)
                 for field_ in fields(AnimationSettings)
             }
+            swww_data = {
+                field_.name: get_or_default("Swww", field_, field_.default)
+                for field_ in fields(SwwwSettings)
+            }
 
             settings = cls(
                 main=MainSettings(**main_data),
                 layout=LayoutSettings(**layout_data),
                 animation=AnimationSettings(**animation_data),
+                swww=SwwwSettings(**swww_data),
                 config_file=config_path,
             )
         else:
@@ -127,6 +135,9 @@ class Settings:
         }
         config["Animation"] = {
             k: str(v) for k, v in asdict(self.animation).items()
+        }
+        config["Swww"] = {
+            k: str(v) for k, v in asdict(self.swww).items()
         }
 
         config_path = Path(self.config_file)
