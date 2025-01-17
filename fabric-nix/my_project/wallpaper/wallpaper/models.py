@@ -73,16 +73,25 @@ class Settings:
             config = ConfigParser()
             config.read(config_path)
 
+
+            def get_or_default(section, field_, default):
+                if section in config and field_.name in config[section]:
+                    value = config.get(section, field_.name)
+                    # Cast to the appropriate type
+                    return field_.type(value)
+                else:
+                    return default
+
             main_data = {
-                field_.name: field_.type(config.get("Main", field_.name))
+                field_.name: get_or_default("Main", field_, field_.default)
                 for field_ in fields(MainSettings)
             }
             layout_data = {
-                field_.name: field_.type(config.get("Layout", field_.name))
+                field_.name: get_or_default("Layout", field_, field_.default)
                 for field_ in fields(LayoutSettings)
             }
             animation_data = {
-                field_.name: field_.type(config.get("Animation", field_.name))
+                field_.name: get_or_default("Animation", field_, field_.default)
                 for field_ in fields(AnimationSettings)
             }
 

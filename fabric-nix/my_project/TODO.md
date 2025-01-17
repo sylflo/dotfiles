@@ -19,7 +19,6 @@ WAllapper
     1) Add fullscrren or not inside config
     4)     Setting check when one or multiple option are not there
     use custom font, Roboto
-    Customize all CSS => check default config
 
 SEttings sww configurable in file
 
