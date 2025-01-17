@@ -12,7 +12,7 @@ from wallpaper.views import Wallpaper as WallpaperView
 class Wallpaper:
     def __init__(self, settings):
         self._settings = settings
-        self._model = WallpaperModel(self._settings.wallpapers_folder)
+        self._model = WallpaperModel(self._settings.main.wallpapers_folder)
         self._service = WallpaperService()
         self._service.connect("next-page", self.next_page)
         self._service.connect("previous-page", self.previous_page)
@@ -21,20 +21,20 @@ class Wallpaper:
         self._service.connect("select-image", self.select_image)
         self._current_page = 1
         self._total_pages = self._get_total_pages(
-            self._settings.img_per_row, self._settings.row_per_page
+            self._settings.layout.img_per_row, self._settings.layout.row_per_page
         )
         self._selected_monitors = []
         self._selected_monitors_name = []
         self._selected_image = None
-        if self._settings.pagination:
+        if self._settings.main.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(
                 self._current_page - 1,
-                self._settings.img_per_row,
-                self._settings.row_per_page,
+                self._settings.layout.img_per_row,
+                self._settings.layout.row_per_page,
             )
         else:
             wallpaper_rows = self._get_scrolling_wallpaper_rows(
-                self._settings.img_per_row
+                self._settings.layout.img_per_row
             )
         self._view = WallpaperView(
             settings=self._settings,
@@ -113,7 +113,7 @@ class Wallpaper:
                 self._selected_monitors, self._selected_monitors_name
             ):
                 image_location = (
-                    f"{self._settings.wallpapers_folder}/{self._selected_image}"
+                    f"{self._settings.main.wallpapers_folder}/{self._selected_image}"
                 )
                 # TODO call the build command for swww
                 command = [
@@ -136,8 +136,8 @@ class Wallpaper:
             page_index=self._current_page,
             wallpaper_rows=self._get_pagination_wallpaper_rows(
                 self._current_page - 1,
-                self._settings.img_per_row,
-                self._settings.row_per_page,
+                self._settings.layout.img_per_row,
+                self._settings.layout.row_per_page,
             ),
         )
 
@@ -146,8 +146,8 @@ class Wallpaper:
         environment = Environment(loader=FileSystemLoader("templates/"))
         template = environment.get_template(filename)
         content = template.render(
-            background_color=self._settings.background_color,
-            background_img=self._settings.background_img,
+            background_color=self._settings.layout.background_color,
+            background_img=self._settings.layout.background_img,
         )
         with open(filename, mode="w", encoding="utf-8") as file:
             file.write(content)

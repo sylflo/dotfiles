@@ -85,15 +85,15 @@ class MainContent(Box):
         self.settings = settings
         self.add(
             MonitorsRow(
-                service, self.settings.config_file, monitors, self.settings.monitor_img_size
+                service, self.settings.config_file, monitors, self.settings.layout.monitor_img_size
             )
         )
         for row in wallpaper_rows:
             self.add(
                 WallpaperRow(
                     service,
-                    self.settings.wallpapers_folder,
-                    self.settings.wallpaper_img_size,
+                    self.settings.main.wallpapers_folder,
+                    self.settings.layout.wallpaper_img_size,
                     images=row,
                 )
             )
@@ -109,13 +109,13 @@ class MainContent(Box):
 
     def update_wallpaper_rows(self, service, wallpaper_rows):
         self.revealer = Revealer(
-            transition_type=self.settings.init_transition_type,
-            transition_duration=self.settings.init_transition_duration,
+            transition_type=self.settings.animation.init_transition_type,
+            transition_duration=self.settings.animation.init_transition_duration,
             child=Box(
                 orientation="vertical",
                 children=[
                     WallpaperRow(
-                        service, self.settings.wallpapers_folder, self.settings.wallpaper_img_size, images=row
+                        service, self.settings.main.wallpapers_folder, self.settings.layout.wallpaper_img_size, images=row
                     )
                     for row in wallpaper_rows
                 ]
@@ -133,8 +133,8 @@ class MainContent(Box):
 
     def on_draw(self, *args):
         if self.revealer:
-            self.revealer.transition_type = self.settings.prev_transition_type
-            self.revealer.transition_duration = self.settings.prev_transition_duration
+            self.revealer.transition_type = self.settings.animation.prev_transition_type
+            self.revealer.transition_duration = self.settings.animation.prev_transition_duration
             self.revealer.child_revealed = True
 
 class Pagination(Box):
@@ -215,20 +215,20 @@ class Wallpaper(Window):
         self.main_content = MainContent(service, settings, monitors, wallpaper_rows)
 
         self.revealer = Revealer(
-            transition_type=settings.init_transition_type,
-            transition_duration=settings.init_transition_duration,
+            transition_type=settings.animation.init_transition_type,
+            transition_duration=settings.animation.init_transition_duration,
             child=self.main_content,
         )
         self.connect("draw", self.on_draw)
         outer_box = CenterBox(
             center_children=self.revealer,
         )
-        if settings.background_img:
+        if settings.layout.background_img:
             outer_box.add_style_class("background-img")
         else:
             outer_box.add_style_class("background-color")
 
-        if settings.pagination:
+        if settings.main.pagination:
             self.pagination = Pagination(service, total_pages)
             self.main_content.add(self.pagination)
             self.children = outer_box
@@ -250,9 +250,9 @@ class Wallpaper(Window):
     def update_monitor_image(self, settings, monitor, image_name):
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-            f"{settings.wallpapers_folder}/{image_name}",
-            width=settings.monitor_img_size,
-            height=settings.monitor_img_size,
+            f"{settings.main.wallpapers_folder}/{image_name}",
+            width=settings.layout.monitor_img_size,
+            height=settings.layout.monitor_img_size,
         )
         image_widget.set_from_pixbuf(pixbuf)
 
