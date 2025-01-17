@@ -10,7 +10,7 @@ LATER
     6) Possiobility to split wallpaper between n screens
     7) Dameon to chang wallpaper every x seconss
     8) Wait for sww to work before changing screenshot image
-
+    9) add loger
 
 TODO:
   add ruff

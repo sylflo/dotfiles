@@ -36,9 +36,9 @@ class WallpaperRow(BaseRow):
         super().__init__(**kwargs)
         max_width = 200
         max_height = 200
-        for image in images:
+        for image_name in images:
             # Load and resize the image while maintaining aspect ratio
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(f"{wallpapers_folder}/{image}")
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(f"{wallpapers_folder}/{image_name}")
             original_width = pixbuf.get_width()
             original_height = pixbuf.get_height()
             width_ratio = max_width / original_width
@@ -47,11 +47,11 @@ class WallpaperRow(BaseRow):
             new_width = int(original_width * scale_ratio)
             new_height = int(original_height * scale_ratio)
             scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-            image = Image(image_file=f"{wallpapers_folder}/{image}")
+            image = Image(image_file=f"{wallpapers_folder}/{image_name}")
             image.set_from_pixbuf(scaled_pixbuf)
 
             event_box = EventBox(
-                on_button_press_event=lambda widget, _, image_name=image: service.select_image(
+                on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(
                     widget, image_name
                 ),
                 child=image.build().add_style_class("img").unwrap(),
@@ -97,7 +97,7 @@ class MainContent(Box):
     def __init__(self, service, monitors, wallpaper_rows, **kwargs):
         super().__init__(orientation="vertical", **kwargs)
 
-        wallpaper_rows = [
+        self.wallpaper_rows = [
             WallpaperRow(
                 service,
                 SETTINGS.main.wallpapers_folder,
@@ -116,12 +116,12 @@ class MainContent(Box):
             max_content_size=(1000, 1000),
             child=Box(
                 orientation="vertical",
-                children=wallpaper_rows,
+                children=self.wallpaper_rows,
             )
         ))
 
     def get_wallpaper_rows(self) -> WallpaperRow:
-        return self.children[1:-1]
+        return self.wallpaper_rows
 
     def get_monitors_row(self) -> MonitorsRow:
         return self.children[0]
