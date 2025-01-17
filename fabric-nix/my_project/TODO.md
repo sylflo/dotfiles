@@ -1,5 +1,6 @@
 LATER
   WALLPAPER
+    NAME: SwwwUiTuning
     Daermon to change wallpaper every x seconds
     Possibilty to split wallpaper between n screens
     SHORTCUT KEY => should be configurable also
@@ -21,16 +22,8 @@ WAllapper
 
     use custom font, Roboto
     Customize all CSS
-    NAME: SwwwUiTuning
 
-.selected-image {
-    opacity: 0.5;
-}
-
-.selected-screen {
-    opacity: 0.5;
-}
-
+SEttings sww configurable in file
 
 MUSIC PLAYER:
   background => album image

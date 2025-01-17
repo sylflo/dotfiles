@@ -52,14 +52,12 @@
     margin-left: 10px;
 }
 
-/* TODO change by something else */
 .selected-image {
-    opacity: 0.5;
+    background-color: blue;
 }
 
-/* TODO change by something else */
 .selected-screen {
-    opacity: 0.5;
+    background-color: blue;
 }
 
 
