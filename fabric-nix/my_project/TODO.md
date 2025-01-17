@@ -20,14 +20,12 @@ WAllapper
     6) SELECTION change css
 
     use custom font, Roboto
-    try scrollview with 100 items
     Customize all CSS
     NAME: SwwwUiTuning
 
     Add this to settings
     click on right => slide right
     cliking on left -=> slide left
-    Settihns => should be a singleton
 
 .selected-image {
     opacity: 0.5;
