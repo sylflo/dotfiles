@@ -1,6 +1,19 @@
 :vars {
-    --background-color: {{ background_color }};
-  }
+    --background: {{ background_color }};
+    --selected-image: {{ background_selected_image }};
+    --selected-screen: {{ background_selected_screen }};
+    --pagination-background: {{ pagination_background_color }};
+    --pagination: {{ pagination_color }};
+    --pagination-border: {{ pagination_border_color }};
+    --pagination-hover-background: {{ pagination_hover_background_color }};
+    --pagination-hover-color: {{ pagination_hover_color }};
+    --pagination-selected-background: {{ pagination_selected_background_color }};
+    --pagination-selected: {{ pagination_selected_color }};
+    --pagination-selected-border: {{ pagination_selected_border }};
+    --pagination-disabled-background: {{ pagination_disabled_background_color }};
+    --pagination-disabled: {{ pagination_disabled_color }};
+    --pagination-disabled-border: {{ pagination_disabled_border }};
+}
 
  * {
     all: unset;
@@ -16,9 +29,9 @@
 
 /* General button styles */
 .pagination-button {
-    background-color: #ffffff;
-    color: #495057;
-    border: 1px solid #dee2e6;
+    background-color: var(--pagination-background);
+    color: var(--pagination);
+    border: 1px solid var(---pagination-border);
     padding: 6px 12px;
     font-size: 14px;
     text-decoration: none;
@@ -27,23 +40,23 @@
 
 /* Hover effect for buttons */
 #pagination button:hover {
-    background-color: #f8f9fa;
-    color: #212529;
+    background-color: var(--pagination-hover-background);
+    color: var(--pagination-hover-color);
 }
 
 /* Active page button */
 .pagination-selected-page {
-    background-color: #007bff;
-    color: #ffffff;
-    border-color: #007bff;
+    background-color: var(--pagination-selected-background);
+    color: var(--pagination-selected);
+    border-color: var(--pagination-selected-border);
     font-weight: bold;
 }
 
 /* Disabled buttons */
 .pagination-disabled {
-    background-color: #e9ecef;
-    color: #6c757d;
-    border-color: #e9ecef;
+    background-color: var(--pagination-disabled-background);
+    color: var(--pagination-disabled);
+    border-color: var(--pagination-disabled-borde);
 }
 
 
@@ -53,13 +66,12 @@
 }
 
 .selected-image {
-    background-color: blue;
+    background-color: var(--selected-image);
 }
 
 .selected-screen {
-    background-color: blue;
+    background-color: var(--selected-screen);
 }
-
 
 .background-img {
     background-image: url( '{{ background_img }}' );
@@ -69,5 +81,5 @@
 }
 
 .background-color {
-    background: var(--background-color);
+    background: var(--background);
 }

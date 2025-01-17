@@ -149,6 +149,19 @@ class Wallpaper:
         content = template.render(
             background_color=SETTINGS.layout.background_color,
             background_img=SETTINGS.layout.background_img,
+            background_selected_image=SETTINGS.layout.selected_image,
+            background_selected_screen=SETTINGS.layout.selected_screen,
+            pagination_background_color=SETTINGS.layout.pagination_background_color,
+            pagination_color=SETTINGS.layout.pagination_color,
+            pagination_border_color=SETTINGS.layout.pagination_border_color,
+            pagination_hover_background_color=SETTINGS.layout.pagination_hover_background_color,
+            pagination_hover_color=SETTINGS.layout.pagination_hover_color,
+            pagination_selected_background_color=SETTINGS.layout.pagination_selected_background_color,
+            pagination_selected_color=SETTINGS.layout.pagination_selected_color,
+            pagination_selected_border=SETTINGS.layout.pagination_selected_border,
+            pagination_disabled_background_color=SETTINGS.layout.pagination_disabled_background_color,
+            pagination_disabled_color=SETTINGS.layout.pagination_disabled_color,
+            pagination_disabled_border=SETTINGS.layout.pagination_disabled_border,
         )
         with open(filename, mode="w", encoding="utf-8") as file:
             file.write(content)

@@ -18,10 +18,12 @@ TransitionType = [
     "slide-down",
 ]
 
+
 @dataclass
 class MainSettings:
     wallpapers_folder: Path = Path.home() / "Pictures"
     pagination: bool = False
+
 
 @dataclass
 class LayoutSettings:
@@ -31,6 +33,19 @@ class LayoutSettings:
     monitor_img_size: int = 250
     background_img: str = ""
     background_color: str = "#f2f2f2"
+    selected_image: str = "#ffffff"
+    selected_screen: str = "#ffffff"
+    pagination_background_color: str = "#ffffff"
+    pagination_color: str = "#495057"
+    pagination_border_color: str = "#dee2e6"
+    pagination_hover_background_color: str = "#f8f9fa"
+    pagination_hover_color: str = "#212529"
+    pagination_selected_background_color = "#007bff"
+    pagination_selected_color: str = "#ffffff"
+    pagination_selected_border: str = "#007bff"
+    pagination_disabled_background_color: str = "#e9ecef"
+    pagination_disabled_color: str = "#6c757d"
+    pagination_disabled_border: str = "#e9ecef"
 
 
 @dataclass
@@ -81,23 +96,10 @@ class Settings:
             settings = cls(config_file=config_path)
             settings.save()
         return settings
-        #     data = {}
-        #     for field_ in fields(cls):
-        #         if field_.name == "config_file":
-        #             continue
-        #         if field_.type == bool:
-        #             data[field_.name] = config.getboolean("View", field_.name)
-        #         else:
-        #             data[field_.name] = field_.type(config.get("View", field_.name))
-        #     settings = cls(**data)
         if settings.layout.background_img and not Path(settings.layout.background_img).exists():
             raise FileNotFoundError(
                 f"Background image '{settings.background_img}' does not exist."
             )
-        # if settings.init_transition_type not in TransitionType:
-        #     raise ValueError(
-        #         f"Transition type {settings.init_transition_type} not in TransitionType"
-        #     )
         return settings
 
     def save(self):

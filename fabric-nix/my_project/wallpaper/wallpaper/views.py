@@ -141,8 +141,6 @@ class MainContent(Box):
 
     def on_draw(self, *args):
         if self.revealer:
-            # self.revealer.transition_type = SETTINGS.animation.prev_transition_type
-            # self.revealer.transition_duration = SETTINGS.animation.prev_transition_duration
             self.revealer.child_revealed = True
 
 class Pagination(Box):

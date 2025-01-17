@@ -1,6 +1,19 @@
 :vars {
-    --background-color: #000000;
-  }
+    --background: #000000;
+    --selected-image: #abcdef;
+    --selected-screen: #ffffff;
+    --pagination-background: green;
+    --pagination: red;
+    --pagination-border: yellow;
+    --pagination-hover-background: blue;
+    --pagination-hover-color: purple;
+    --pagination-selected-background: #007bff;
+    --pagination-selected: red;
+    --pagination-selected-border: red;
+    --pagination-disabled-background: red;
+    --pagination-disabled: yellow;
+    --pagination-disabled-border: green;
+}
 
  * {
     all: unset;
@@ -16,9 +29,9 @@
 
 /* General button styles */
 .pagination-button {
-    background-color: #ffffff;
-    color: #495057;
-    border: 1px solid #dee2e6;
+    background-color: var(--pagination-background);
+    color: var(--pagination);
+    border: 1px solid var(---pagination-border);
     padding: 6px 12px;
     font-size: 14px;
     text-decoration: none;
@@ -27,23 +40,23 @@
 
 /* Hover effect for buttons */
 #pagination button:hover {
-    background-color: #f8f9fa;
-    color: #212529;
+    background-color: var(--pagination-hover-background);
+    color: var(--pagination-hover-color);
 }
 
 /* Active page button */
 .pagination-selected-page {
-    background-color: #007bff;
-    color: #ffffff;
-    border-color: #007bff;
+    background-color: var(--pagination-selected-background);
+    color: var(--pagination-selected);
+    border-color: var(--pagination-selected-border);
     font-weight: bold;
 }
 
 /* Disabled buttons */
 .pagination-disabled {
-    background-color: #e9ecef;
-    color: #6c757d;
-    border-color: #e9ecef;
+    background-color: var(--pagination-disabled-background);
+    color: var(--pagination-disabled);
+    border-color: var(--pagination-disabled-borde);
 }
 
 
@@ -53,13 +66,12 @@
 }
 
 .selected-image {
-    background-color: blue;
+    background-color: var(--selected-image);
 }
 
 .selected-screen {
-    background-color: blue;
+    background-color: var(--selected-screen);
 }
-
 
 .background-img {
     background-image: url( '/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images/wide-girl.png' );
@@ -69,5 +81,5 @@
 }
 
 .background-color {
-    background: var(--background-color);
+    background: var(--background);
 }
