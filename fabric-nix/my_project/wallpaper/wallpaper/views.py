@@ -37,7 +37,6 @@ class WallpaperRow(BaseRow):
         max_width = 200
         max_height = 200
         for image in images:
-
             # Load and resize the image while maintaining aspect ratio
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(f"{wallpapers_folder}/{image}")
             original_width = pixbuf.get_width()
@@ -55,11 +54,7 @@ class WallpaperRow(BaseRow):
                 on_button_press_event=lambda widget, _, image_name=image: service.select_image(
                     widget, image_name
                 ),
-                #child=Image(image_file=f"{wallpapers_folder}/{image}", size=img_size)
-                child=image
-                .build()
-                .add_style_class("img")
-                .unwrap(),
+                child=image.build().add_style_class("img").unwrap(),
             )
             self.add(event_box)
 
@@ -245,11 +240,6 @@ class Wallpaper(Window):
         self.set_resizable(False)  
     
         self.pagination = None
-        # self.main_content = ScrolledWindow(
-        #     min_content_size=(280, 320),
-        #     max_content_size=(280 * 2, 320),
-        #     child=MainContent(service, monitors, wallpaper_rows),
-        # )
         self.main_content = MainContent(service, monitors, wallpaper_rows)
 
         self.revealer = Revealer(
@@ -272,8 +262,6 @@ class Wallpaper(Window):
             self.children = outer_box
         else:
             self.children = outer_box
-            #self.children = ScrolledWindow(child=outer_box)
-
 
 
     def set_selected_monitor(self, widget):
