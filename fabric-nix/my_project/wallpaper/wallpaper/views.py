@@ -109,10 +109,16 @@ class MainContent(Box):
     def get_pagination_row(self):
         return self.children[-1]
 
-    def update_wallpaper_rows(self, service, wallpaper_rows):
+    def update_wallpaper_rows(self, service, action, wallpaper_rows):
+        if action == 'next':
+            transition_type = SETTINGS.animation.next_transition_type
+            transition_duration = SETTINGS.animation.next_transition_duration       
+        else:
+            transition_type = SETTINGS.animation.prev_transition_type
+            transition_duration = SETTINGS.animation.prev_transition_duration       
         self.revealer = Revealer(
-            transition_type=SETTINGS.animation.init_transition_type,
-            transition_duration=SETTINGS.animation.init_transition_duration,
+            transition_type=transition_type,
+            transition_duration=transition_duration,
             child=Box(
                 orientation="vertical",
                 children=[
@@ -135,8 +141,8 @@ class MainContent(Box):
 
     def on_draw(self, *args):
         if self.revealer:
-            self.revealer.transition_type = SETTINGS.animation.prev_transition_type
-            self.revealer.transition_duration = SETTINGS.animation.prev_transition_duration
+            # self.revealer.transition_type = SETTINGS.animation.prev_transition_type
+            # self.revealer.transition_duration = SETTINGS.animation.prev_transition_duration
             self.revealer.child_revealed = True
 
 class Pagination(Box):
@@ -257,8 +263,8 @@ class Wallpaper(Window):
         )
         image_widget.set_from_pixbuf(pixbuf)
 
-    def update_wallpaper_rows(self, service, page_index, wallpaper_rows):
-        self.main_content.update_wallpaper_rows(service, wallpaper_rows)
+    def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
+        self.main_content.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 
     def on_draw(self, *args):

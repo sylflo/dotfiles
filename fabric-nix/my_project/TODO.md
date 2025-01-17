@@ -23,10 +23,6 @@ WAllapper
     Customize all CSS
     NAME: SwwwUiTuning
 
-    Add this to settings
-    click on right => slide right
-    cliking on left -=> slide left
-
 .selected-image {
     opacity: 0.5;
 }
