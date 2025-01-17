@@ -6,6 +6,9 @@ from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 from screeninfo import get_monitors
 
+from wallpaper.swww import SWWW as SwwwSettings
+
+
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
 
@@ -58,12 +61,12 @@ class AnimationSettings:
     next_transition_duration: int = 2000
 
 
-
 @dataclass
 class Settings:
     main: MainSettings = field(default_factory=MainSettings)
     layout: LayoutSettings = field(default_factory=LayoutSettings)
     animation: AnimationSettings = field(default_factory=AnimationSettings)
+    swww: SwwwSettings = field(default_factory=SwwwSettings)
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
@@ -77,8 +80,10 @@ class Settings:
             def get_or_default(section, field_, default):
                 if section in config and field_.name in config[section]:
                     value = config.get(section, field_.name)
-                    # Cast to the appropriate type
-                    return field_.type(value)
+                    if field_.type == bool:
+                        return config.getboolean(section, field_.name)
+                    else:
+                        return field_.type(value)
                 else:
                     return default
 

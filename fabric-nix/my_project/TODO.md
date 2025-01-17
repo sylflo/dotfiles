@@ -1,12 +1,12 @@
 LATER
   WALLPAPER
-    NAME: SwwwUiTuning
-    Daermon to change wallpaper every x seconds
-    Possibilty to split wallpaper between n screens
-    SHORTCUT KEY => should be configurable also
-    try scrolling with 100 wallapaer
-    respomsive layout
-     Refresh button to refresh doirectory
+    1) Not fullscreen
+    2) responsive layout
+    3) Try scrolling with 100 items
+    4) Refresh button wallpaper folder
+    5) Shortcut key => configurable
+    6) Possiobility to split wallpaper between n screens
+    7) Dameon to chang wallpaper every x seconss
 
 
 TODO:
@@ -15,10 +15,7 @@ TODO:
   add black
   add isort
 
-WAllapper
-    1) Add fullscrren or not inside config
-    4)     Setting check when one or multiple option are not there
-    use custom font, Roboto
+    NAME: SwwwUiTuning
 
 SEttings sww configurable in file
 
