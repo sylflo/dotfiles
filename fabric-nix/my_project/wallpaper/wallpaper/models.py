@@ -29,8 +29,8 @@ class Settings:
     wallpapers_folder: Path = Path.home() / "Pictures"
     background_img: str = ""
     background_color: str = "#f2f2f2"
-    transition_type: str = "none"
-    transition_duration: int = 2000
+    init_transition_type: str = "none"
+    init_transition_duration: int = 2000
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
@@ -57,7 +57,7 @@ class Settings:
             raise FileNotFoundError(
                 f"Background image '{settings.background_img}' does not exist."
             )
-        if settings.transition_type not in TransitionType:
+        if settings.init_transition_type not in TransitionType:
             raise ValueError(
                 f"Transition type {settings.transition_type} not in TransitionType"
             )
