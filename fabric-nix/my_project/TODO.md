@@ -8,6 +8,7 @@ LATER
     5) Shortcut key => configurable
     6) Possiobility to split wallpaper between n screens
     7) Dameon to chang wallpaper every x seconss
+    8) Wait for sww to work before changing screenshot image
 
 
 TODO:
