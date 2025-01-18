@@ -47,7 +47,8 @@ class WallpaperRow(BaseRow):
             new_width = int(original_width * scale_ratio)
             new_height = int(original_height * scale_ratio)
             scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-            image = Image(pixbuf=scaled_pixbuf)
+            scaled_pixbuf.save("./toto")
+            #image = Image(pixbuf=scaled_pixbuf)
 
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(

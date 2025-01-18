@@ -1,13 +1,20 @@
 LATER
   WALLPAPER
     1) Font family, color screen name
-    3) Try scrolling with 100 items or more and use caching
-      3.1) Refresh button wallpaper folder => DO cachachine first
-
-    4) Check all todo in code
+    2) Caching => Cache all images (try no threading then threading see if it blocks ui)
+      2.1) Refrsh button
+      2.2) Put shitty file, pdf, txt, ... shoould not create a bug
+      2.4 )  tryu webp
+      2.3) Order image by name in cache application
+    4) Check all todo in code => chck swww random 
     5) add loger
 
-    LATER Next versions
+    use XDG_CONFIG_HOME and XDG_CACHE_HOME
+
+    LATER Next versions\
+    3.0) Make a progress bar whern loading cacghe
+    3.1) VIDEO EXTENSION
+    3.3) => Too many page how to manage it  1 ... 53 54 55 ... 281 
     5) Shortcut key => configurable
     6) Possiobility to split wallpaper between n screens
     7) Dameon to chang wallpaper every x seconss
