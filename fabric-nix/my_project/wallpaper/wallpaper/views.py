@@ -97,8 +97,8 @@ class WallpaperSection(ScrolledWindow):
 
     def __init__(self, service, wallpaper_rows, **kwargs):
         super().__init__(
-            min_content_size=(280, 320),
-            max_content_size=(1000, 1000),
+            min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
+            max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
             **kwargs
         )
 

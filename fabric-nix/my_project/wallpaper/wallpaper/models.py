@@ -33,7 +33,11 @@ class MainSettings:
 
 @dataclass
 class LayoutSettings:
-    window_size: int = 800
+    window_size: int = 1000
+    scroll_min_width: int = 280
+    scroll_min_height: int = 320
+    scroll_max_width: int = 1000
+    scroll_max_height: int = 1000
     img_per_row: int = 3
     row_per_page: int = 4
     img_max_width: int = 300
