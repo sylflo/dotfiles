@@ -151,11 +151,12 @@ class WallpaperSection(ScrolledWindow):
         box = CenterBox(
             center_children=self.revealer,
         )
-        self.children = (
-            [self.get_monitors_row()]
-            + [box]
-            + [self.get_pagination_row()]
-        )
+        self.children = [box]
+        # self.children = (
+        #     [self.get_monitors_row()]
+        #     + [box]
+        #     + [self.get_pagination_row()]
+        # )
 
     def on_draw(self, *args):
         if self.revealer:
@@ -265,7 +266,8 @@ class Wallpaper(Window):
             outer_box.add_style_class("background-color")
 
         if SETTINGS.main.pagination:
-            self.layout.end_children = PaginationSection(service, total_pages)
+            self.pagination = PaginationSection(service, total_pages)
+            self.layout.end_children = self.pagination
             self.children = outer_box
         else:
             self.children = outer_box
@@ -294,7 +296,7 @@ class Wallpaper(Window):
         image_widget.set_from_pixbuf(pixbuf)
 
     def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
-        self.main_content.update_wallpaper_rows(service, action, wallpaper_rows)
+        self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 
     def on_draw(self, *args):
