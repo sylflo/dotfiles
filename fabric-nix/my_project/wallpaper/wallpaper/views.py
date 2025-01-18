@@ -229,9 +229,10 @@ class Wallpaper(Window):
         **kwargs,
     ):
         super().__init__(
-            size=800,
-            anchor="top left",
-            # anchor="left bottom top right",
+            # TODO config
+            size=200,
+            #anchor="top left",
+            anchor="left bottom top right",
             exclusivity="auto",
             keyboard_mode="on-demand",
             **kwargs
