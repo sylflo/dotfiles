@@ -117,7 +117,7 @@ class Wallpaper:
                     f"{SETTINGS.main.wallpapers_folder}/{self._selected_image}"
                 )
                 command = SETTINGS.swww.build_command(name, image_location)
-                print(command)
+                # TODO add logger for command
                 subprocess.run(command)
                 self._view.update_monitor_image(widget, self._selected_image)
                 shutil.copy(

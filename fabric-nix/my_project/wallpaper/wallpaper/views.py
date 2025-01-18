@@ -47,8 +47,7 @@ class WallpaperRow(BaseRow):
             new_width = int(original_width * scale_ratio)
             new_height = int(original_height * scale_ratio)
             scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-            image = Image(image_file=f"{wallpapers_folder}/{image_name}")
-            image.set_from_pixbuf(scaled_pixbuf)
+            image = Image(pixbuf=scaled_pixbuf)
 
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(
@@ -125,7 +124,7 @@ class WallpaperSection(ScrolledWindow):
             transition_duration = SETTINGS.animation.next_transition_duration       
         else:
             transition_type = SETTINGS.animation.prev_transition_type
-            transition_duration = SETTINGS.animation.prev_transition_duration       
+            transition_duration = SETTINGS.animation.prev_transition_duration
         self.revealer = Revealer(
             transition_type=transition_type,
             transition_duration=transition_duration,
@@ -139,6 +138,7 @@ class WallpaperSection(ScrolledWindow):
                 ]
             ),
         )
+        #raise Exception("FUCK")
         self.connect("draw", self.on_draw)
         box = CenterBox(
             center_children=self.revealer,
@@ -285,6 +285,7 @@ class Wallpaper(Window):
     def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
         self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
+
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
