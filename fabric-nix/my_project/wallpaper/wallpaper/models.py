@@ -42,6 +42,7 @@ class LayoutSettings:
     row_per_page: int = 4
     img_max_width: int = 300
     img_max_height: int = 300
+    img_spacing: int = 10
     monitor_img_size: int = 250
     background_img: str = ""
     background_color: str = "#f2f2f2"

@@ -156,6 +156,7 @@ class Wallpaper:
             pagination_disabled_background_color=SETTINGS.layout.pagination_disabled_background_color,
             pagination_disabled_color=SETTINGS.layout.pagination_disabled_color,
             pagination_disabled_border=SETTINGS.layout.pagination_disabled_border,
+            img_spacing=SETTINGS.layout.img_spacing,
         )
         with open(filename, mode="w", encoding="utf-8") as file:
             file.write(content)

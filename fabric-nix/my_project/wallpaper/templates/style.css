@@ -61,10 +61,7 @@
 
 
 .img {
-    margin-right: 10px;
-    margin-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  padding: {{ img_spacing }}px;
 }
 
 .selected-image {
