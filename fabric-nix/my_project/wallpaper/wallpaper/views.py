@@ -31,25 +31,12 @@ class BaseRow(Box):
 
 class WallpaperRow(BaseRow):
     def __init__(
+        # TODO chamge wallpapers_fodle to cache folder shopuld be get fgroim
         self, service, wallpapers_folder: Path, images, **kwargs
     ):
         super().__init__(**kwargs)
-        max_width = SETTINGS.layout.img_max_width
-        max_height = SETTINGS.layout.img_max_height
         for image_name in images:
-            # Load and resize the image while maintaining aspect ratio
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(f"{wallpapers_folder}/{image_name}")
-            original_width = pixbuf.get_width()
-            original_height = pixbuf.get_height()
-            width_ratio = max_width / original_width
-            height_ratio = max_height / original_height
-            scale_ratio = min(width_ratio, height_ratio)
-            new_width = int(original_width * scale_ratio)
-            new_height = int(original_height * scale_ratio)
-            scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-            scaled_pixbuf.save("./toto")
-            #image = Image(pixbuf=scaled_pixbuf)
-
+            image = Image(image_file=f"{wallpapers_folder}/{image_name}", size=SETTINGS.layout.img_max_width)
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(
                     widget, image_name

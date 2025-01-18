@@ -29,6 +29,7 @@ class MainSettings:
     wallpapers_folder: Path = Path.home() / "Pictures"
     pagination: bool = False
     fullscreen: bool = True
+    cache_folder: Path = Path.home() / ".cache" / "sww_ui_ricing"
 
 
 @dataclass

@@ -9,6 +9,10 @@ gi.require_version("Gtk", "3.0")
 gi.require_version('GdkPixbuf', '2.0')
 from gi.repository import GdkPixbuf
 
+import os
+import shutil
+
+# TODO Load from settings
 DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
 CACHE_DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing"
 IMG_MAX_WIDTH = 300
@@ -76,24 +80,18 @@ def cache_images():
 
 cache_images()
 
-# Clear cache
-# delete all files
-# Delete json file
-# Why to delete cache => wallpaper folder changes => widht or height change
+def clear_cache():
+    # TODO call if wallpaperfolder change, width/heifght change
+    # Delete all files and directories inside myapp_cache_dir
+    if os.path.exists(CACHE_DIRECTORY):
+        for item in os.listdir(CACHE_DIRECTORY):
+            item_path = os.path.join(CACHE_DIRECTORY, item)
+            if os.path.isfile(item_path):
+                os.remove(item_path)  # Remove files
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)  # Remove directories
+        print(f"All contents of {CACHE_DIRECTORY} have been deleted.")
+    else:
+        print(f"{CACHE_DIRECTORY} does not exist.")
 
-
-# import os
-# import shutil
-
-
-# # Delete all files and directories inside myapp_cache_dir
-# if os.path.exists(myapp_cache_dir):
-#     for item in os.listdir(myapp_cache_dir):
-#         item_path = os.path.join(myapp_cache_dir, item)
-#         if os.path.isfile(item_path):
-#             os.remove(item_path)  # Remove files
-#         elif os.path.isdir(item_path):
-#             shutil.rmtree(item_path)  # Remove directories
-#     print(f"All contents of {myapp_cache_dir} have been deleted.")
-# else:
-#     print(f"{myapp_cache_dir} does not exist.")
+#clear_cache()
