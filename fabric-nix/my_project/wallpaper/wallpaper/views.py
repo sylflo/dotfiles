@@ -109,7 +109,7 @@ class WallpaperSection(ScrolledWindow):
                 SETTINGS.main.wallpapers_folder,
                 SETTINGS.layout.wallpaper_img_size,
                 images=row,
-            ).build().add_style_class("wallpaper-row").unwrap() for row in wallpaper_rows]
+            ) for row in wallpaper_rows]
 
         self.add(
             Box(
@@ -121,11 +121,11 @@ class WallpaperSection(ScrolledWindow):
     def get_wallpaper_rows(self) -> WallpaperRow:
         return self.wallpaper_rows
 
-    def get_monitors_row(self) -> MonitorSection:
-        return self.children[0]
+    # def get_monitors_row(self) -> MonitorSection:
+    #     return self.children[0]
 
-    def get_pagination_row(self):
-        return self.children[-1]
+    # def get_pagination_row(self):
+    #     return self.children[-1]
 
     def update_wallpaper_rows(self, service, action, wallpaper_rows):
         if action == 'next':
@@ -239,11 +239,9 @@ class Wallpaper(Window):
     
         self.pagination = None
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
-
-
         self.monitor_section = MonitorSection(
-                service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
-            )
+            service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
+        )
         self.layout = CenterBox(
             orientation='vertical',
             start_children=self.monitor_section,
@@ -280,7 +278,7 @@ class Wallpaper(Window):
         widget.remove_style_class("selected-screen")
 
     def set_selected_image(self, widget):
-        for row in self.main_content.get_wallpaper_rows():
+        for row in self.wallpaper_section.get_wallpaper_rows():
             for child in row:
                 if isinstance(child, EventBox):
                     child.remove_style_class("selected-image")

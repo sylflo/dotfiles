@@ -63,6 +63,8 @@
 .img {
     margin-right: 10px;
     margin-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .selected-image {
@@ -71,11 +73,6 @@
 
 .selected-screen {
     background-color: var(--selected-screen);
-}
-
-.wallpaper-row {
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .background-img {
