@@ -1,7 +1,6 @@
 LATER
   WALLPAPER
     1) scrolling => min_content_size, max_content_size also confgigurable
-    2) image size shgould be cionfigurable
     2) spacing should be configurable
     3) Try scrolling with 100 items or more and use caching
     3.1) Font family, color screen name
