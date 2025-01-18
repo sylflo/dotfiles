@@ -59,7 +59,7 @@ class WallpaperRow(BaseRow):
             self.add(event_box)
 
 
-class MonitorsRow(BaseRow):
+class MonitorSection(BaseRow):
     def __init__(
         self, service, config_file, monitors: list[str], img_size: int, **kwargs
     ):
@@ -93,9 +93,14 @@ class MonitorsRow(BaseRow):
             self.add(event_box)
 
 
-class MainContent(Box):
-    def __init__(self, service, monitors, wallpaper_rows, **kwargs):
-        super().__init__(orientation="vertical", **kwargs)
+class WallpaperSection(ScrolledWindow):
+
+    def __init__(self, service, wallpaper_rows, **kwargs):
+        super().__init__(
+            min_content_size=(280, 320),
+            max_content_size=(1000, 1000),
+            **kwargs
+        )
 
         self.wallpaper_rows = [
             WallpaperRow(
@@ -106,24 +111,16 @@ class MainContent(Box):
             ).build().add_style_class("wallpaper-row").unwrap() for row in wallpaper_rows]
 
         self.add(
-            MonitorsRow(
-                service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
-            )
-        )
-
-        self.add(ScrolledWindow(
-            min_content_size=(280, 320),
-            max_content_size=(1000, 1000),
-            child=Box(
+            Box(
                 orientation="vertical",
                 children=self.wallpaper_rows,
             )
-        ))
+        )
 
     def get_wallpaper_rows(self) -> WallpaperRow:
         return self.wallpaper_rows
 
-    def get_monitors_row(self) -> MonitorsRow:
+    def get_monitors_row(self) -> MonitorSection:
         return self.children[0]
 
     def get_pagination_row(self):
@@ -163,7 +160,7 @@ class MainContent(Box):
         if self.revealer:
             self.revealer.child_revealed = True
 
-class Pagination(Box):
+class PaginationSection(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
         self.max_pages = nb_pages
 
@@ -240,28 +237,41 @@ class Wallpaper(Window):
         self.set_resizable(False)  
     
         self.pagination = None
-        self.main_content = MainContent(service, monitors, wallpaper_rows)
+        self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
 
-        self.revealer = Revealer(
-            transition_type=SETTINGS.animation.init_transition_type,
-            transition_duration=SETTINGS.animation.init_transition_duration,
-            child=self.main_content,
-        )
-        self.connect("draw", self.on_draw)
-        outer_box = CenterBox(
-            center_children=self.revealer,
-        )
-        if SETTINGS.layout.background_img:
-            outer_box.add_style_class("background-img")
-        else:
-            outer_box.add_style_class("background-color")
 
-        if SETTINGS.main.pagination:
-            self.pagination = Pagination(service, total_pages)
-            self.main_content.add(self.pagination)
-            self.children = outer_box
-        else:
-            self.children = outer_box
+        # TODO should not be used whern paigination is disabled
+        self.pagination_section = PaginationSection(service, total_pages)
+        self.monitor_section = MonitorSection(
+                service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
+            )
+        self.children = CenterBox(
+            orientation='vertical',
+            start_children=self.monitor_section,
+            center_children=self.wallpaper_section,
+            end_children=self.pagination_section,
+        )
+
+        # self.revealer = Revealer(
+        #     transition_type=SETTINGS.animation.init_transition_type,
+        #     transition_duration=SETTINGS.animation.init_transition_duration,
+        #     child=self.main_content,
+        # )
+        # self.connect("draw", self.on_draw)
+        # outer_box = CenterBox(
+        #     center_children=self.revealer,
+        # )
+        # if SETTINGS.layout.background_img:
+        #     outer_box.add_style_class("background-img")
+        # else:
+        #     outer_box.add_style_class("background-color")
+
+        # if SETTINGS.main.pagination:
+        #     self.pagination = Pagination(service, total_pages)
+        #     self.main_content.add(self.pagination)
+        #     self.children = outer_box
+        # else:
+        #     self.children = outer_box
 
 
     def set_selected_monitor(self, widget):
