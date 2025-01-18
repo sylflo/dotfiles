@@ -121,12 +121,6 @@ class WallpaperSection(ScrolledWindow):
     def get_wallpaper_rows(self) -> WallpaperRow:
         return self.wallpaper_rows
 
-    # def get_monitors_row(self) -> MonitorSection:
-    #     return self.children[0]
-
-    # def get_pagination_row(self):
-    #     return self.children[-1]
-
     def update_wallpaper_rows(self, service, action, wallpaper_rows):
         if action == 'next':
             transition_type = SETTINGS.animation.next_transition_type
@@ -152,11 +146,6 @@ class WallpaperSection(ScrolledWindow):
             center_children=self.revealer,
         )
         self.children = [box]
-        # self.children = (
-        #     [self.get_monitors_row()]
-        #     + [box]
-        #     + [self.get_pagination_row()]
-        # )
 
     def on_draw(self, *args):
         if self.revealer:
@@ -228,11 +217,11 @@ class Wallpaper(Window):
         wallpaper_rows: list[list[str]],
         **kwargs,
     ):
+        anchor = "left bottom top right" if SETTINGS.main.fullscreen else "top left"
         super().__init__(
             # TODO config
             size=200,
-            #anchor="top left",
-            anchor="left bottom top right",
+            anchor=anchor,
             exclusivity="auto",
             keyboard_mode="on-demand",
             **kwargs

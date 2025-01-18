@@ -28,6 +28,7 @@ TransitionType = [
 class MainSettings:
     wallpapers_folder: Path = Path.home() / "Pictures"
     pagination: bool = False
+    fullscreen: bool = True
 
 
 @dataclass
