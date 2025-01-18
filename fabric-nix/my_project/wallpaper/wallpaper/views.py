@@ -31,12 +31,11 @@ class BaseRow(Box):
 
 class WallpaperRow(BaseRow):
     def __init__(
-        self, service, wallpapers_folder: Path, img_size: int, images, **kwargs
+        self, service, wallpapers_folder: Path, images, **kwargs
     ):
         super().__init__(**kwargs)
-        # TODO should be in config
-        max_width = 200
-        max_height = 200
+        max_width = SETTINGS.layout.img_max_width
+        max_height = SETTINGS.layout.img_max_height
         for image_name in images:
             # Load and resize the image while maintaining aspect ratio
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(f"{wallpapers_folder}/{image_name}")
@@ -107,7 +106,6 @@ class WallpaperSection(ScrolledWindow):
             WallpaperRow(
                 service,
                 SETTINGS.main.wallpapers_folder,
-                SETTINGS.layout.wallpaper_img_size,
                 images=row,
             ) for row in wallpaper_rows]
 
@@ -135,7 +133,7 @@ class WallpaperSection(ScrolledWindow):
                 orientation="vertical",
                 children=[
                     WallpaperRow(
-                        service, SETTINGS.main.wallpapers_folder, SETTINGS.layout.wallpaper_img_size, images=row
+                        service, SETTINGS.main.wallpapers_folder, images=row
                     ).build().add_style_class("wallpaper-row").unwrap()
                     for row in wallpaper_rows
                 ]
@@ -219,8 +217,7 @@ class Wallpaper(Window):
     ):
         anchor = "left bottom top right" if SETTINGS.main.fullscreen else "top left"
         super().__init__(
-            # TODO config
-            size=200,
+            size=SETTINGS.layout.window_size,
             anchor=anchor,
             exclusivity="auto",
             keyboard_mode="on-demand",
