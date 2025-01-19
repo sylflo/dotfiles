@@ -31,9 +31,9 @@ class BaseRow(Box):
 
 class WallpaperRow(BaseRow):
     def __init__(
-        # TODO chamge wallpapers_fodle to cache folder shopuld be get fgroim
         self, service, wallpapers_folder: Path, images, **kwargs
     ):
+        #raise Exception(wallpapers_folder, images)
         super().__init__(**kwargs)
         for image_name in images:
             image = Image(image_file=f"{wallpapers_folder}/{image_name}", size=SETTINGS.layout.img_max_width)
@@ -92,7 +92,7 @@ class WallpaperSection(ScrolledWindow):
         self.wallpaper_rows = [
             WallpaperRow(
                 service,
-                SETTINGS.main.wallpapers_folder,
+                SETTINGS.main.cache_folder / "images",
                 images=row,
             ) for row in wallpaper_rows]
 

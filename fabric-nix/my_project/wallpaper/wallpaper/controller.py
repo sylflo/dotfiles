@@ -1,5 +1,6 @@
 import shutil
 import subprocess
+import threading
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -9,11 +10,19 @@ from wallpaper.services import Pagination as WallpaperService
 from wallpaper.views import Wallpaper as WallpaperView
 
 from wallpaper.models import Settings
+from wallpaper.cache import CacheManager
 
 
 class Wallpaper:
+    def _cache(self):
+        cache_manager = CacheManager()
+        cache_manager.clear_cache()
+        cache_manager.cache_images()
+
     def __init__(self):
-        self._model = WallpaperModel(SETTINGS.main.wallpapers_folder)
+        thread = threading.Thread(target=self._cache).start()
+        # self._cache()
+        self._model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self._service = WallpaperService()
         self._service.connect("next-page", self.next_page)
         self._service.connect("previous-page", self.previous_page)
@@ -27,6 +36,8 @@ class Wallpaper:
         self._selected_monitors = []
         self._selected_monitors_name = []
         self._selected_image = None
+   
+
         if SETTINGS.main.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(
                 self._current_page - 1,
