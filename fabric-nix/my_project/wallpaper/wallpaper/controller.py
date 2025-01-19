@@ -22,39 +22,40 @@ class Wallpaper:
     def __init__(self):
         #thread = threading.Thread(target=self._cache).start()
         self._cache()
-        self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
-        self.service = WallpaperService()
-        self.service.connect("next-page", self.next_page)
-        self.service.connect("previous-page", self.previous_page)
-        self.service.connect("go-to-page", self.go_to_page)
-        self.service.connect("select-monitor", self.select_monitor)
-        self.service.connect("select-image", self.select_image)
-        self.current_page = 1
-        self.total_pages = self._get_total_pages(
-            SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
-        )
-        self.selected_monitors = []
-        self.selected_monitors_name = []
-        self.selected_image = None
+        raise Exception("TOOT")
+        # self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
+        # self.service = WallpaperService()
+        # self.service.connect("next-page", self.next_page)
+        # self.service.connect("previous-page", self.previous_page)
+        # self.service.connect("go-to-page", self.go_to_page)
+        # self.service.connect("select-monitor", self.select_monitor)
+        # self.service.connect("select-image", self.select_image)
+        # self.current_page = 1
+        # self.total_pages = self._get_total_pages(
+        #     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
+        # )
+        # self.selected_monitors = []
+        # self.selected_monitors_name = []
+        # self.selected_image = None
    
 
-        if SETTINGS.main.pagination:
-            wallpaper_rows = self._get_pagination_wallpaper_rows(
-                self.current_page - 1,
-                SETTINGS.layout.img_per_row,
-                SETTINGS.layout.row_per_page,
-            )
-        else:
-            wallpaper_rows = self._get_scrolling_wallpaper_rows(
-                SETTINGS.layout.img_per_row
-            )
-        self._view = WallpaperView(
-            service=self.service,
-            total_pages=self.total_pages,
-            monitors=self._get_monitors(),
-            wallpaper_rows=wallpaper_rows,
-        )
-        self._set_stylesheet_vars()
+        # if SETTINGS.main.pagination:
+        #     wallpaper_rows = self._get_pagination_wallpaper_rows(
+        #         self.current_page - 1,
+        #         SETTINGS.layout.img_per_row,
+        #         SETTINGS.layout.row_per_page,
+        #     )
+        # else:
+        #     wallpaper_rows = self._get_scrolling_wallpaper_rows(
+        #         SETTINGS.layout.img_per_row
+        #     )
+        # self._view = WallpaperView(
+        #     service=self.service,
+        #     total_pages=self.total_pages,
+        #     monitors=self._get_monitors(),
+        #     wallpaper_rows=wallpaper_rows,
+        # )
+        # self._set_stylesheet_vars()
 
     def _get_monitors(self):
         return self.model.get_monitors()
