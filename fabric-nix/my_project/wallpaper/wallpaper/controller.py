@@ -16,13 +16,13 @@ from wallpaper.cache import CacheManager
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
-        cache_manager.clear_cache()
+        #cache_manager.clear_cache()
         cache_manager.cache_images()
 
     def __init__(self):
         #thread = threading.Thread(target=self._cache).start()
-        # self._cache()
-        self._model = WallpaperModel(SETTINGS.main.cache_folder / "images")
+        self._cache()
+        self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self._service = WallpaperService()
         self._service.connect("next-page", self.next_page)
         self._service.connect("previous-page", self.previous_page)
@@ -57,14 +57,14 @@ class Wallpaper:
         self._set_stylesheet_vars()
 
     def _get_monitors(self):
-        return self._model.get_monitors()
+        return self.model.get_monitors()
 
     def _get_scrolling_wallpaper_rows(self, img_per_row: int):
-        images = self._model.get_images()
+        images = self.model.get_images()
         return [images[i : i + img_per_row] for i in range(0, len(images), img_per_row)]
 
     def _get_total_pages(self, img_per_row: int, row_per_page: int):
-        images = self._model.get_images()
+        images = self.model.get_images()
 
         items_per_page = img_per_row * row_per_page
         total_pages = (len(images) + (items_per_page - 1)) // items_per_page
@@ -74,7 +74,7 @@ class Wallpaper:
     def _get_pagination_wallpaper_rows(
         self, page_index: int, img_per_row: int, row_per_page: int
     ):
-        images = self._model.get_images()
+        images = self.model.get_images()
 
         items_per_page = img_per_row * row_per_page
         start_index = page_index * items_per_page
