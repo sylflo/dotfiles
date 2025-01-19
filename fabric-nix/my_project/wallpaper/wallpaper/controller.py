@@ -20,7 +20,7 @@ class Wallpaper:
         cache_manager.cache_images()
 
     def __init__(self):
-        thread = threading.Thread(target=self._cache).start()
+        #thread = threading.Thread(target=self._cache).start()
         # self._cache()
         self._model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self._service = WallpaperService()

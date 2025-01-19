@@ -73,7 +73,7 @@ class CacheManager:
 
     def _should_clear_cache(self):
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
-        return cache_data['wallpapers_folder'] != SETTINGS.main.wallpapers_folder
+        return cache_data['wallpapers_folder'] != str(SETTINGS.main.wallpapers_folder)
 
     def clear_cache(self):
         if os.path.exists(SETTINGS.main.cache_folder) and self._should_clear_cache():
