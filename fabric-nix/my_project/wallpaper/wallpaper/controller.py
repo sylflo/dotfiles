@@ -23,12 +23,12 @@ class Wallpaper:
         #thread = threading.Thread(target=self._cache).start()
         self._cache()
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
-        self._service = WallpaperService()
-        self._service.connect("next-page", self.next_page)
-        self._service.connect("previous-page", self.previous_page)
-        self._service.connect("go-to-page", self.go_to_page)
-        self._service.connect("select-monitor", self.select_monitor)
-        self._service.connect("select-image", self.select_image)
+        self.service = WallpaperService()
+        self.service.connect("next-page", self.next_page)
+        self.service.connect("previous-page", self.previous_page)
+        self.service.connect("go-to-page", self.go_to_page)
+        self.service.connect("select-monitor", self.select_monitor)
+        self.service.connect("select-image", self.select_image)
         self._current_page = 1
         self._total_pages = self._get_total_pages(
             SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
@@ -49,7 +49,7 @@ class Wallpaper:
                 SETTINGS.layout.img_per_row
             )
         self._view = WallpaperView(
-            service=self._service,
+            service=self.service,
             total_pages=self._total_pages,
             monitors=self._get_monitors(),
             wallpaper_rows=wallpaper_rows,
@@ -137,7 +137,7 @@ class Wallpaper:
 
     def _update_view(self, action: str):
         self._view.update_wallpaper_rows(
-            service=self._service,
+            service=self.service,
             action=action,
             page_index=self._current_page,
             wallpaper_rows=self._get_pagination_wallpaper_rows(
