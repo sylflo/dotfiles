@@ -19,8 +19,7 @@ class Wallpaper:
         cache_manager = CacheManager()
         cache_manager.clear_cache()
         for cached_files in cache_manager.cache_images():
-            print(cached_files)
-            GLib.idle_add(self._view.update_progress)
+            GLib.idle_add(self._view.add_wallpaper_rows, cached_files)
 
 
     def __init__(self):

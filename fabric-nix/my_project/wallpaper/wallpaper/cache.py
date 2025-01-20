@@ -30,7 +30,6 @@ class CacheManager:
 
     def _cache_image(self, path_file, hashed_filename, cache_data) -> Path:
         filename = path_file.name
-        #hashed_filename = hashlib.md5(path_file.name.encode('utf-8')).hexdigest()
         cached_filename = Path(SETTINGS.main.cache_folder / "images" /  hashed_filename)
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(str(path_file))
         original_width = pixbuf.get_width()
