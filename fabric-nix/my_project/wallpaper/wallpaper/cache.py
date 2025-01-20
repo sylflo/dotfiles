@@ -84,7 +84,7 @@ class CacheManager:
     #         json.dump(cache_data, f, indent=4)
 
 
-    def cache_images(self, CONTROLLER):
+    def cache_images(self):
     # File generator for all files in the directory
         DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing/images"
 
@@ -101,11 +101,12 @@ class CacheManager:
             image_batch.append(filename)
             if len(image_batch) >= batch_size:
                 # Process the batch
-                CONTROLLER.process_image_batch(image_batch)
+                yield image_batch
                 image_batch = []
-        # Process the remaining files
-        if image_batch:
-            CONTROLLER.process_image_batch(image_batch)
+        # TODO check we do all images
+        # # Process the remaining files
+        # if image_batch:
+        #     CONTROLLER.process_image_batch(image_batch)
 
     def _should_clear_cache(self):
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
