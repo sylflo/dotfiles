@@ -28,9 +28,9 @@ class CacheManager:
             }
         return data
 
-    def _cache_image(self, path_file, cache_data) -> Path:
+    def _cache_image(self, path_file, hashed_filename, cache_data) -> Path:
         filename = path_file.name
-        hashed_filename = hashlib.md5(path_file.name.encode('utf-8')).hexdigest()
+        #hashed_filename = hashlib.md5(path_file.name.encode('utf-8')).hexdigest()
         cached_filename = Path(SETTINGS.main.cache_folder / "images" /  hashed_filename)
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(str(path_file))
         original_width = pixbuf.get_width()
@@ -66,15 +66,13 @@ class CacheManager:
     def cache_images(self):
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
         Path(SETTINGS.main.cache_folder  / "images").mkdir(parents=True, exist_ok=True)
-        for path_files in self._get_files_by_batch(SETTINGS.main.wallpapers_folder, batch_size=10):
+        for path_files in self._get_files_by_batch(SETTINGS.main.wallpapers_folder, SETTINGS.main.cache_batch):
             cached_files = []
             for path_file in path_files:
+                hashed_filename = hashlib.md5(path_file.name.encode('utf-8')).hexdigest()
                 if path_file.name not in cache_data['files']:
-                    cached_filename = self._cache_image(path_file, cache_data)
-                    cached_files.append(cached_filename)
-                else:
-                    # TODO get cache filename
-                    pass
+                    cached_filename = self._cache_image(path_file, hashed_filename, cache_data)
+                cached_files.append(hashed_filename)
             yield cached_files
         with open(self._get_cache_file(), "w") as f:
             json.dump(cache_data, f, indent=4)

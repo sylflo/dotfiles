@@ -18,12 +18,9 @@ class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
         cache_manager.clear_cache()
-        # TODO add batch procession here
-        # TOOD batch processing should be in settings
         for cached_files in cache_manager.cache_images():
+            print(cached_files)
             GLib.idle_add(self._view.update_progress)
-            #self._view.update_progress()
-            #raise Exception(cached_files)
 
 
     def __init__(self):

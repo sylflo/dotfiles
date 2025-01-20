@@ -30,6 +30,7 @@ class MainSettings:
     pagination: bool = False
     fullscreen: bool = True
     cache_folder: Path = Path.home() / ".cache" / "sww_ui_ricing"
+    cache_batch: int = 100
 
 
 @dataclass
