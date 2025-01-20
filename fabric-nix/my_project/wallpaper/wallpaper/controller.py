@@ -23,17 +23,16 @@ import os
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
-        cache_manager.clear_cache()
+        #cache_manager.clear_cache()
         for cached_files in cache_manager.cache_images():
-            pass
-            #self.process_image_batch(cached_files)
+            self.process_image_batch(cached_files)
 
     def process_image_batch(self, image_batch):
         DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
         for filename in image_batch:
             try:
                 # Attempt to load the image using GdkPixbuf
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, 200, 200, True)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
                 # Update the view with the new image
                 GLib.idle_add(self._view.add_wallpaper_rows, pixbuf, DIRECTORY + "/" + filename)
             except Exception as e:
@@ -55,7 +54,6 @@ class Wallpaper:
         self.selected_monitors = []
         self.selected_monitors_name = []
         self.selected_image = None
-   
 
         if SETTINGS.main.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(

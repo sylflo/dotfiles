@@ -57,9 +57,6 @@ class CacheManager:
         # Process the remaining files
         if image_batch:
             yield image_batch
-        # Write json file
-        with open(self._get_cache_file(), "w") as file:
-            json.dump(cache_data, file, indent=4)
 
 
     def _should_clear_cache(self):
