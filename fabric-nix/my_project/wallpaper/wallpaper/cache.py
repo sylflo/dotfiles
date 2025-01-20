@@ -86,7 +86,7 @@ class CacheManager:
 
     def cache_images(self):
     # File generator for all files in the directory
-        DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing/images"
+        DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
 
         def files_generator():
             for root, _, files in os.walk(DIRECTORY):

@@ -295,13 +295,7 @@ class Wallpaper(Window):
         self.pagination.reset_pagination(page_index)
 
     def add_wallpaper_rows(self, pixbuf, filepath):
-        #self.box.add(Label(label="plop"))
-        self.box.add(Image(pixbuf=pixbuf))
-        #self.box.add(Image(image_file="/home/sylflo/.cache/sww_ui_ricing/images/f3a3b54e2a3a0855ec793e3b868d36ff"))
-        # raise Exception(self.wallpaper_section.children[0].get_child().children)
-        # raise Exception(self.wallpaper_section.children[0].get_child())
-        # self.wallpaper_section.children[0].get_child().add(Label(label="  plop"))
-        #self.wallpaper_section.get_container().add(Label(label=" sfsdfsfsd"))
+        self.wallpaper_section.children[0].get_child().add(Image(pixbuf=pixbuf))
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
