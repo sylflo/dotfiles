@@ -213,42 +213,6 @@ class PaginationSection(Box):
                 button.remove_style_class("pagination-selected-page")
 
 
-# class Wallpaper(Window):
-#     def __init__(
-#         self,
-#         service,
-#         total_pages: int,
-#         monitors: list[str],
-#         wallpaper_rows: list[list[str]],
-#         **kwargs,
-#     ):
-#         anchor = "left bottom top right" if SETTINGS.main.fullscreen else "top left"
-#         super().__init__(
-#             size=SETTINGS.layout.window_size,
-#             anchor=anchor,
-#             exclusivity="auto",
-#             keyboard_mode="on-demand",
-#             **kwargs
-#         )
-#         self.set_resizable(False)
-#         self.labels = [Label(label="PLop "), Label(label=" sdfs")]
-#         self.box = Box(
-#             children=self.labels
-#         )
-#         self.children = [self.box]
-#         #self.labels.append(Label(label="TUTU"))
-#         #self.add(Label(label="First label"))
-
-
-#     # def update_progress(self):
-
-#     #     #raise Exception(self.children[0].children)
-#     #     # raise Exception(self.children[0])
-#     #     self.children[0].add(Label(label="   IS THIS WOLKTRING ??"))
-#     #     #self.children[0].children.add(Label(label="zdpofjsdpojf"))
-#     #     #self.children[0].children = []
-#     #     #self.children[0].children.append(Label(label="yesah!@!@!!!!"))
-
 class Wallpaper(Window):
     def __init__(
         self,
@@ -268,50 +232,40 @@ class Wallpaper(Window):
         )
         self.set_resizable(False)
 
-        DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing/images"
-        images = [Image(image_file=f"{DIRECTORY}/f491c2c179ea7e1ceb988eba22ef9f9d", size=320) for i in range(3)]
-        self.box = Box(
-            orientation="vertical",
-            children=images,
-        )
-        
-        self.add(ScrolledWindow(
-            child=self.box,
-        ))
-        # self.pagination = None
-        # #self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
+        self.pagination = None
+        self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
         # self.wallpaper_section = WallpaperSection(service, [])
-        # self.monitor_section = MonitorSection(
-        #     service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
-        # )
-        # self.layout = CenterBox(
-        #     orientation='vertical',
-        #     start_children=self.monitor_section,
-        #     center_children=self.wallpaper_section,
-        # )
+        self.monitor_section = MonitorSection(
+            service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
+        )
+        self.layout = CenterBox(
+            orientation='vertical',
+            start_children=self.monitor_section,
+            center_children=self.wallpaper_section,
+        )
 
-        # self.revealer = Revealer(
-        #     transition_type=SETTINGS.animation.init_transition_type,
-        #     transition_duration=SETTINGS.animation.init_transition_duration,
-        #     child=self.layout,
-        # )
-        # self.connect("draw", self.on_draw)
+        self.revealer = Revealer(
+            transition_type=SETTINGS.animation.init_transition_type,
+            transition_duration=SETTINGS.animation.init_transition_duration,
+            child=self.layout,
+        )
+        self.connect("draw", self.on_draw)
 
 
-        # outer_box = CenterBox(
-        #     center_children=self.revealer,
-        # )
-        # if SETTINGS.layout.background_img:
-        #     outer_box.add_style_class("background-img")
-        # else:
-        #     outer_box.add_style_class("background-color")
+        outer_box = CenterBox(
+            center_children=self.revealer,
+        )
+        if SETTINGS.layout.background_img:
+            outer_box.add_style_class("background-img")
+        else:
+            outer_box.add_style_class("background-color")
 
-        # if SETTINGS.main.pagination:
-        #     self.pagination = PaginationSection(service, total_pages)
-        #     self.layout.end_children = self.pagination
-        #     self.children = outer_box
-        # else:
-        #     self.children = outer_box
+        if SETTINGS.main.pagination:
+            self.pagination = PaginationSection(service, total_pages)
+            self.layout.end_children = self.pagination
+            self.children = outer_box
+        else:
+            self.children = outer_box
 
 
     def set_selected_monitor(self, widget):
@@ -336,9 +290,9 @@ class Wallpaper(Window):
         )
         image_widget.set_from_pixbuf(pixbuf)
 
-    # def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
-    #     self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
-    #     self.pagination.reset_pagination(page_index)
+    def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
+        self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
+        self.pagination.reset_pagination(page_index)
 
     def add_wallpaper_rows(self, pixbuf, filepath):
         #self.box.add(Label(label="plop"))
@@ -352,21 +306,3 @@ class Wallpaper(Window):
     def on_draw(self, *args):
         self.revealer.child_revealed = True
 
-
-
-
-
-# class WallpaperSection(ScrolledWindow):
-#     def __init__(self, service, wallpaper_rows, **kwargs):
-#         super().__init__(
-#             min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
-#             max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
-#             **kwargs
-#         )
-#         self.wallpaper_rows = [Label(label="plop")]
-#         self.add(
-#             Box(
-#                 orientation="vertical",
-#                 children=self.wallpaper_rows,
-#             )
-#         )
