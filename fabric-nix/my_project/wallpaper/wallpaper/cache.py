@@ -39,10 +39,16 @@ class CacheManager:
                 for file in files:
                     yield file
 
+        hash_md5 = hashlib.md5()
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
         # Load and display images in batches
         image_batch = []
         for filename in files_generator():
+            md5_filename = hashlib.md5(filename.encode("utf")).hexdigest()
+            if md5_filename not in cache_data:
+                cache_data[md5_filename] = {
+                    "source_filename": filename,
+                }
             image_batch.append(filename)
             if len(image_batch) >= SETTINGS.main.cache_batch:
                 # Process the batch
@@ -51,6 +57,11 @@ class CacheManager:
         # Process the remaining files
         if image_batch:
             yield image_batch
+        # Write json file
+        print("FINISHED")
+        with open(self._get_cache_file(), "w") as file:
+            json.dump(cache_data, file, indent=4)
+
 
     def _should_clear_cache(self):
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
@@ -67,3 +78,4 @@ class CacheManager:
             print(f"All contents of {SETTINGS.main.cache_folder} have been deleted.")
         else:
             print(f"{SETTINGS.main.cache_folder} does not exist.")
+
