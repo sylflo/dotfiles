@@ -46,7 +46,7 @@ class CacheManager:
         for filename in files_generator():
             md5_filename = hashlib.md5(filename.encode("utf")).hexdigest()
             if md5_filename not in cache_data:
-                cache_data[md5_filename] = {
+                cache_data["files"][md5_filename] = {
                     "source_filename": filename,
                 }
             image_batch.append(filename)

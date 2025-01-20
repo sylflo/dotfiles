@@ -25,7 +25,8 @@ class Wallpaper:
         cache_manager = CacheManager()
         cache_manager.clear_cache()
         for cached_files in cache_manager.cache_images():
-            self.process_image_batch(cached_files)
+            pass
+            #self.process_image_batch(cached_files)
 
     def process_image_batch(self, image_batch):
         DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
