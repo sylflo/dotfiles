@@ -58,7 +58,6 @@ class CacheManager:
         if image_batch:
             yield image_batch
         # Write json file
-        print("FINISHED")
         with open(self._get_cache_file(), "w") as file:
             json.dump(cache_data, file, indent=4)
 

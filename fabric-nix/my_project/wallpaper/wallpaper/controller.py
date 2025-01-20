@@ -18,24 +18,21 @@ from gi.repository import Gtk
 
 import os
 
-DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
+
 
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
         cache_manager.clear_cache()
-        # cache_manager.cache_images(self)
         for cached_files in cache_manager.cache_images():
             self.process_image_batch(cached_files)
 
     def process_image_batch(self, image_batch):
-        #raise Exception(image_batch)
+        DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
         for filename in image_batch:
             try:
                 # Attempt to load the image using GdkPixbuf
-                #raise Exception(DIRECTORY + "/" + filename)
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, 200, 200, True)
-                #raise Exception(pixbuf)
                 # Update the view with the new image
                 GLib.idle_add(self._view.add_wallpaper_rows, pixbuf, DIRECTORY + "/" + filename)
             except Exception as e:
