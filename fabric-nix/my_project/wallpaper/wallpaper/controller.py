@@ -12,31 +12,35 @@ from wallpaper.views import Wallpaper as WallpaperView
 from wallpaper.models import Settings
 from wallpaper.cache import CacheManager
 
+from gi.repository import Gtk, GLib
 
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
-        #cache_manager.clear_cache()
-        cache_manager.cache_images()
+        cache_manager.clear_cache()
+        # TODO add batch procession here
+        # TOOD batch processing should be in settings
+        for cached_files in cache_manager.cache_images():
+            GLib.idle_add(self._view.update_progress)
+            #self._view.update_progress()
+            #raise Exception(cached_files)
+
 
     def __init__(self):
-        #thread = threading.Thread(target=self._cache).start()
-        self._cache()
-        raise Exception("TOOT")
-        # self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
-        # self.service = WallpaperService()
-        # self.service.connect("next-page", self.next_page)
-        # self.service.connect("previous-page", self.previous_page)
-        # self.service.connect("go-to-page", self.go_to_page)
-        # self.service.connect("select-monitor", self.select_monitor)
-        # self.service.connect("select-image", self.select_image)
-        # self.current_page = 1
-        # self.total_pages = self._get_total_pages(
-        #     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
-        # )
+        self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
+        self.service = WallpaperService()
+        self.service.connect("next-page", self.next_page)
+        self.service.connect("previous-page", self.previous_page)
+        self.service.connect("go-to-page", self.go_to_page)
+        self.service.connect("select-monitor", self.select_monitor)
+        self.service.connect("select-image", self.select_image)
+        self.current_page = 1
+        self.total_pages = self._get_total_pages(
+            SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
+        )
         # self.selected_monitors = []
-        # self.selected_monitors_name = []
-        # self.selected_image = None
+        self.selected_monitors_name = []
+        self.selected_image = None
    
 
         # if SETTINGS.main.pagination:
@@ -49,13 +53,18 @@ class Wallpaper:
         #     wallpaper_rows = self._get_scrolling_wallpaper_rows(
         #         SETTINGS.layout.img_per_row
         #     )
-        # self._view = WallpaperView(
-        #     service=self.service,
-        #     total_pages=self.total_pages,
-        #     monitors=self._get_monitors(),
-        #     wallpaper_rows=wallpaper_rows,
-        # )
-        # self._set_stylesheet_vars()
+        self._view = WallpaperView(
+            service=self.service,
+            total_pages=self.total_pages,
+            monitors=self._get_monitors(),
+            # wallpaper_rows=wallpaper_rows,
+            wallpaper_rows=[],
+
+        )
+        self._set_stylesheet_vars()
+        thread = threading.Thread(target=self._cache)
+        thread.daemon = True
+        thread.start()
 
     def _get_monitors(self):
         return self.model.get_monitors()

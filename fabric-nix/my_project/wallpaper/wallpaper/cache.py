@@ -28,9 +28,10 @@ class CacheManager:
             }
         return data
 
-    def _cache_image(self, path_file, cache_data):
+    def _cache_image(self, path_file, cache_data) -> Path:
         filename = path_file.name
         hashed_filename = hashlib.md5(path_file.name.encode('utf-8')).hexdigest()
+        cached_filename = Path(SETTINGS.main.cache_folder / "images" /  hashed_filename)
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(str(path_file))
         original_width = pixbuf.get_width()
         original_height = pixbuf.get_height()
@@ -40,11 +41,12 @@ class CacheManager:
         new_width = int(original_width * scale_ratio)
         new_height = int(original_height * scale_ratio)
         scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-        pixbuf.savev(Path(SETTINGS.main.cache_folder / "images" /  hashed_filename).as_posix().encode('utf-8'), "jpeg", [], [])
+        pixbuf.savev(cached_filename.as_posix().encode('utf-8'), "jpeg", [], [])
         cache_data['files'][path_file.name] = {
             "thumbnail": hashed_filename,
             "source_image": str(path_file),
         }
+        return cached_filename
 
     def _get_files_by_batch(self, directory, batch_size):
         files = (f for f in Path(directory).iterdir() if f.is_file())
@@ -64,10 +66,16 @@ class CacheManager:
     def cache_images(self):
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
         Path(SETTINGS.main.cache_folder  / "images").mkdir(parents=True, exist_ok=True)
-        for path_files in self._get_files_by_batch(SETTINGS.main.wallpapers_folder, batch_size=100):
+        for path_files in self._get_files_by_batch(SETTINGS.main.wallpapers_folder, batch_size=10):
+            cached_files = []
             for path_file in path_files:
                 if path_file.name not in cache_data['files']:
-                    self._cache_image(path_file, cache_data)
+                    cached_filename = self._cache_image(path_file, cache_data)
+                    cached_files.append(cached_filename)
+                else:
+                    # TODO get cache filename
+                    pass
+            yield cached_files
         with open(self._get_cache_file(), "w") as f:
             json.dump(cache_data, f, indent=4)
 
