@@ -28,60 +28,8 @@ class CacheManager:
             }
         return data
 
-    # def _cache_image(self, path_file, hashed_filename, cache_data) -> Path:
-    #     filename = path_file.name
-    #     cached_filename = Path(SETTINGS.main.cache_folder / "images" /  hashed_filename)
-    #     pixbuf = GdkPixbuf.Pixbuf.new_from_file(str(path_file))
-    #     original_width = pixbuf.get_width()
-    #     original_height = pixbuf.get_height()
-    #     width_ratio = SETTINGS.layout.img_max_width / original_width
-    #     height_ratio = SETTINGS.layout.img_max_height / original_height
-    #     scale_ratio = min(width_ratio, height_ratio)
-    #     new_width = int(original_width * scale_ratio)
-    #     new_height = int(original_height * scale_ratio)
-    #     scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-    #     pixbuf.savev(cached_filename.as_posix().encode('utf-8'), "jpeg", [], [])
-    #     cache_data['files'][path_file.name] = {
-    #         "thumbnail": hashed_filename,
-    #         "source_image": str(path_file),
-    #     }
-    #     return cached_filename
-
-    # def _get_files_by_batch(self, directory, batch_size):
-    #     #for root, _, files in os.walk(DIRECTORY):
-    #     def files_generator():
-    #         for root, _, files in os.walk(directory):
-    #             for file in files:
-    #                 yield file
-    #                 #yield os.path.join(root, file)
-    #     #files = (f for f in Path(directory).iterdir() if f.is_file())
-    #     batch = []
-    #     for file in files_generator():
-    #         batch.append(file)
-    #         if len(batch) == batch_size:
-    #             yield batch
-    #             batch = []
-    #     # Yield any remaining files
-    #     if batch:
-    #         yield batch
-
     def _get_cache_file(self):
         return SETTINGS.main.cache_folder  / "cache.json"
-
-    # def cache_images(self):
-    #     cache_data = self._get_data_from_cache_file(self._get_cache_file())
-    #     Path(SETTINGS.main.cache_folder  / "images").mkdir(parents=True, exist_ok=True)
-    #     for path_files in self._get_files_by_batch(SETTINGS.main.wallpapers_folder, SETTINGS.main.cache_batch):
-    #         cached_files = []
-    #         for path_file in path_files:
-    #             # hashed_filename = hashlib.md5(path_file.name.encode('utf-8')).hexdigest()
-    #             hashed_filename = hashlib.md5(path_file.encode('utf-8')).hexdigest()
-    #             if path_file not in cache_data['files']:
-    #                 cached_filename = self._cache_image(path_file, hashed_filename, cache_data)
-    #             cached_files.append(hashed_filename)
-    #         yield cached_files
-    #     with open(self._get_cache_file(), "w") as f:
-    #         json.dump(cache_data, f, indent=4)
 
 
     def cache_images(self):
@@ -103,10 +51,9 @@ class CacheManager:
                 # Process the batch
                 yield image_batch
                 image_batch = []
-        # TODO check we do all images
-        # # Process the remaining files
-        # if image_batch:
-        #     CONTROLLER.process_image_batch(image_batch)
+        # Process the remaining files
+        if image_batch:
+            yield image_batch
 
     def _should_clear_cache(self):
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
