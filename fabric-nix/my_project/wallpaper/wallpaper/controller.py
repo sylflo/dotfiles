@@ -12,14 +12,58 @@ from wallpaper.views import Wallpaper as WallpaperView
 from wallpaper.models import Settings
 from wallpaper.cache import CacheManager
 
-from gi.repository import Gtk, GLib
+import gi
+from gi.repository import GdkPixbuf, GLib
+from gi.repository import Gtk
+
+import os
+
+DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing/images"
 
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
         cache_manager.clear_cache()
-        for cached_files in cache_manager.cache_images():
-            GLib.idle_add(self._view.add_wallpaper_rows, cached_files)
+        cache_manager.cache_images(self)
+        # for cached_files in cache_manager.cache_images():
+        #     GLib.idle_add(self._view.add_wallpaper_rows, cached_files)
+
+
+    def process_image_batch(self, image_batch):
+        for filename in image_batch:
+            try:
+                # Attempt to load the image using GdkPixbuf
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, 200, 200, True)
+                # Update the view with the new image
+                GLib.idle_add(self._view.add_wallpaper_rows, pixbuf, DIRECTORY + "/" + filename)
+            except Exception as e:
+                pass
+                #print(f"Error loading file {DIRECTORY + "/" + filename}: {e}")
+
+
+
+    # def _cache(self):
+    # # File generator for all files in the directory
+    #     DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing/images"
+
+    #     def files_generator():
+    #         for root, _, files in os.walk(DIRECTORY):
+    #             for file in files:
+    #                 yield os.path.join(root, file)
+
+    #     # Load and display images in batches
+    #     batch_size = 10 # Number of images to load per batch
+    #     image_batch = []
+    #     for file_path in files_generator():
+    #         image_batch.append(file_path)
+    #         if len(image_batch) >= batch_size:
+    #             # Process the batch
+    #             self.process_image_batch(image_batch)
+    #             image_batch = []
+
+    #     # Process the remaining files
+    #     if image_batch:
+    #         self.process_image_batch(image_batch)
 
 
     def __init__(self):

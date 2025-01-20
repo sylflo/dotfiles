@@ -266,42 +266,52 @@ class Wallpaper(Window):
             keyboard_mode="on-demand",
             **kwargs
         )
-        self.set_resizable(False)  
-    
-        self.pagination = None
-        #self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
-        self.wallpaper_section = WallpaperSection(service, [])
-        self.monitor_section = MonitorSection(
-            service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
-        )
-        self.layout = CenterBox(
-            orientation='vertical',
-            start_children=self.monitor_section,
-            center_children=self.wallpaper_section,
-        )
+        self.set_resizable(False)
 
-        self.revealer = Revealer(
-            transition_type=SETTINGS.animation.init_transition_type,
-            transition_duration=SETTINGS.animation.init_transition_duration,
-            child=self.layout,
+        DIRECTORY = "/home/sylflo/.cache/sww_ui_ricing/images"
+        images = [Image(image_file=f"{DIRECTORY}/f491c2c179ea7e1ceb988eba22ef9f9d", size=320) for i in range(3)]
+        self.box = Box(
+            orientation="vertical",
+            children=images,
         )
-        self.connect("draw", self.on_draw)
+        
+        self.add(ScrolledWindow(
+            child=self.box,
+        ))
+        # self.pagination = None
+        # #self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
+        # self.wallpaper_section = WallpaperSection(service, [])
+        # self.monitor_section = MonitorSection(
+        #     service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
+        # )
+        # self.layout = CenterBox(
+        #     orientation='vertical',
+        #     start_children=self.monitor_section,
+        #     center_children=self.wallpaper_section,
+        # )
+
+        # self.revealer = Revealer(
+        #     transition_type=SETTINGS.animation.init_transition_type,
+        #     transition_duration=SETTINGS.animation.init_transition_duration,
+        #     child=self.layout,
+        # )
+        # self.connect("draw", self.on_draw)
 
 
-        outer_box = CenterBox(
-            center_children=self.revealer,
-        )
-        if SETTINGS.layout.background_img:
-            outer_box.add_style_class("background-img")
-        else:
-            outer_box.add_style_class("background-color")
+        # outer_box = CenterBox(
+        #     center_children=self.revealer,
+        # )
+        # if SETTINGS.layout.background_img:
+        #     outer_box.add_style_class("background-img")
+        # else:
+        #     outer_box.add_style_class("background-color")
 
-        if SETTINGS.main.pagination:
-            self.pagination = PaginationSection(service, total_pages)
-            self.layout.end_children = self.pagination
-            self.children = outer_box
-        else:
-            self.children = outer_box
+        # if SETTINGS.main.pagination:
+        #     self.pagination = PaginationSection(service, total_pages)
+        #     self.layout.end_children = self.pagination
+        #     self.children = outer_box
+        # else:
+        #     self.children = outer_box
 
 
     def set_selected_monitor(self, widget):
@@ -330,11 +340,14 @@ class Wallpaper(Window):
     #     self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
     #     self.pagination.reset_pagination(page_index)
 
-    def add_wallpaper_rows(self, cached_files):
+    def add_wallpaper_rows(self, pixbuf, filepath):
+        #self.box.add(Label(label="plop"))
+        self.box.add(Image(pixbuf=pixbuf))
+        #self.box.add(Image(image_file="/home/sylflo/.cache/sww_ui_ricing/images/f3a3b54e2a3a0855ec793e3b868d36ff"))
         # raise Exception(self.wallpaper_section.children[0].get_child().children)
         # raise Exception(self.wallpaper_section.children[0].get_child())
         # self.wallpaper_section.children[0].get_child().add(Label(label="  plop"))
-        self.wallpaper_section.get_container().add(Label(label=" sfsdfsfsd"))
+        #self.wallpaper_section.get_container().add(Label(label=" sfsdfsfsd"))
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
