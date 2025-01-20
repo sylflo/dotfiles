@@ -34,20 +34,17 @@ class CacheManager:
 
     def cache_images(self):
     # File generator for all files in the directory
-        DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
-
         def files_generator():
-            for root, _, files in os.walk(DIRECTORY):
+            for root, _, files in os.walk(SETTINGS.main.wallpapers_folder):
                 for file in files:
                     yield file
 
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
         # Load and display images in batches
-        batch_size = 10 # Number of images to load per batch
         image_batch = []
         for filename in files_generator():
             image_batch.append(filename)
-            if len(image_batch) >= batch_size:
+            if len(image_batch) >= SETTINGS.main.cache_batch:
                 # Process the batch
                 yield image_batch
                 image_batch = []
