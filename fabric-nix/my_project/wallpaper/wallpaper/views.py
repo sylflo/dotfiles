@@ -27,6 +27,7 @@ STYLE_BACKGROUND_IMG = "background-img"
 STYLE_SELECTED_SCREEN = "selected-screen"
 STYLE_IMG = "img"
 STYLE_PAGINATION_BUTTON = "pagination-button"
+STYLE_WALLPAPER_ROW = "wallpaper-row"
 
 
 class BaseRow(Box):
@@ -144,7 +145,7 @@ class WallpaperSection(ScrolledWindow):
                         service, SETTINGS.main.cache_folder / "images", images=row
                     )
                     .build()
-                    .add_style_class("wallpaper-row")
+                    .add_style_class(STYLE_WALLPAPER_ROW)
                     .unwrap()
                     for row in wallpaper_rows
                 ],
