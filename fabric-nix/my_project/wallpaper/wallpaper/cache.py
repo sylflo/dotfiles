@@ -47,12 +47,23 @@ class CacheManager:
         for full_path in files_generator():
             md5_filename = hashlib.md5(full_path.encode("utf")).hexdigest()
             if md5_filename not in cache_data:
+                # Avoid duplciate if two file are the same
                 cache_data["files"][md5_filename] = {
                     "source_filename": full_path,
                 }
+            # scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(full_path, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
+            # scaled_pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(full_path)
+            original_width = pixbuf.get_width()
+            original_height = pixbuf.get_height()
+            width_ratio = SETTINGS.layout.img_max_width / original_width
+            height_ratio = SETTINGS.layout.img_max_height / original_height
+            scale_ratio = min(width_ratio, height_ratio)
+            new_width = int(original_width * scale_ratio)
+            new_height = int(original_height * scale_ratio)
+            scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
+            pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
             image_batch.append(full_path)
-            scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(full_path, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
-            scaled_pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
 
             if len(image_batch) >= SETTINGS.main.cache_batch:
                 yield image_batch

@@ -28,9 +28,7 @@ class Wallpaper:
             os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)        
             files_processed = 0
             for cached_files in cache_manager.cache_images():
-                #files_processed = len(cached_files) + files_processed
-    
-
+                files_processed = len(cached_files) + files_processed
                 self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
                 self.total_pages = self._get_total_pages(
                     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
