@@ -4,6 +4,7 @@ LATER
       2.1) Refrsh button/clear cache
     4) Check all todo in code => chck swww random 
     5) add loger
+    6) add swwww-daemopn
 
     use XDG_CONFIG_HOME and XDG_CACHE_HOME
 
