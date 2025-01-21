@@ -199,7 +199,6 @@ class Wallpaper(Window):
         service,
         total_pages: int,
         monitors: list[str],
-        wallpaper_rows: list[list[str]],
         **kwargs,
     ):
         anchor = "left bottom top right" if SETTINGS.main.fullscreen else "top left"
@@ -213,15 +212,12 @@ class Wallpaper(Window):
         self.set_resizable(False)
 
         self.pagination = None
-        #self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
         self.monitor_section = MonitorSection(
             service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
         )
         self.layout = CenterBox(
             orientation='vertical',
             start_children=self.monitor_section,
-            #center_children=[]
-            #center_children=self.wallpaper_section,
         )
 
         self.revealer = Revealer(

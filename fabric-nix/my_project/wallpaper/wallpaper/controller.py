@@ -63,22 +63,10 @@ class Wallpaper:
         self.selected_monitors_name = []
         self.selected_image = None
 
-        # if SETTINGS.main.pagination:
-        #     wallpaper_rows = self._get_pagination_wallpaper_rows(
-        #         self.current_page - 1,
-        #         SETTINGS.layout.img_per_row,
-        #         SETTINGS.layout.row_per_page,
-        #     )
-        # else:
-        #     wallpaper_rows = self._get_scrolling_wallpaper_rows(
-        #         SETTINGS.layout.img_per_row
-        #     )
         self._view = WallpaperView(
             service=self.service,
             total_pages=self.total_pages,
             monitors=self._get_monitors(),
-            wallpaper_rows=[],
-            # wallpaper_rows=wallpaper_rows,
         )
         self._set_stylesheet_vars()
         thread = threading.Thread(target=self._cache, daemon=True).start()
