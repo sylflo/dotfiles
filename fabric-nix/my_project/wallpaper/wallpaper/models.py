@@ -119,8 +119,14 @@ class Settings:
                 settings.save()
             cls.validate_background_image(settings.layout.background_img)
             return settings
+        except FileNotFoundError as e:
+            raise ValueError(f"Configuration file not found: {e}")
+        except ParsingError as e:
+            raise ValueError(f"Invalid configuration format: {e}")
+        except ValueError as e:
+            raise ValueError(f"Invalid configuration value: {e}")
         except Exception as e:
-            raise ValueError(f"Error loading settings: {e}")
+            raise RuntimeError(f"Unexpected error loading settings: {e}") from e
 
     def save(self):
         try:
