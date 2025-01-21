@@ -45,29 +45,8 @@ class Wallpaper:
                         SETTINGS.layout.img_per_row
                     )
                 GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows, self.total_pages)
-
-
-
-
-
                 print(f"Cached {files_processed} files...")
             print("All files have been cached")
-        # self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
-        # self.total_pages = self._get_total_pages(
-        #     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
-        # )
-        # # Update ui accordingly
-        # if SETTINGS.main.pagination:
-        #     wallpaper_rows = self._get_pagination_wallpaper_rows(
-        #         self.current_page - 1,
-        #         SETTINGS.layout.img_per_row,
-        #         SETTINGS.layout.row_per_page,
-        #     )
-        # else:
-        #     wallpaper_rows = self._get_scrolling_wallpaper_rows(
-        #         SETTINGS.layout.img_per_row
-        #     )
-        # GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows, self.total_pages)
 
 
     def __init__(self):
