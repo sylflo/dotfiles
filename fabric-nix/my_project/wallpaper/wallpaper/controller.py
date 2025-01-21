@@ -22,15 +22,26 @@ import os
 
 class Wallpaper:
     def _cache(self):
-        cache_manager = CacheManager()
-        #cache_manager.clear_cache()
-        files_processed = 0
-        for cached_files in cache_manager.cache_images():
-            #self.process_image_batch(cached_files)
-            files_processed = len(cached_files) + files_processed
-            print(f"Cached {files_processed} files...")
+        # cache_manager = CacheManager()
+        # #cache_manager.clear_cache()
+        # files_processed = 0
+        # for cached_files in cache_manager.cache_images():
+        #     #self.process_image_batch(cached_files)
+        #     files_processed = len(cached_files) + files_processed
+        #     print(f"Cached {files_processed} files...")
         print("All files have been cached")
-
+        # Update ui accordingly
+        if SETTINGS.main.pagination:
+            wallpaper_rows = self._get_pagination_wallpaper_rows(
+                self.current_page - 1,
+                SETTINGS.layout.img_per_row,
+                SETTINGS.layout.row_per_page,
+            )
+        else:
+            wallpaper_rows = self._get_scrolling_wallpaper_rows(
+                SETTINGS.layout.img_per_row
+            )
+        GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows)
     # def process_image_batch(self, image_batch):
     #     DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
     #     for filename in image_batch:
@@ -62,24 +73,25 @@ class Wallpaper:
         self.selected_monitors_name = []
         self.selected_image = None
 
-        if SETTINGS.main.pagination:
-            wallpaper_rows = self._get_pagination_wallpaper_rows(
-                self.current_page - 1,
-                SETTINGS.layout.img_per_row,
-                SETTINGS.layout.row_per_page,
-            )
-        else:
-            wallpaper_rows = self._get_scrolling_wallpaper_rows(
-                SETTINGS.layout.img_per_row
-            )
+        # if SETTINGS.main.pagination:
+        #     wallpaper_rows = self._get_pagination_wallpaper_rows(
+        #         self.current_page - 1,
+        #         SETTINGS.layout.img_per_row,
+        #         SETTINGS.layout.row_per_page,
+        #     )
+        # else:
+        #     wallpaper_rows = self._get_scrolling_wallpaper_rows(
+        #         SETTINGS.layout.img_per_row
+        #     )
         self._view = WallpaperView(
             service=self.service,
             total_pages=self.total_pages,
             monitors=self._get_monitors(),
-            wallpaper_rows=wallpaper_rows,
+            wallpaper_rows=[],
+            # wallpaper_rows=wallpaper_rows,
         )
         self._set_stylesheet_vars()
-        # thread = threading.Thread(target=self._cache, daemon=True).start()
+        thread = threading.Thread(target=self._cache, daemon=True).start()
 
     def _get_monitors(self):
         return self.model.get_monitors()

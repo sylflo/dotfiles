@@ -126,7 +126,6 @@ class WallpaperSection(ScrolledWindow):
                 ]
             ),
         )
-        #raise Exception("FUCK")
         self.connect("draw", self.on_draw)
         box = CenterBox(
             center_children=self.revealer,
@@ -214,14 +213,15 @@ class Wallpaper(Window):
         self.set_resizable(False)
 
         self.pagination = None
-        self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
+        #self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
         self.monitor_section = MonitorSection(
             service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
         )
         self.layout = CenterBox(
             orientation='vertical',
             start_children=self.monitor_section,
-            center_children=self.wallpaper_section,
+            #center_children=[]
+            #center_children=self.wallpaper_section,
         )
 
         self.revealer = Revealer(
@@ -265,7 +265,6 @@ class Wallpaper(Window):
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
             image_name,
-            #f"{SETTINGS.main.wallpapers_folder}/{image_name}",
             width=SETTINGS.layout.monitor_img_size,
             height=SETTINGS.layout.monitor_img_size,
         )
@@ -275,8 +274,9 @@ class Wallpaper(Window):
         self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 
-    def add_wallpaper_rows(self, pixbuf, filepath):
-        self.wallpaper_section.children[0].get_child().add(Image(pixbuf=pixbuf))
+    def set_wallpaper_rows(self, service, wallpaper_rows):
+        self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
+        self.layout.add_center(self.wallpaper_section)
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
