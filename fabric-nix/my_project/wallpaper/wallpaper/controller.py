@@ -65,7 +65,6 @@ class Wallpaper:
 
         self._view = WallpaperView(
             service=self.service,
-            #total_pages=self.total_pages,
             monitors=self._get_monitors(),
         )
         self._set_stylesheet_vars()
