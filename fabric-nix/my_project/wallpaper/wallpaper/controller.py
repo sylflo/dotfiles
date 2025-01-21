@@ -73,6 +73,7 @@ class Wallpaper:
         self.service.connect("go-to-page", self.go_to_page)
         self.service.connect("select-monitor", self.select_monitor)
         self.service.connect("select-image", self.select_image)
+        self.service.connect("clear-cache", self.clear_cache)
         self.current_page = 1
         self.selected_monitors = []
         self.selected_monitors_name = []
@@ -164,6 +165,10 @@ class Wallpaper:
                 shutil.copy(
                     org_img_path, Path(SETTINGS.config_file).parent / name
                 )
+
+    def clear_cache(self, service):
+        raise Exception("CLEAR CACHE CONTROLLER")
+        pass
 
     def _update_view(self, action: str):
         self._view.update_wallpaper_rows(

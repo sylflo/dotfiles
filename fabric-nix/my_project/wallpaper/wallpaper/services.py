@@ -24,5 +24,5 @@ class Pagination(Service):
         pass
 
     @Signal
-    def clear_cache() -> None:
+    def clear_cache(self) -> None:
         pass
