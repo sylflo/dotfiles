@@ -35,7 +35,9 @@ class WallpaperRow(BaseRow):
     ):
         super().__init__(**kwargs)
         for image_name in images:
-            image = Image(image_file=f"{wallpapers_folder}/{image_name}", size=SETTINGS.layout.img_max_width)
+            # image = Image(image_file=f"{wallpapers_folder}/{image_name}", size=SETTINGS.layout.img_max_width)
+            scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(f"{wallpapers_folder}/{image_name}", SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
+            image = Image(pixbuf=scaled_pixbuf)
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(
                     widget, image_name
