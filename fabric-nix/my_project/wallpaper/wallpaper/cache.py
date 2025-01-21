@@ -12,7 +12,6 @@ from gi.repository import GdkPixbuf
 from wallpaper.models import SETTINGS
 
 
-
 class CacheManager:
     def get_data_from_cache_file(self):
         file = Path(self._get_cache_file())
