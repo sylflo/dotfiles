@@ -80,25 +80,6 @@ class MonitorSection(BaseRow):
             self.add(event_box)
 
 
-# class WallpaperSection(ScrolledWindow):
-#     def __init__(self, service, wallpaper_rows, **kwargs):
-#         super().__init__(
-#             min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
-#             max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
-#             **kwargs
-#         )
-#         # self.wallpaper_rows = []
-#         self.add(
-#             Box(
-#                 orientation="vertical",
-#                 children=[],
-#             )
-#         )
-
-
-#     def get_container(self):
-#         return self.children[0].get_child()
-
 class WallpaperSection(ScrolledWindow):
 
     def __init__(self, service, wallpaper_rows, **kwargs):
@@ -139,7 +120,7 @@ class WallpaperSection(ScrolledWindow):
                 orientation="vertical",
                 children=[
                     WallpaperRow(
-                        service, SETTINGS.main.wallpapers_folder, images=row
+                        service, SETTINGS.main.cache_folder / "images", images=row
                     ).build().add_style_class("wallpaper-row").unwrap()
                     for row in wallpaper_rows
                 ]
