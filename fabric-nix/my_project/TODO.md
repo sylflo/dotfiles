@@ -1,6 +1,5 @@
 LATER
   WALLPAPER
-    1) Font family, color screen name
     2) Caching => Cache all images (try no threading then threading see if it blocks ui)
       2.1) Refrsh button/clear cache
       2.2) Put shitty file, pdf, txt, ... shoould not create a bug
@@ -12,6 +11,7 @@ LATER
     use XDG_CONFIG_HOME and XDG_CACHE_HOME
 
     LATER Next versions\
+        1) Font family, color screen name
           2.3) Order image by name in cache application
     3.0) Make a progress bar whern loading cacghe
     3.0) Load image before cache finished, easy for scrolkling what about pagination :/

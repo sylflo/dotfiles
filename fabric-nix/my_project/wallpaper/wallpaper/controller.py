@@ -42,16 +42,6 @@ class Wallpaper:
                 SETTINGS.layout.img_per_row
             )
         GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows)
-    # def process_image_batch(self, image_batch):
-    #     DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
-    #     for filename in image_batch:
-    #         try:
-    #             # Attempt to load the image using GdkPixbuf
-    #             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
-    #             # Update the view with the new image
-    #             #GLib.idle_add(self._view.add_wallpaper_rows, pixbuf, DIRECTORY + "/" + filename)
-    #         except Exception as e:
-    #             print(f"Error loading file {DIRECTORY}/{filename}: {e}")
 
 
     def __init__(self):
