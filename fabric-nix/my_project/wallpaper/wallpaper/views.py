@@ -80,81 +80,81 @@ class MonitorSection(BaseRow):
             self.add(event_box)
 
 
-class WallpaperSection(ScrolledWindow):
-    def __init__(self, service, wallpaper_rows, **kwargs):
-        super().__init__(
-            min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
-            max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
-            **kwargs
-        )
-        # self.wallpaper_rows = []
-        self.add(
-            Box(
-                orientation="vertical",
-                children=[],
-            )
-        )
-
-
-    def get_container(self):
-        return self.children[0].get_child()
-
 # class WallpaperSection(ScrolledWindow):
-
 #     def __init__(self, service, wallpaper_rows, **kwargs):
 #         super().__init__(
 #             min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
 #             max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
 #             **kwargs
 #         )
-
-#         self.wallpaper_rows = [
-#             WallpaperRow(
-#                 service,
-#                 SETTINGS.main.cache_folder / "images",
-#                 images=row,
-#             ) for row in wallpaper_rows]
-
+#         # self.wallpaper_rows = []
 #         self.add(
 #             Box(
 #                 orientation="vertical",
-#                 children=self.wallpaper_rows,
+#                 children=[],
 #             )
 #         )
 
-#     def get_wallpaper_rows(self) -> WallpaperRow:
-#         return self.wallpaper_rows
 
-#     def update_wallpaper_rows(self, service, action, wallpaper_rows):
-#         if action == 'next':
-#             transition_type = SETTINGS.animation.next_transition_type
-#             transition_duration = SETTINGS.animation.next_transition_duration       
-#         else:
-#             transition_type = SETTINGS.animation.prev_transition_type
-#             transition_duration = SETTINGS.animation.prev_transition_duration
-#         self.revealer = Revealer(
-#             transition_type=transition_type,
-#             transition_duration=transition_duration,
-#             child=Box(
-#                 orientation="vertical",
-#                 children=[
-#                     WallpaperRow(
-#                         service, SETTINGS.main.wallpapers_folder, images=row
-#                     ).build().add_style_class("wallpaper-row").unwrap()
-#                     for row in wallpaper_rows
-#                 ]
-#             ),
-#         )
-#         #raise Exception("FUCK")
-#         self.connect("draw", self.on_draw)
-#         box = CenterBox(
-#             center_children=self.revealer,
-#         )
-#         self.children = [box]
+#     def get_container(self):
+#         return self.children[0].get_child()
 
-#     def on_draw(self, *args):
-#         if self.revealer:
-#             self.revealer.child_revealed = True
+class WallpaperSection(ScrolledWindow):
+
+    def __init__(self, service, wallpaper_rows, **kwargs):
+        super().__init__(
+            min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
+            max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
+            **kwargs
+        )
+
+        self.wallpaper_rows = [
+            WallpaperRow(
+                service,
+                SETTINGS.main.cache_folder / "images",
+                images=row,
+            ) for row in wallpaper_rows]
+
+        self.add(
+            Box(
+                orientation="vertical",
+                children=self.wallpaper_rows,
+            )
+        )
+
+    def get_wallpaper_rows(self) -> WallpaperRow:
+        return self.wallpaper_rows
+
+    def update_wallpaper_rows(self, service, action, wallpaper_rows):
+        if action == 'next':
+            transition_type = SETTINGS.animation.next_transition_type
+            transition_duration = SETTINGS.animation.next_transition_duration       
+        else:
+            transition_type = SETTINGS.animation.prev_transition_type
+            transition_duration = SETTINGS.animation.prev_transition_duration
+        self.revealer = Revealer(
+            transition_type=transition_type,
+            transition_duration=transition_duration,
+            child=Box(
+                orientation="vertical",
+                children=[
+                    WallpaperRow(
+                        service, SETTINGS.main.wallpapers_folder, images=row
+                    ).build().add_style_class("wallpaper-row").unwrap()
+                    for row in wallpaper_rows
+                ]
+            ),
+        )
+        #raise Exception("FUCK")
+        self.connect("draw", self.on_draw)
+        box = CenterBox(
+            center_children=self.revealer,
+        )
+        self.children = [box]
+
+    def on_draw(self, *args):
+        if self.revealer:
+            self.revealer.child_revealed = True
 
 class PaginationSection(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
@@ -234,7 +234,6 @@ class Wallpaper(Window):
 
         self.pagination = None
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
-        # self.wallpaper_section = WallpaperSection(service, [])
         self.monitor_section = MonitorSection(
             service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
         )
@@ -299,4 +298,3 @@ class Wallpaper(Window):
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
-

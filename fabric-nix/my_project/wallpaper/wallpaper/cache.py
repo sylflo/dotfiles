@@ -35,23 +35,27 @@ class CacheManager:
     def cache_images(self):
     # File generator for all files in the directory
         def files_generator():
-            for root, _, files in os.walk(SETTINGS.main.wallpapers_folder):
+            for root, dirs, files in os.walk(SETTINGS.main.wallpapers_folder):
                 for file in files:
-                    yield file
+                    #relative_path = os.path.relpath(os.path.join(root, file), SETTINGS.main.wallpapers_folder)
+                    full_path = os.path.join(root, file)
+                    yield full_path
 
-        hash_md5 = hashlib.md5()
         cache_data = self._get_data_from_cache_file(self._get_cache_file())
         # Load and display images in batches
         image_batch = []
-        for filename in files_generator():
-            md5_filename = hashlib.md5(filename.encode("utf")).hexdigest()
+        for full_path in files_generator():
+            md5_filename = hashlib.md5(full_path.encode("utf")).hexdigest()
             if md5_filename not in cache_data:
                 cache_data["files"][md5_filename] = {
-                    "source_filename": filename,
+                    "source_filename": full_path,
                 }
-            image_batch.append(filename)
+            image_batch.append(full_path)
+            scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(full_path, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
+            
+            scaled_pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
+
             if len(image_batch) >= SETTINGS.main.cache_batch:
-                # Process the batch
                 yield image_batch
                 image_batch = []
         # Process the remaining files
@@ -74,4 +78,3 @@ class CacheManager:
             print(f"All contents of {SETTINGS.main.cache_folder} have been deleted.")
         else:
             print(f"{SETTINGS.main.cache_folder} does not exist.")
-

@@ -24,22 +24,27 @@ class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
         #cache_manager.clear_cache()
+        files_processed = 0
         for cached_files in cache_manager.cache_images():
-            self.process_image_batch(cached_files)
+            #self.process_image_batch(cached_files)
+            files_processed = len(cached_files) + files_processed
+            print(f"Cached {files_processed} files...")
+        print("All files have been cached")
 
-    def process_image_batch(self, image_batch):
-        DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
-        for filename in image_batch:
-            try:
-                # Attempt to load the image using GdkPixbuf
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
-                # Update the view with the new image
-                GLib.idle_add(self._view.add_wallpaper_rows, pixbuf, DIRECTORY + "/" + filename)
-            except Exception as e:
-                print(f"Error loading file {DIRECTORY}/{filename}: {e}")
+    # def process_image_batch(self, image_batch):
+    #     DIRECTORY = "/home/sylflo/Projects/dotfiles/fabric-nix/my_project/images"
+    #     for filename in image_batch:
+    #         try:
+    #             # Attempt to load the image using GdkPixbuf
+    #             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(DIRECTORY + "/" + filename, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
+    #             # Update the view with the new image
+    #             #GLib.idle_add(self._view.add_wallpaper_rows, pixbuf, DIRECTORY + "/" + filename)
+    #         except Exception as e:
+    #             print(f"Error loading file {DIRECTORY}/{filename}: {e}")
 
 
     def __init__(self):
+        os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self.service = WallpaperService()
         self.service.connect("next-page", self.next_page)
@@ -72,9 +77,7 @@ class Wallpaper:
             wallpaper_rows=wallpaper_rows,
         )
         self._set_stylesheet_vars()
-        thread = threading.Thread(target=self._cache)
-        thread.daemon = True
-        thread.start()
+        # thread = threading.Thread(target=self._cache, daemon=True).start()
 
     def _get_monitors(self):
         return self.model.get_monitors()
