@@ -236,10 +236,6 @@ class Wallpaper(Window):
         else:
             outer_box.add_style_class("background-color")
 
-        # if SETTINGS.main.pagination:
-        #     self.pagination = PaginationSection(service, total_pages)
-        #     self.layout.end_children = self.pagination
-
         self.children = outer_box
 
 

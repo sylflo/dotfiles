@@ -52,8 +52,6 @@ class CacheManager:
                 cache_data["files"][md5_filename] = {
                     "source_filename": full_path,
                 }
-            # scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(full_path, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
-            # scaled_pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(full_path)
                 original_width = pixbuf.get_width()

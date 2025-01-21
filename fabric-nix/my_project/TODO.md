@@ -3,7 +3,6 @@ LATER
   WALLPAPER
       2.1) Refrsh button/clear cache
       2.4 )  tryu webp
-      2.5) Redo image for even space horizontal/vertical use pixbuf also so we dont hjave to recaculate size
     4) Check all todo in code => chck swww random 
     5) add loger
 
