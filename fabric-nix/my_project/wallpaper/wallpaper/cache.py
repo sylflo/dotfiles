@@ -59,7 +59,10 @@ class CacheManager:
                 scale_ratio = min(width_ratio, height_ratio)
                 new_width = int(original_width * scale_ratio)
                 new_height = int(original_height * scale_ratio)
-                pixbuf.savev(
+                scaled_pixbuf = pixbuf.scale_simple(
+                    new_width, new_height, GdkPixbuf.InterpType.BILINEAR
+                )
+                scaled_pixbuf.savev(
                     str(SETTINGS.main.cache_folder / "images" / md5_filename),
                     "jpeg",
                     [],
