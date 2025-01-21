@@ -10,16 +10,6 @@ from wallpaper.swww import SWWW as SwwwSettings
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
 
-TransitionType = [
-    "none",
-    "crossfade",
-    "slide-right",
-    "slide-left",
-    "slide-up",
-    "slide-down",
-]
-
-
 @dataclass
 class MainSettings:
     wallpapers_folder: Path = Path.home() / "Pictures"
