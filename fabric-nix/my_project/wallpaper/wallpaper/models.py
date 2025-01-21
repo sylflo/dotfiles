@@ -78,73 +78,75 @@ class Settings:
 
     config_file: str = field(default=str(DEFAULT_CONFIG_FILE), repr=False)
 
+    @staticmethod
+    def validate_background_image(path: str):
+        if path and not Path(path).exists():
+            raise FileNotFoundError(f"Background image '{path}' does not exist.")
+
     @classmethod
     def load(cls, config_path=DEFAULT_CONFIG_FILE):
+        try:
+            if os.path.exists(config_path):
+                config = ConfigParser()
+                config.read(config_path)
 
-        if os.path.exists(config_path):
-            config = ConfigParser()
-            config.read(config_path)
-
-            def get_or_default(section, field_, default):
-                if section in config and field_.name in config[section]:
-                    value = config.get(section, field_.name)
-                    if field_.type == bool:
-                        return config.getboolean(section, field_.name)
+                def get_or_default(section, field_, default):
+                    if section in config and field_.name in config[section]:
+                        value = config.get(section, field_.name)
+                        if field_.type == bool:
+                            return config.getboolean(section, field_.name)
+                        else:
+                            return field_.type(value)
                     else:
-                        return field_.type(value)
-                else:
-                    return default
+                        return default
 
-            main_data = {
-                field_.name: get_or_default("Main", field_, field_.default)
-                for field_ in fields(MainSettings)
-            }
-            layout_data = {
-                field_.name: get_or_default("Layout", field_, field_.default)
-                for field_ in fields(LayoutSettings)
-            }
-            animation_data = {
-                field_.name: get_or_default("Animation", field_, field_.default)
-                for field_ in fields(AnimationSettings)
-            }
-            swww_data = {
-                field_.name: get_or_default("Swww", field_, field_.default)
-                for field_ in fields(SwwwSettings)
-            }
+                main_data = {
+                    field_.name: get_or_default("Main", field_, field_.default)
+                    for field_ in fields(MainSettings)
+                }
+                layout_data = {
+                    field_.name: get_or_default("Layout", field_, field_.default)
+                    for field_ in fields(LayoutSettings)
+                }
+                animation_data = {
+                    field_.name: get_or_default("Animation", field_, field_.default)
+                    for field_ in fields(AnimationSettings)
+                }
+                swww_data = {
+                    field_.name: get_or_default("Swww", field_, field_.default)
+                    for field_ in fields(SwwwSettings)
+                }
 
-            settings = cls(
-                main=MainSettings(**main_data),
-                layout=LayoutSettings(**layout_data),
-                animation=AnimationSettings(**animation_data),
-                swww=SwwwSettings(**swww_data),
-                config_file=config_path,
-            )
-        else:
-            settings = cls(config_file=config_path)
-            settings.save()
-        return settings
-        if (
-            settings.layout.background_img
-            and not Path(settings.layout.background_img).exists()
-        ):
-            raise FileNotFoundError(
-                f"Background image '{settings.background_img}' does not exist."
-            )
-        return settings
+                settings = cls(
+                    main=MainSettings(**main_data),
+                    layout=LayoutSettings(**layout_data),
+                    animation=AnimationSettings(**animation_data),
+                    swww=SwwwSettings(**swww_data),
+                    config_file=config_path,
+                )
+            else:
+                settings = cls(config_file=config_path)
+                settings.save()
+            cls.validate_background_image(settings.layout.background_img)
+            return settings
+        except Exception as e:
+            raise ValueError(f"Error loading settings: {e}")
 
     def save(self):
-        config = ConfigParser()
+        try:
+            config = ConfigParser()
 
-        config["Main"] = {k: str(v) for k, v in asdict(self.main).items()}
-        config["Layout"] = {k: str(v) for k, v in asdict(self.layout).items()}
-        config["Animation"] = {k: str(v) for k, v in asdict(self.animation).items()}
-        config["Swww"] = {k: str(v) for k, v in asdict(self.swww).items()}
+            config["Main"] = {k: str(v) for k, v in asdict(self.main).items()}
+            config["Layout"] = {k: str(v) for k, v in asdict(self.layout).items()}
+            config["Animation"] = {k: str(v) for k, v in asdict(self.animation).items()}
+            config["Swww"] = {k: str(v) for k, v in asdict(self.swww).items()}
 
-        config_path = Path(self.config_file)
-        config_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.config_file, "w") as f:
-            config.write(f)
-
+            config_path = Path(self.config_file)
+            config_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.config_file, "w") as f:
+                config.write(f)
+        except Exception as e:
+            raise IOError(f"Failed to save configuration: {e}")
 
 class Wallpaper:
     def __init__(self, directory):
