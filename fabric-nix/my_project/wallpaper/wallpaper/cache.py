@@ -11,6 +11,8 @@ from gi.repository import GdkPixbuf
 
 from wallpaper.models import SETTINGS
 
+gi.repository.GLib.GError
+
 
 class CacheManager:
     def get_data_from_cache_file(self):
@@ -52,17 +54,21 @@ class CacheManager:
                 }
             # scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(full_path, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
             # scaled_pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(full_path)
-            original_width = pixbuf.get_width()
-            original_height = pixbuf.get_height()
-            width_ratio = SETTINGS.layout.img_max_width / original_width
-            height_ratio = SETTINGS.layout.img_max_height / original_height
-            scale_ratio = min(width_ratio, height_ratio)
-            new_width = int(original_width * scale_ratio)
-            new_height = int(original_height * scale_ratio)
-            scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-            pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
-            image_batch.append(full_path)
+            try:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(full_path)
+                original_width = pixbuf.get_width()
+                original_height = pixbuf.get_height()
+                width_ratio = SETTINGS.layout.img_max_width / original_width
+                height_ratio = SETTINGS.layout.img_max_height / original_height
+                scale_ratio = min(width_ratio, height_ratio)
+                new_width = int(original_width * scale_ratio)
+                new_height = int(original_height * scale_ratio)
+                scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
+                pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
+                image_batch.append(full_path)
+            except gi.repository.GLib.GError:
+                # TODO add logger
+                pass
 
             if len(image_batch) >= SETTINGS.main.cache_batch:
 
@@ -74,10 +80,6 @@ class CacheManager:
         # Process the remaining files
         if image_batch:
             yield image_batch
-
-        # # Write JSON data to the file
-        # with open(self._get_cache_file(), 'w') as json_file:
-        #     json.dump(cache_data, json_file, indent=4)
 
 
     def should_clear_cache(self):

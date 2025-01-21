@@ -2,7 +2,6 @@ LATER
   PAGINAGION
   WALLPAPER
       2.1) Refrsh button/clear cache
-      2.2) Put shitty file, pdf, txt, ... shoould not create a bug
       2.4 )  tryu webp
       2.5) Redo image for even space horizontal/vertical use pixbuf also so we dont hjave to recaculate size
     4) Check all todo in code => chck swww random 
@@ -14,7 +13,6 @@ LATER
         1) Font family, color screen name
           2.3) Order image by name in cache application
     3.0) Make a progress bar whern loading cacghe
-    3.0) Load image before cache finished, easy for scrolkling what about pagination :/
     3.1) VIDEO EXTENSION
     3.3) => Too many page how to manage it  1 ... 53 54 55 ... 281 
     5) Shortcut key => configurable
