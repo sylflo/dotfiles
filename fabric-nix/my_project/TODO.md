@@ -2,7 +2,6 @@ LATER
   PAGINAGION
   WALLPAPER
       2.1) Refrsh button/clear cache
-      2.4 )  tryu webp
     4) Check all todo in code => chck swww random 
     5) add loger
 
