@@ -84,7 +84,7 @@ class Wallpaper:
             monitors=self._get_monitors(),
         )
         self._set_stylesheet_vars()
-        thread = threading.Thread(target=self._cache, daemon=True).start()
+        threading.Thread(target=self._cache, daemon=True).start()
 
     def _get_monitors(self):
         return self.model.get_monitors()
@@ -167,8 +167,9 @@ class Wallpaper:
                 )
 
     def clear_cache(self, service):
-        raise Exception("CLEAR CACHE CONTROLLER")
-        pass
+        cache_manager = CacheManager()
+        cache_manager.clear_cache()
+        threading.Thread(target=self._cache, daemon=True).start()
 
     def _update_view(self, action: str):
         self._view.update_wallpaper_rows(
