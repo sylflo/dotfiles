@@ -151,6 +151,10 @@ class Wallpaper:
         self.screens_selected = {}
 
     def get_images(self):
+        if not os.path.exists(self.directory):
+            raise FileNotFoundError(f"Directory {self.directory} does not exist.")
+        if not os.path.isdir(self.directory):
+            raise NotADirectoryError(f"{self.directory} is not a directory.")
         return os.listdir(self.directory)
 
     def get_monitors(self):
