@@ -8,6 +8,7 @@ LATER
     use XDG_CONFIG_HOME and XDG_CACHE_HOME
 
     LATER Next versions\
+        WEBP
         1) Font family, color screen name
           2.3) Order image by name in cache application
     3.0) Make a progress bar whern loading cacghe

@@ -1,35 +1,32 @@
+import os
 import shutil
 import subprocess
 import threading
 from pathlib import Path
 
+from gi.repository import GLib
 from jinja2 import Environment, FileSystemLoader
 
-from wallpaper.models import Wallpaper as WallpaperModel, SETTINGS
+from wallpaper.cache import CacheManager
+from wallpaper.models import SETTINGS
+from wallpaper.models import Wallpaper as WallpaperModel
 from wallpaper.services import Pagination as WallpaperService
 from wallpaper.views import Wallpaper as WallpaperView
-
-from wallpaper.models import Settings
-from wallpaper.cache import CacheManager
-
-import gi
-from gi.repository import GdkPixbuf, GLib
-from gi.repository import Gtk
-
-import os
 
 
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
         if cache_manager.should_clear_cache():
-            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)        
+            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
             cache_manager.clear_cache()
-            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)        
+            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
             files_processed = 0
             for cached_files in cache_manager.cache_images():
                 files_processed = len(cached_files) + files_processed
-                self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
+                self.cache_data = cache_manager = (
+                    CacheManager().get_data_from_cache_file()
+                )
                 self.total_pages = self._get_total_pages(
                     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
                 )
@@ -44,7 +41,12 @@ class Wallpaper:
                     wallpaper_rows = self._get_scrolling_wallpaper_rows(
                         SETTINGS.layout.img_per_row
                     )
-                GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows, self.total_pages)
+                GLib.idle_add(
+                    self._view.set_wallpaper_rows,
+                    self.service,
+                    wallpaper_rows,
+                    self.total_pages,
+                )
                 print(f"Cached {files_processed} files...")
             print("All files have been cached")
         self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
@@ -62,8 +64,12 @@ class Wallpaper:
             wallpaper_rows = self._get_scrolling_wallpaper_rows(
                 SETTINGS.layout.img_per_row
             )
-        GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows, self.total_pages)
-
+        GLib.idle_add(
+            self._view.set_wallpaper_rows,
+            self.service,
+            wallpaper_rows,
+            self.total_pages,
+        )
 
     def __init__(self):
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
@@ -120,16 +126,16 @@ class Wallpaper:
     def next_page(self, service):
         if self.current_page < self.total_pages:
             self.current_page = self.current_page + 1
-            self._update_view(action='next')
+            self._update_view(action="next")
 
     def previous_page(self, service):
         if self.current_page > 1:
             self.current_page = self.current_page - 1
-            self._update_view(action='previous')
+            self._update_view(action="previous")
 
     def go_to_page(self, service, page_index: int):
         if page_index > 0 and page_index <= self.total_pages:
-            action = 'next' if page_index > self.current_page else 'previous'
+            action = "next" if page_index > self.current_page else "previous"
             self.current_page = page_index
             self._update_view(action=action)
 
@@ -150,7 +156,7 @@ class Wallpaper:
         self.update_monitor_image()
 
     def _get_original_image_from_cache(self, thumbail_location: str):
-        return self.cache_data["files"][self.selected_image]['source_filename']
+        return self.cache_data["files"][self.selected_image]["source_filename"]
 
     def update_monitor_image(self):
         if self.selected_image:
@@ -162,9 +168,7 @@ class Wallpaper:
                 # TODO add logger for command
                 subprocess.run(command)
                 self._view.update_monitor_image(widget, org_img_path)
-                shutil.copy(
-                    org_img_path, Path(SETTINGS.config_file).parent / name
-                )
+                shutil.copy(org_img_path, Path(SETTINGS.config_file).parent / name)
 
     def clear_cache(self, service):
         cache_manager = CacheManager()

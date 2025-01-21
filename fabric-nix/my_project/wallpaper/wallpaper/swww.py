@@ -1,16 +1,15 @@
-from dataclasses import asdict, dataclass, fields
-from enum import Enum
-from typing import Optional
-
 import re
+from dataclasses import asdict, dataclass
+from enum import Enum
+
 
 class HexColor:
-    HEX_COLOR_PATTERN = re.compile(r'^#?[0-9A-Fa-f]{6}$')
+    HEX_COLOR_PATTERN = re.compile(r"^#?[0-9A-Fa-f]{6}$")
 
     def __init__(self, color: str):
         if not self.HEX_COLOR_PATTERN.match(color):
             raise ValueError(f"Invalid hex color: {color}")
-        self.color = color if color.startswith('#') else f"#{color}"
+        self.color = color if color.startswith("#") else f"#{color}"
 
     def __str__(self):
         return self.color
@@ -18,7 +17,7 @@ class HexColor:
 
 class SwwwResize(Enum):
     NO = "no"
-    CROP  = "crop"
+    CROP = "crop"
     FIT = "fit"
 
 
@@ -45,6 +44,7 @@ class SwwwTransitionType(Enum):
     ANY = "any"
     OUTER = "outer"
     RANDOM = "random"
+
 
 class SwwwTransitionPosition(Enum):
     CENTER = "center"
@@ -75,13 +75,12 @@ class SWWW:
     # transition_bezier: tuple[float, float, float] = [0.54, 0, 0.34, 0.99]
     # transition_wave: tuple[int, int] = [20, 20]
 
-
     def _transform_option(self, option: str, value: str) -> list[str]:
         return [f"--{option.replace('_', '-')}", str(value)]
 
     def build_command(self, monitor_name: str, image_path: str) -> str:
         command = ["swww", "img", "-o", monitor_name]
-        for name, value in asdict(self).items():            
+        for name, value in asdict(self).items():
             if isinstance(value, Enum):
                 value = value.value
             elif isinstance(value, str) and "#" in value:

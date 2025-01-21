@@ -3,17 +3,16 @@ from pathlib import Path
 import gi
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
+from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
-from fabric.widgets.wayland import WaylandWindow as Window
-from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.scrolledwindow import ScrolledWindow
+from fabric.widgets.wayland import WaylandWindow as Window
 
 from wallpaper.models import SETTINGS
-
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import GdkPixbuf
@@ -30,12 +29,15 @@ class BaseRow(Box):
 
 
 class WallpaperRow(BaseRow):
-    def __init__(
-        self, service, wallpapers_folder: Path, images, **kwargs
-    ):
+    def __init__(self, service, wallpapers_folder: Path, images, **kwargs):
         super().__init__(**kwargs)
         for image_name in images:
-            scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(f"{wallpapers_folder}/{image_name}", SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
+            scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                f"{wallpapers_folder}/{image_name}",
+                SETTINGS.layout.img_max_width,
+                SETTINGS.layout.img_max_height,
+                True,
+            )
             image = Image(pixbuf=scaled_pixbuf)
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(
@@ -84,9 +86,15 @@ class WallpaperSection(ScrolledWindow):
 
     def __init__(self, service, wallpaper_rows, **kwargs):
         super().__init__(
-            min_content_size=(SETTINGS.layout.scroll_min_width, SETTINGS.layout.scroll_min_height),
-            max_content_size=(SETTINGS.layout.scroll_max_width, SETTINGS.layout.scroll_max_height),
-            **kwargs
+            min_content_size=(
+                SETTINGS.layout.scroll_min_width,
+                SETTINGS.layout.scroll_min_height,
+            ),
+            max_content_size=(
+                SETTINGS.layout.scroll_max_width,
+                SETTINGS.layout.scroll_max_height,
+            ),
+            **kwargs,
         )
 
         self.wallpaper_rows = [
@@ -94,7 +102,9 @@ class WallpaperSection(ScrolledWindow):
                 service,
                 SETTINGS.main.cache_folder / "images",
                 images=row,
-            ) for row in wallpaper_rows]
+            )
+            for row in wallpaper_rows
+        ]
 
         self.add(
             Box(
@@ -107,9 +117,9 @@ class WallpaperSection(ScrolledWindow):
         return self.wallpaper_rows
 
     def update_wallpaper_rows(self, service, action, wallpaper_rows):
-        if action == 'next':
+        if action == "next":
             transition_type = SETTINGS.animation.next_transition_type
-            transition_duration = SETTINGS.animation.next_transition_duration       
+            transition_duration = SETTINGS.animation.next_transition_duration
         else:
             transition_type = SETTINGS.animation.prev_transition_type
             transition_duration = SETTINGS.animation.prev_transition_duration
@@ -121,9 +131,12 @@ class WallpaperSection(ScrolledWindow):
                 children=[
                     WallpaperRow(
                         service, SETTINGS.main.cache_folder / "images", images=row
-                    ).build().add_style_class("wallpaper-row").unwrap()
+                    )
+                    .build()
+                    .add_style_class("wallpaper-row")
+                    .unwrap()
                     for row in wallpaper_rows
-                ]
+                ],
             ),
         )
         self.connect("draw", self.on_draw)
@@ -136,6 +149,7 @@ class WallpaperSection(ScrolledWindow):
         if self.revealer:
             self.revealer.child_revealed = True
 
+
 class PaginationSection(Box):
     def __init__(self, service, nb_pages: int, **kwargs):
         self.max_pages = nb_pages
@@ -147,16 +161,27 @@ class PaginationSection(Box):
             children=[
                 Button(
                     label="Previous", on_clicked=lambda widget: service.previous_page()
-                ).build().add_style_class("pagination-button").unwrap()
+                )
+                .build()
+                .add_style_class("pagination-button")
+                .unwrap()
             ]
             + [
                 Button(
                     label=str(i),
                     on_clicked=lambda widget, page=(i): service.go_to_page(page),
-                ).build().add_style_class("pagination-button").unwrap()
+                )
+                .build()
+                .add_style_class("pagination-button")
+                .unwrap()
                 for i in range(1, nb_pages + 1)
             ]
-            + [Button(label="Next", on_clicked=lambda widget: service.next_page()).build().add_style_class("pagination-button").unwrap()],
+            + [
+                Button(label="Next", on_clicked=lambda widget: service.next_page())
+                .build()
+                .add_style_class("pagination-button")
+                .unwrap()
+            ],
             **kwargs,
         )
         self.get_prev_button().add_style_class("pagination-disabled")
@@ -178,7 +203,7 @@ class PaginationSection(Box):
         if disabled:
             button.add_style_class("pagination-disabled")
         else:
-            button.remove_style_class("pagination-disabled")     
+            button.remove_style_class("pagination-disabled")
 
     def reset_pagination(self, page_index):
         # Prev and next
@@ -206,7 +231,7 @@ class Wallpaper(Window):
             anchor=anchor,
             exclusivity="auto",
             keyboard_mode="on-demand",
-            **kwargs
+            **kwargs,
         )
         self.set_resizable(False)
 
@@ -215,7 +240,7 @@ class Wallpaper(Window):
             service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
         )
         self.layout = CenterBox(
-            orientation='vertical',
+            orientation="vertical",
             start_children=self.monitor_section,
         )
 
@@ -226,7 +251,6 @@ class Wallpaper(Window):
         )
         self.connect("draw", self.on_draw)
 
-
         outer_box = CenterBox(
             center_children=self.revealer,
         )
@@ -236,7 +260,6 @@ class Wallpaper(Window):
             outer_box.add_style_class("background-color")
 
         self.children = outer_box
-
 
     def set_selected_monitor(self, widget):
         widget.add_style_class("selected-screen")
@@ -267,7 +290,9 @@ class Wallpaper(Window):
     def set_wallpaper_rows(self, service, wallpaper_rows, total_pages):
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
         self.layout.add_center(self.wallpaper_section)
-        self.layout.add_end(Button(label="Clear cache", on_clicked=lambda _: service.clear_cache()))
+        self.layout.add_end(
+            Button(label="Clear cache", on_clicked=lambda _: service.clear_cache())
+        )
         if SETTINGS.main.pagination:
             self.pagination = PaginationSection(service, total_pages)
             self.layout.add_end(self.pagination)

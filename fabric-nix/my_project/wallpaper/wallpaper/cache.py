@@ -1,24 +1,23 @@
+import hashlib
 import json
 import os
-from pathlib import Path
-import hashlib
-import gi
 import shutil
+from pathlib import Path
 
-gi.require_version("Gtk", "3.0")
-gi.require_version('GdkPixbuf', '2.0')
+import gi
 from gi.repository import GdkPixbuf
 
 from wallpaper.models import SETTINGS
 
-gi.repository.GLib.GError
+gi.require_version("Gtk", "3.0")
+gi.require_version("GdkPixbuf", "2.0")
 
 
 class CacheManager:
     def get_data_from_cache_file(self):
         file = Path(self._get_cache_file())
         if file.exists():
-            with open(file, 'r') as f:
+            with open(file, "r") as f:
                 data = json.load(f)
         else:
             data = {
@@ -30,15 +29,14 @@ class CacheManager:
         return data
 
     def _get_cache_file(self):
-        return SETTINGS.main.cache_folder  / "cache.json"
-
+        return SETTINGS.main.cache_folder / "cache.json"
 
     def cache_images(self):
-    # File generator for all files in the directory
+        # File generator for all files in the directory
         def files_generator():
             for root, dirs, files in os.walk(SETTINGS.main.wallpapers_folder):
                 for file in files:
-                    #relative_path = os.path.relpath(os.path.join(root, file), SETTINGS.main.wallpapers_folder)
+                    # relative_path = os.path.relpath(os.path.join(root, file), SETTINGS.main.wallpapers_folder)
                     full_path = os.path.join(root, file)
                     yield full_path
 
@@ -61,8 +59,12 @@ class CacheManager:
                 scale_ratio = min(width_ratio, height_ratio)
                 new_width = int(original_width * scale_ratio)
                 new_height = int(original_height * scale_ratio)
-                scaled_pixbuf = pixbuf.scale_simple(new_width, new_height, GdkPixbuf.InterpType.BILINEAR)
-                pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
+                pixbuf.savev(
+                    str(SETTINGS.main.cache_folder / "images" / md5_filename),
+                    "jpeg",
+                    [],
+                    [],
+                )
                 image_batch.append(full_path)
             except gi.repository.GLib.GError:
                 # TODO add logger
@@ -70,7 +72,7 @@ class CacheManager:
 
             if len(image_batch) >= SETTINGS.main.cache_batch:
                 # Write JSON data to the file
-                with open(self._get_cache_file(), 'w') as json_file:
+                with open(self._get_cache_file(), "w") as json_file:
                     json.dump(cache_data, json_file, indent=4)
                 yield image_batch
                 image_batch = []
@@ -78,13 +80,14 @@ class CacheManager:
         if image_batch:
             yield image_batch
 
-
     def should_clear_cache(self):
         if Path(self._get_cache_file()).exists() is False:
             return True
         else:
             cache_data = self.get_data_from_cache_file()
-            return cache_data['wallpapers_folder'] != str(SETTINGS.main.wallpapers_folder)
+            return cache_data["wallpapers_folder"] != str(
+                SETTINGS.main.wallpapers_folder
+            )
 
     def clear_cache(self):
         for item in os.listdir(SETTINGS.main.cache_folder):

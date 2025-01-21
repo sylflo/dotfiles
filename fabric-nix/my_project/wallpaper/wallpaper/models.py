@@ -1,15 +1,11 @@
-import json
 import os
-import subprocess
 from configparser import ConfigParser
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
+
 from screeninfo import get_monitors
 
 from wallpaper.swww import SWWW as SwwwSettings
-
-from typing import Union
-
 
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
@@ -84,7 +80,6 @@ class Settings:
 
     @classmethod
     def load(cls, config_path=DEFAULT_CONFIG_FILE):
-        from enum import Enum
 
         if os.path.exists(config_path):
             config = ConfigParser()
@@ -128,7 +123,10 @@ class Settings:
             settings = cls(config_file=config_path)
             settings.save()
         return settings
-        if settings.layout.background_img and not Path(settings.layout.background_img).exists():
+        if (
+            settings.layout.background_img
+            and not Path(settings.layout.background_img).exists()
+        ):
             raise FileNotFoundError(
                 f"Background image '{settings.background_img}' does not exist."
             )
@@ -137,18 +135,10 @@ class Settings:
     def save(self):
         config = ConfigParser()
 
-        config["Main"] = {
-            k: str(v) for k, v in asdict(self.main).items()
-        }
-        config["Layout"] = {
-            k: str(v) for k, v in asdict(self.layout).items()
-        }
-        config["Animation"] = {
-            k: str(v) for k, v in asdict(self.animation).items()
-        }
-        config["Swww"] = {
-            k: str(v) for k, v in asdict(self.swww).items()
-        }
+        config["Main"] = {k: str(v) for k, v in asdict(self.main).items()}
+        config["Layout"] = {k: str(v) for k, v in asdict(self.layout).items()}
+        config["Animation"] = {k: str(v) for k, v in asdict(self.animation).items()}
+        config["Swww"] = {k: str(v) for k, v in asdict(self.swww).items()}
 
         config_path = Path(self.config_file)
         config_path.parent.mkdir(parents=True, exist_ok=True)
