@@ -69,7 +69,6 @@ class CacheManager:
                 pass
 
             if len(image_batch) >= SETTINGS.main.cache_batch:
-
                 # Write JSON data to the file
                 with open(self._get_cache_file(), 'w') as json_file:
                     json.dump(cache_data, json_file, indent=4)
