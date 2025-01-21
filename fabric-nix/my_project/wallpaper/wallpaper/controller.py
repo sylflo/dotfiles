@@ -45,6 +45,8 @@ class Wallpaper:
 
     def __init__(self):
         os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
+        #self.cache_data = {}
+        self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self.service = WallpaperService()
         self.service.connect("next-page", self.next_page)
@@ -142,22 +144,22 @@ class Wallpaper:
         self.selected_image = image_name
         self.update_monitor_image()
 
+    def _get_original_image_from_cache(self, thumbail_location: str):
+        return self.cache_data["files"][self.selected_image]['source_filename']
+
     def update_monitor_image(self):
         if self.selected_image:
             for widget, name in zip(
                 self.selected_monitors, self.selected_monitors_name
             ):
-                image_location = (
-                    f"{SETTINGS.main.wallpapers_folder}/{self.selected_image}"
-                )
-                command = SETTINGS.swww.build_command(name, image_location)
+                org_img_path = self._get_original_image_from_cache(self.selected_image)
+                command = SETTINGS.swww.build_command(name, org_img_path)
                 # TODO add logger for command
                 subprocess.run(command)
-                self._view.update_monitor_image(widget, self.selected_image)
+                self._view.update_monitor_image(widget, org_img_path)
                 shutil.copy(
-                    image_location, Path(SETTINGS.config_file).parent / name
+                    org_img_path, Path(SETTINGS.config_file).parent / name
                 )
-
     def _update_view(self, action: str):
         self._view.update_wallpaper_rows(
             service=self.service,

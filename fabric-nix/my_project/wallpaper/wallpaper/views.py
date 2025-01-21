@@ -264,7 +264,8 @@ class Wallpaper(Window):
     def update_monitor_image(self, monitor, image_name):
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-            f"{SETTINGS.main.wallpapers_folder}/{image_name}",
+            image_name,
+            #f"{SETTINGS.main.wallpapers_folder}/{image_name}",
             width=SETTINGS.layout.monitor_img_size,
             height=SETTINGS.layout.monitor_img_size,
         )

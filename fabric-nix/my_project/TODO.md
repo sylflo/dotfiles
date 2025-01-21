@@ -13,6 +13,7 @@ LATER
 
     LATER Next versions\
     3.0) Make a progress bar whern loading cacghe
+    3.0) Load image before cache finished, easy for scrolkling what about pagination :/
     3.1) VIDEO EXTENSION
     3.3) => Too many page how to manage it  1 ... 53 54 55 ... 281 
     5) Shortcut key => configurable

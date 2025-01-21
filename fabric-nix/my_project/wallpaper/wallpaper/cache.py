@@ -14,8 +14,8 @@ from wallpaper.models import SETTINGS
 
 
 class CacheManager:
-    def _get_data_from_cache_file(self, file_path):
-        file = Path(file_path)
+    def get_data_from_cache_file(self):
+        file = Path(self._get_cache_file())
         if file.exists():
             with open(file, 'r') as f:
                 data = json.load(f)
@@ -41,7 +41,7 @@ class CacheManager:
                     full_path = os.path.join(root, file)
                     yield full_path
 
-        cache_data = self._get_data_from_cache_file(self._get_cache_file())
+        cache_data = self.get_data_from_cache_file()
         # Load and display images in batches
         image_batch = []
         for full_path in files_generator():
@@ -62,9 +62,14 @@ class CacheManager:
         if image_batch:
             yield image_batch
 
+        # Write JSON data to the file
+        with open(self._get_cache_file(), 'w') as json_file:
+            json.dump(cache_data, json_file, indent=4)
+
+
 
     def _should_clear_cache(self):
-        cache_data = self._get_data_from_cache_file(self._get_cache_file())
+        cache_data = self.get_data_from_cache_file()
         return cache_data['wallpapers_folder'] != str(SETTINGS.main.wallpapers_folder)
 
     def clear_cache(self):
