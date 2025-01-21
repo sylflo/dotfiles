@@ -52,7 +52,6 @@ class CacheManager:
                 }
             image_batch.append(full_path)
             scaled_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(full_path, SETTINGS.layout.img_max_width, SETTINGS.layout.img_max_height, True)
-            
             scaled_pixbuf.savev(str(SETTINGS.main.cache_folder / "images" / md5_filename), "jpeg", [], [])
 
             if len(image_batch) >= SETTINGS.main.cache_batch:
@@ -67,19 +66,18 @@ class CacheManager:
             json.dump(cache_data, json_file, indent=4)
 
 
-
-    def _should_clear_cache(self):
-        cache_data = self.get_data_from_cache_file()
-        return cache_data['wallpapers_folder'] != str(SETTINGS.main.wallpapers_folder)
+    def should_clear_cache(self):
+        if Path(self._get_cache_file()).exists() is False:
+            return True
+        else:
+            cache_data = self.get_data_from_cache_file()
+            return cache_data['wallpapers_folder'] != str(SETTINGS.main.wallpapers_folder)
 
     def clear_cache(self):
-        if os.path.exists(SETTINGS.main.cache_folder) and self._should_clear_cache():
-            for item in os.listdir(SETTINGS.main.cache_folder):
-                item_path = os.path.join(SETTINGS.main.cache_folder, item)
-                if os.path.isfile(item_path):
-                    os.remove(item_path)  # Remove files
-                elif os.path.isdir(item_path):
-                    shutil.rmtree(item_path)  # Remove directories
-            print(f"All contents of {SETTINGS.main.cache_folder} have been deleted.")
-        else:
-            print(f"{SETTINGS.main.cache_folder} does not exist.")
+        for item in os.listdir(SETTINGS.main.cache_folder):
+            item_path = os.path.join(SETTINGS.main.cache_folder, item)
+            if os.path.isfile(item_path):
+                os.remove(item_path)  # Remove files
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)  # Remove directories
+        print(f"All contents of {SETTINGS.main.cache_folder} have been deleted.")

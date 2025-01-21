@@ -23,13 +23,15 @@ import os
 class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
-        #cache_manager.clear_cache()
-        files_processed = 0
-        for cached_files in cache_manager.cache_images():
-            #self.process_image_batch(cached_files)
-            files_processed = len(cached_files) + files_processed
-            print(f"Cached {files_processed} files...")
-        print("All files have been cached")
+        if cache_manager.should_clear_cache():
+            cache_manager.clear_cache()
+            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)        
+            files_processed = 0
+            for cached_files in cache_manager.cache_images():
+                #self.process_image_batch(cached_files)
+                files_processed = len(cached_files) + files_processed
+                print(f"Cached {files_processed} files...")
+            print("All files have been cached")
         self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
         self.total_pages = self._get_total_pages(
             SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
@@ -49,7 +51,6 @@ class Wallpaper:
 
 
     def __init__(self):
-        os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)        
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self.service = WallpaperService()
         self.service.connect("next-page", self.next_page)
