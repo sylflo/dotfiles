@@ -22,14 +22,18 @@ import os
 
 class Wallpaper:
     def _cache(self):
-        # cache_manager = CacheManager()
-        # #cache_manager.clear_cache()
-        # files_processed = 0
-        # for cached_files in cache_manager.cache_images():
-        #     #self.process_image_batch(cached_files)
-        #     files_processed = len(cached_files) + files_processed
-        #     print(f"Cached {files_processed} files...")
+        cache_manager = CacheManager()
+        #cache_manager.clear_cache()
+        files_processed = 0
+        for cached_files in cache_manager.cache_images():
+            #self.process_image_batch(cached_files)
+            files_processed = len(cached_files) + files_processed
+            print(f"Cached {files_processed} files...")
         print("All files have been cached")
+        self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
+        self.total_pages = self._get_total_pages(
+            SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
+        )
         # Update ui accordingly
         if SETTINGS.main.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(
@@ -41,13 +45,11 @@ class Wallpaper:
             wallpaper_rows = self._get_scrolling_wallpaper_rows(
                 SETTINGS.layout.img_per_row
             )
-        GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows)
+        GLib.idle_add(self._view.set_wallpaper_rows, self.service, wallpaper_rows, self.total_pages)
 
 
     def __init__(self):
-        os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
-        #self.cache_data = {}
-        self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
+        os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)        
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self.service = WallpaperService()
         self.service.connect("next-page", self.next_page)
@@ -56,16 +58,13 @@ class Wallpaper:
         self.service.connect("select-monitor", self.select_monitor)
         self.service.connect("select-image", self.select_image)
         self.current_page = 1
-        self.total_pages = self._get_total_pages(
-            SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
-        )
         self.selected_monitors = []
         self.selected_monitors_name = []
         self.selected_image = None
 
         self._view = WallpaperView(
             service=self.service,
-            total_pages=self.total_pages,
+            #total_pages=self.total_pages,
             monitors=self._get_monitors(),
         )
         self._set_stylesheet_vars()
@@ -150,6 +149,7 @@ class Wallpaper:
                 shutil.copy(
                     org_img_path, Path(SETTINGS.config_file).parent / name
                 )
+
     def _update_view(self, action: str):
         self._view.update_wallpaper_rows(
             service=self.service,

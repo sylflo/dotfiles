@@ -1,6 +1,6 @@
 LATER
+  PAGINAGION
   WALLPAPER
-    2) Caching => Cache all images (try no threading then threading see if it blocks ui)
       2.1) Refrsh button/clear cache
       2.2) Put shitty file, pdf, txt, ... shoould not create a bug
       2.4 )  tryu webp

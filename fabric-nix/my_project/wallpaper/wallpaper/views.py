@@ -33,7 +33,6 @@ class WallpaperRow(BaseRow):
     def __init__(
         self, service, wallpapers_folder: Path, images, **kwargs
     ):
-        #raise Exception(wallpapers_folder, images)
         super().__init__(**kwargs)
         for image_name in images:
             image = Image(image_file=f"{wallpapers_folder}/{image_name}", size=SETTINGS.layout.img_max_width)
@@ -197,7 +196,7 @@ class Wallpaper(Window):
     def __init__(
         self,
         service,
-        total_pages: int,
+        #total_pages: int,
         monitors: list[str],
         **kwargs,
     ):
@@ -236,12 +235,11 @@ class Wallpaper(Window):
         else:
             outer_box.add_style_class("background-color")
 
-        if SETTINGS.main.pagination:
-            self.pagination = PaginationSection(service, total_pages)
-            self.layout.end_children = self.pagination
-            self.children = outer_box
-        else:
-            self.children = outer_box
+        # if SETTINGS.main.pagination:
+        #     self.pagination = PaginationSection(service, total_pages)
+        #     self.layout.end_children = self.pagination
+
+        self.children = outer_box
 
 
     def set_selected_monitor(self, widget):
@@ -270,9 +268,12 @@ class Wallpaper(Window):
         self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
 
-    def set_wallpaper_rows(self, service, wallpaper_rows):
+    def set_wallpaper_rows(self, service, wallpaper_rows, total_pages):
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
         self.layout.add_center(self.wallpaper_section)
+        if SETTINGS.main.pagination:
+            self.pagination = PaginationSection(service, total_pages)
+            self.layout.add_end(self.pagination)
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
