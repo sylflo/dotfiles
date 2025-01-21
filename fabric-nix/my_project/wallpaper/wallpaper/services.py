@@ -22,3 +22,7 @@ class Pagination(Service):
     @Signal
     def select_image(self, widget: EventBox, image_name: str) -> None:
         pass
+
+    @Signal
+    def clear_cache() -> None:
+        pass

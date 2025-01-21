@@ -197,7 +197,6 @@ class Wallpaper(Window):
     def __init__(
         self,
         service,
-        #total_pages: int,
         monitors: list[str],
         **kwargs,
     ):
@@ -268,6 +267,7 @@ class Wallpaper(Window):
     def set_wallpaper_rows(self, service, wallpaper_rows, total_pages):
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
         self.layout.add_center(self.wallpaper_section)
+        self.layout.add_end(Button(label="Clear cache"))
         if SETTINGS.main.pagination:
             self.pagination = PaginationSection(service, total_pages)
             self.layout.add_end(self.pagination)
