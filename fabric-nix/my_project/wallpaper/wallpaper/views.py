@@ -18,6 +18,17 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import GdkPixbuf
 
 
+# Constants for styles
+STYLE_SELECTED_IMAGE = "selected-image"
+STYLE_DISABLED = "pagination-disabled"
+STYLE_SELECTED_PAGE = "pagination-selected-page"
+STYLE_BACKGROUND_COLOR = "background-color"
+STYLE_BACKGROUND_IMG = "background-img"
+STYLE_SELECTED_SCREEN = "selected-screen"
+STYLE_IMG = "img"
+STYLE_PAGINATION_BUTTON = "pagination-button"
+
+
 class BaseRow(Box):
     def __init__(self, **kwargs):
         super().__init__(
@@ -43,7 +54,7 @@ class WallpaperRow(BaseRow):
                 on_button_press_event=lambda widget, _, image_name=image_name: service.select_image(
                     widget, image_name
                 ),
-                child=image.build().add_style_class("img").unwrap(),
+                child=image.build().add_style_class(STYLE_IMG).unwrap(),
             )
             self.add(event_box)
 
@@ -72,7 +83,7 @@ class MonitorSection(BaseRow):
                                 size=img_size,
                             )
                             .build()
-                            .add_style_class("img")
+                            .add_style_class(STYLE_IMG)
                             .unwrap(),
                             overlays=Label(label=monitor),
                         )
@@ -163,7 +174,7 @@ class PaginationSection(Box):
                     label="Previous", on_clicked=lambda widget: service.previous_page()
                 )
                 .build()
-                .add_style_class("pagination-button")
+                .add_style_class(STYLE_PAGINATION_BUTTON)
                 .unwrap()
             ]
             + [
@@ -172,20 +183,20 @@ class PaginationSection(Box):
                     on_clicked=lambda widget, page=(i): service.go_to_page(page),
                 )
                 .build()
-                .add_style_class("pagination-button")
+                .add_style_class(STYLE_PAGINATION_BUTTON)
                 .unwrap()
                 for i in range(1, nb_pages + 1)
             ]
             + [
                 Button(label="Next", on_clicked=lambda widget: service.next_page())
                 .build()
-                .add_style_class("pagination-button")
+                .add_style_class(STYLE_PAGINATION_BUTTON)
                 .unwrap()
             ],
             **kwargs,
         )
-        self.get_prev_button().add_style_class("pagination-disabled")
-        self.get_page_button(1).add_style_class("pagination-selected-page")
+        self.get_prev_button().add_style_class(STYLE_DISABLED)
+        self.get_page_button(1).add_style_class(STYLE_SELECTED_PAGE)
 
     def get_prev_button(self):
         return self.children[0]
@@ -201,9 +212,9 @@ class PaginationSection(Box):
 
     def _update_nav_button(self, button, disabled):
         if disabled:
-            button.add_style_class("pagination-disabled")
+            button.add_style_class(STYLE_DISABLED)
         else:
-            button.remove_style_class("pagination-disabled")
+            button.remove_style_class(STYLE_DISABLED)
 
     def reset_pagination(self, page_index):
         # Prev and next
@@ -213,10 +224,9 @@ class PaginationSection(Box):
         # Pagination number
         for index, button in enumerate(self.get_all_page_button()):
             if (index + 1) == page_index:
-                button.add_style_class("pagination-selected-page")
+                button.add_style_class(STYLE_SELECTED_PAGE)
             else:
-                button.remove_style_class("pagination-selected-page")
-
+                button.remove_style_class(STYLE_SELECTED_PAGE)
 
 class Wallpaper(Window):
     def __init__(
@@ -255,24 +265,24 @@ class Wallpaper(Window):
             center_children=self.revealer,
         )
         if SETTINGS.layout.background_img:
-            outer_box.add_style_class("background-img")
+            outer_box.add_style_class(STYLE_BACKGROUND_IMG)
         else:
-            outer_box.add_style_class("background-color")
+            outer_box.add_style_class(STYLE_BACKGROUND_COLOR)
 
         self.children = outer_box
 
     def set_selected_monitor(self, widget):
-        widget.add_style_class("selected-screen")
+        widget.add_style_class(STYLE_SELECTED_SCREEN)
 
     def set_unselected_monitor(self, widget):
-        widget.remove_style_class("selected-screen")
+        widget.remove_style_class(STYLE_SELECTED_SCREEN)
 
     def set_selected_image(self, widget):
         for row in self.wallpaper_section.get_wallpaper_rows():
             for child in row:
                 if isinstance(child, EventBox):
-                    child.remove_style_class("selected-image")
-        widget.add_style_class("selected-image")
+                    child.remove_style_class(STYLE_SELECTED_IMAGE)
+        widget.add_style_class(STYLE_SELECTED_IMAGE)
 
     def update_monitor_image(self, monitor, image_name):
         image_widget = monitor.children[0].children[0].children[0]
