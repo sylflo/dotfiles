@@ -65,15 +65,19 @@ class CacheManager:
             image_batch.append(full_path)
 
             if len(image_batch) >= SETTINGS.main.cache_batch:
+
+                # Write JSON data to the file
+                with open(self._get_cache_file(), 'w') as json_file:
+                    json.dump(cache_data, json_file, indent=4)
                 yield image_batch
                 image_batch = []
         # Process the remaining files
         if image_batch:
             yield image_batch
 
-        # Write JSON data to the file
-        with open(self._get_cache_file(), 'w') as json_file:
-            json.dump(cache_data, json_file, indent=4)
+        # # Write JSON data to the file
+        # with open(self._get_cache_file(), 'w') as json_file:
+        #     json.dump(cache_data, json_file, indent=4)
 
 
     def should_clear_cache(self):
