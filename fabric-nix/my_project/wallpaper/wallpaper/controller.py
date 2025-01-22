@@ -8,8 +8,7 @@ from gi.repository import GLib
 from jinja2 import Environment, FileSystemLoader
 
 from wallpaper.cache import CacheManager
-from wallpaper.models import SETTINGS
-from wallpaper.models import Wallpaper as WallpaperModel
+from wallpaper.models import SETTINGS, Wallpaper as WallpaperModel
 from wallpaper.services import Pagination as WallpaperService
 from wallpaper.views import Wallpaper as WallpaperView
 from wallpaper.pagination_service import PaginationService

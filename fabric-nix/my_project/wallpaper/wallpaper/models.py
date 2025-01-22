@@ -5,7 +5,8 @@ from pathlib import Path
 
 from screeninfo import get_monitors
 
-from wallpaper.swww import SWWW as SwwwSettings
+from wallpaper.commands.swww import SWWW as SwwwSettings
+
 
 DEFAULT_CONFIG_FILE = Path.home() / ".config" / "sww_ui_ricing" / "app"
 
