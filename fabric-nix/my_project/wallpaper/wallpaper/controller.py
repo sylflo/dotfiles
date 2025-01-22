@@ -76,7 +76,7 @@ class Wallpaper:
     def __init__(self):
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self.pagination_service = PaginationService()
-        self.service = EventsService()
+        self.service = EventsServic()
         self._init_services()
         self.selected_monitors = []
         self.selected_monitors_name = []
