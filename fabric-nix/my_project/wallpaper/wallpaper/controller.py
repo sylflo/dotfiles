@@ -12,6 +12,7 @@ from wallpaper.models import SETTINGS
 from wallpaper.models import Wallpaper as WallpaperModel
 from wallpaper.services import Pagination as WallpaperService
 from wallpaper.views import Wallpaper as WallpaperView
+from wallpaper.pagination_service import PaginationService
 
 
 class Wallpaper:
@@ -30,17 +31,18 @@ class Wallpaper:
                 self.total_pages = self._get_total_pages(
                     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
                 )
-                # Update ui accordingly
-                if SETTINGS.main.pagination:
-                    wallpaper_rows = self._get_pagination_wallpaper_rows(
-                        self.current_page - 1,
-                        SETTINGS.layout.img_per_row,
-                        SETTINGS.layout.row_per_page,
-                    )
-                else:
-                    wallpaper_rows = self._get_scrolling_wallpaper_rows(
-                        SETTINGS.layout.img_per_row
-                    )
+                # # Update ui accordingly
+                # if SETTINGS.main.pagination:
+                #     wallpaper_rows = self._get_pagination_wallpaper_rows(
+                #         self.current_page - 1,
+                #         SETTINGS.layout.img_per_row,
+                #         SETTINGS.layout.row_per_page,
+                #     )
+                # else:
+                #     wallpaper_rows = self._get_scrolling_wallpaper_rows(
+                #         SETTINGS.layout.img_per_row
+                #     )
+                wallpaper_rows=[]
                 GLib.idle_add(
                     self._view.set_wallpaper_rows,
                     self.service,
@@ -56,7 +58,7 @@ class Wallpaper:
         # Update ui accordingly
         if SETTINGS.main.pagination:
             wallpaper_rows = self._get_pagination_wallpaper_rows(
-                self.current_page - 1,
+                self.pagination_service.current_page - 1,
                 SETTINGS.layout.img_per_row,
                 SETTINGS.layout.row_per_page,
             )
@@ -64,6 +66,7 @@ class Wallpaper:
             wallpaper_rows = self._get_scrolling_wallpaper_rows(
                 SETTINGS.layout.img_per_row
             )
+        #wallpaper_rows = []
         GLib.idle_add(
             self._view.set_wallpaper_rows,
             self.service,
@@ -79,9 +82,9 @@ class Wallpaper:
         self.service.connect("select-image", self.select_image)
         self.service.connect("clear-cache", self.clear_cache)
 
-
     def __init__(self):
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
+        self.pagination_service = PaginationService()
         self.service = WallpaperService()
         self._init_services()
         self.current_page = 1
