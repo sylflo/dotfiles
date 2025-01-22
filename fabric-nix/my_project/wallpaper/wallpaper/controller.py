@@ -25,6 +25,7 @@ class Wallpaper:
             self._initialize_cache_directory()
             cache_manager.clear_cache()
             self._initialize_cache_directory()
+            self._update_cache_ui()
             files_processed = 0
             self._view.update_cache_label("Caching files...")
             for cached_files in cache_manager.cache_images():

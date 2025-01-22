@@ -238,7 +238,7 @@ class Wallpaper(Window):
         )
         self.set_resizable(False)
         self.button_clear_cache = Button(
-            h_align="center",
+            h_align="start",
             label="Clear cache", on_clicked=lambda _: service.clear_cache()
         ).build().add_style_class(STYLE_CLEAR_CACHE_BUTTON).unwrap()
 
@@ -247,6 +247,7 @@ class Wallpaper(Window):
         self.monitor_section = Box(
             orientation="vertical",
             children=[
+                self.button_clear_cache,
                 MonitorSection(
                     service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
                 ), self.updating_cache_label]
@@ -266,6 +267,13 @@ class Wallpaper(Window):
         outer_box = CenterBox(
             center_children=self.revealer,
         )
+        # outer_box = Box(
+        #     orientation="vertical",
+        #     children=[
+        #         Label(label="plop", h_align="start"),
+        #         CenterBox(center_children=self.revealer),
+        #     ]
+        # )
         if SETTINGS.layout.background_img:
             outer_box.add_style_class(STYLE_BACKGROUND_IMG)
         else:
