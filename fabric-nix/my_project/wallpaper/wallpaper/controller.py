@@ -90,7 +90,6 @@ class Wallpaper:
         self.pagination_service = PaginationService()
         self.service = WallpaperService()
         self._init_services()
-        # self.current_page = 1
         self.selected_monitors = []
         self.selected_monitors_name = []
         self.selected_image = None
