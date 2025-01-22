@@ -130,20 +130,21 @@ class Wallpaper:
         return rows
 
     def next_page(self, service):
-        if self.current_page < self.total_pages:
-            self.current_page = self.current_page + 1
+        if self.pagination_service.has_next():
+            self.current_page = self.pagination_service.next_page()
             self._update_view(action="next")
 
+
     def previous_page(self, service):
-        if self.current_page > 1:
-            self.current_page = self.current_page - 1
-            self._update_view(action="previous")
+        if self.pagination_service.has_previous():
+            self.current_page = self.pagination_service.previous_page()
+            self._update_view(action="next")
 
     def go_to_page(self, service, page_index: int):
-        if page_index > 0 and page_index <= self.total_pages:
-            action = "next" if page_index > self.current_page else "previous"
-            self.current_page = page_index
-            self._update_view(action=action)
+        self.current_page = self.pagination_service.go_to_page(page_index)
+        action = "next" if page_index > self.current_page else "previous"
+        self._update_view(action=action)
+
 
     def select_monitor(self, service, widget, monitor_name):
         if widget in self.selected_monitors:
