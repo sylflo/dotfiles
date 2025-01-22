@@ -279,7 +279,6 @@ class Wallpaper(Window):
         widget.add_style_class(STYLE_SELECTED_IMAGE)
 
     def update_monitor_image(self, monitor, image_name):
-        # TODO get monitor with a method
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
             image_name,
