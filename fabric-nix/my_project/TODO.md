@@ -1,7 +1,7 @@
 LATER
   PAGINAGION
   WALLPAPER
-    4) Check all todo in code => chck swww random 
+    4) Check all todo in code
     5) add loger
     6) add swwww-daemopn
 
