@@ -4,7 +4,6 @@ LATER
     4) Check all todo in code => chck swww random 
     5) add loger
     6) add swwww-daemopn
-    7) Manage webp image
 
     use XDG_CONFIG_HOME and XDG_CACHE_HOME
 

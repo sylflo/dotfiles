@@ -28,6 +28,7 @@ STYLE_SELECTED_SCREEN = "selected-screen"
 STYLE_IMG = "img"
 STYLE_PAGINATION_BUTTON = "pagination-button"
 STYLE_WALLPAPER_ROW = "wallpaper-row"
+STYLE_CLEAR_CACHE_BUTTON = "clear-cache-button"
 
 DEFAULT_IMAGE_PATH = "./images/default.png"
 
@@ -235,7 +236,10 @@ class Wallpaper(Window):
             **kwargs,
         )
         self.set_resizable(False)
-        self.button_clear_cache = Button(label="Clear cache", on_clicked=lambda _: service.clear_cache())
+        self.button_clear_cache = Button(
+            h_align="center",
+            label="Clear cache", on_clicked=lambda _: service.clear_cache()
+        ).build().add_style_class(STYLE_CLEAR_CACHE_BUTTON).unwrap()
 
         self.pagination = None
         self.monitor_section = MonitorSection(

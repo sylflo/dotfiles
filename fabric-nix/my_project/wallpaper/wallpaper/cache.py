@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 from pathlib import Path
-
+from PIL import Image
 import gi
 from gi.repository import GdkPixbuf
 
@@ -36,7 +36,14 @@ class CacheManager:
 
     def _scale_and_save_image(self, file_path, md5_filename):
         try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_path)
+            extension = Path(file_path).suffix.lower()
+            if extension == ".webp":
+                with Image.open(file_path) as img:
+                    data = img.tobytes()
+                    img_width, img_height = img.size
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_data(data, GdkPixbuf.Colorspace.RGB, False, 8, img_width, img_height, img_width * 3)
+            else:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_path)
             original_width = pixbuf.get_width()
             original_height = pixbuf.get_height()
             width_ratio = SETTINGS.layout.img_max_width / original_width
