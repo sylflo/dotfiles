@@ -245,6 +245,7 @@ class Wallpaper(Window):
             **kwargs,
         )
         self.set_resizable(False)
+        self.button_clear_cache = Button(label="Clear cache", on_clicked=lambda _: service.clear_cache())
 
         self.pagination = None
         self.monitor_section = MonitorSection(
@@ -300,13 +301,15 @@ class Wallpaper(Window):
 
     def set_wallpaper_rows(self, service, wallpaper_rows, total_pages):
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
-        self.layout.add_center(self.wallpaper_section)
-        self.layout.add_end(
-            Button(label="Clear cache", on_clicked=lambda _: service.clear_cache())
-        )
+
         if SETTINGS.main.pagination:
+            self.layout.center_children = self.wallpaper_section
             self.pagination = PaginationSection(service, total_pages)
+            self.layout.end_children = self.button_clear_cache
             self.layout.add_end(self.pagination)
+        else:
+            self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
+            self.layout.add_center(self.wallpaper_section)
 
     def on_draw(self, *args):
         self.revealer.child_revealed = True
