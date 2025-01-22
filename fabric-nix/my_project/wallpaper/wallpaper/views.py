@@ -137,8 +137,6 @@ class WallpaperSection(ScrolledWindow):
         else:
             transition_type = SETTINGS.animation.prev_transition_type
             transition_duration = SETTINGS.animation.prev_transition_duration
-        # TODO put revealer in init
-        # TODO Modify children rows nore properly
         self.revealer = Revealer(
             transition_type=transition_type,
             transition_duration=transition_duration,

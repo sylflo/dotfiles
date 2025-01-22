@@ -31,6 +31,34 @@ class CacheManager:
     def _get_cache_file(self):
         return SETTINGS.main.cache_folder / "cache.json"
 
+    def _generate_md5_hash(self, file_path):
+        return hashlib.md5(file_path.encode("utf")).hexdigest()
+
+    def _scale_and_save_image(self, file_path, md5_filename):
+        try:
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_path)
+            original_width = pixbuf.get_width()
+            original_height = pixbuf.get_height()
+            width_ratio = SETTINGS.layout.img_max_width / original_width
+            height_ratio = SETTINGS.layout.img_max_height / original_height
+            scale_ratio = min(width_ratio, height_ratio)
+            new_width = int(original_width * scale_ratio)
+            new_height = int(original_height * scale_ratio)
+            scaled_pixbuf = pixbuf.scale_simple(
+                new_width, new_height, GdkPixbuf.InterpType.BILINEAR
+            )
+            scaled_pixbuf.savev(
+                str(SETTINGS.main.cache_folder / "images" / md5_filename),
+                "jpeg",
+                [],
+                [],
+            )
+            return True
+        except gi.repository.GLib.GError as e:
+            # TODO: Add proper logging
+            print(f"Failed to process {file_path}: {e}")
+            return False
+
     def cache_images(self):
         # File generator for all files in the directory
         def files_generator():
@@ -44,35 +72,14 @@ class CacheManager:
         # Load and display images in batches
         image_batch = []
         for full_path in files_generator():
-            md5_filename = hashlib.md5(full_path.encode("utf")).hexdigest()
+            md5_filename = self._generate_md5_hash(full_path)
             if md5_filename not in cache_data:
                 # Avoid duplciate if two file are the same
                 cache_data["files"][md5_filename] = {
                     "source_filename": full_path,
                 }
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(full_path)
-                original_width = pixbuf.get_width()
-                original_height = pixbuf.get_height()
-                width_ratio = SETTINGS.layout.img_max_width / original_width
-                height_ratio = SETTINGS.layout.img_max_height / original_height
-                scale_ratio = min(width_ratio, height_ratio)
-                new_width = int(original_width * scale_ratio)
-                new_height = int(original_height * scale_ratio)
-                scaled_pixbuf = pixbuf.scale_simple(
-                    new_width, new_height, GdkPixbuf.InterpType.BILINEAR
-                )
-                scaled_pixbuf.savev(
-                    str(SETTINGS.main.cache_folder / "images" / md5_filename),
-                    "jpeg",
-                    [],
-                    [],
-                )
+            if self._scale_and_save_image(full_path, md5_filename):
                 image_batch.append(full_path)
-            except gi.repository.GLib.GError:
-                # TODO add logger
-                pass
-
             if len(image_batch) >= SETTINGS.main.cache_batch:
                 # Write JSON data to the file
                 with open(self._get_cache_file(), "w") as json_file:
