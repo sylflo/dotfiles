@@ -71,15 +71,19 @@ class Wallpaper:
             self.total_pages,
         )
 
-    def __init__(self):
-        self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
-        self.service = WallpaperService()
+    def _init_services(self):
         self.service.connect("next-page", self.next_page)
         self.service.connect("previous-page", self.previous_page)
         self.service.connect("go-to-page", self.go_to_page)
         self.service.connect("select-monitor", self.select_monitor)
         self.service.connect("select-image", self.select_image)
         self.service.connect("clear-cache", self.clear_cache)
+
+
+    def __init__(self):
+        self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
+        self.service = WallpaperService()
+        self._init_services()
         self.current_page = 1
         self.selected_monitors = []
         self.selected_monitors_name = []
