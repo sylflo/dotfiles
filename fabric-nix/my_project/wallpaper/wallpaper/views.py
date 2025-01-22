@@ -307,8 +307,9 @@ class Wallpaper(Window):
         if SETTINGS.main.pagination:
             self.layout.center_children = self.wallpaper_section
             self.pagination = PaginationSection(service, total_pages)
-            self.layout.end_children = self.button_clear_cache
-            self.layout.add_end(self.pagination)
+            self.layout.end_children = self.pagination
+            # self.layout.end_children = self.button_clear_cache
+            # self.layout.add_end(self.pagination)
         else:
             self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
             self.layout.add_center(self.wallpaper_section)
