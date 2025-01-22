@@ -72,6 +72,11 @@ class Wallpaper:
             self.total_pages,
         )
 
+    def clear_cache(self, service):
+        cache_manager = CacheManager()
+        cache_manager.clear_cache()
+        threading.Thread(target=self._cache, daemon=True).start()
+
     def _init_services(self):
         self.service.connect("next-page", self.next_page)
         self.service.connect("previous-page", self.previous_page)
@@ -85,11 +90,10 @@ class Wallpaper:
         self.pagination_service = PaginationService()
         self.service = WallpaperService()
         self._init_services()
-        self.current_page = 1
+        # self.current_page = 1
         self.selected_monitors = []
         self.selected_monitors_name = []
         self.selected_image = None
-
         self._view = WallpaperView(
             service=self.service,
             monitors=self._get_monitors(),
@@ -106,17 +110,17 @@ class Wallpaper:
 
     def next_page(self, service):
         if self.pagination_service.has_next():
-            self.current_page = self.pagination_service.next_page()
+            self.pagination_service.next_page()
             self._update_view(action="next")
 
     def previous_page(self, service):
         if self.pagination_service.has_previous():
-            self.current_page = self.pagination_service.previous_page()
+            self.pagination_service.previous_page()
             self._update_view(action="next")
 
     def go_to_page(self, service, page_index: int):
-        self.current_page = self.pagination_service.go_to_page(page_index)
-        action = "next" if page_index > self.current_page else "previous"
+        self.pagination_service.go_to_page(page_index)
+        action = "next" if page_index > self.pagination_service.current_page else "previous"
         self._update_view(action=action)
 
     def select_monitor(self, service, widget, monitor_name):
@@ -150,18 +154,13 @@ class Wallpaper:
                 self._view.update_monitor_image(widget, org_img_path)
                 shutil.copy(org_img_path, Path(SETTINGS.config_file).parent / name)
 
-    def clear_cache(self, service):
-        cache_manager = CacheManager()
-        cache_manager.clear_cache()
-        threading.Thread(target=self._cache, daemon=True).start()
-
     def _update_view(self, action: str):
         self._view.update_wallpaper_rows(
             service=self.service,
             action=action,
-            page_index=self.current_page,
+            page_index=self.pagination_service.current_page,
             wallpaper_rows=self.pagination_service.get_wallpaper_rows(
-                self.current_page - 1,
+                self.pagination_service.current_page - 1,
                 SETTINGS.layout.img_per_row,
                 SETTINGS.layout.row_per_page,
             ),
