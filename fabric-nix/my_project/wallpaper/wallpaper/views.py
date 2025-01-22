@@ -267,13 +267,6 @@ class Wallpaper(Window):
         outer_box = CenterBox(
             center_children=self.revealer,
         )
-        # outer_box = Box(
-        #     orientation="vertical",
-        #     children=[
-        #         Label(label="plop", h_align="start"),
-        #         CenterBox(center_children=self.revealer),
-        #     ]
-        # )
         if SETTINGS.layout.background_img:
             outer_box.add_style_class(STYLE_BACKGROUND_IMG)
         else:
