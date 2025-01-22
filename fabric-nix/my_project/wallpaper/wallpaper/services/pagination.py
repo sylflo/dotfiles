@@ -2,7 +2,7 @@ from wallpaper.models import SETTINGS
 from wallpaper.models import Wallpaper as WallpaperModel
 
 
-class PaginationService:
+class Pagination:
     def __init__(self):
         self.current_page = 1
         self.total_pages = 0

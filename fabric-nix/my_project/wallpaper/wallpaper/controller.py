@@ -9,9 +9,10 @@ from jinja2 import Environment, FileSystemLoader
 
 from wallpaper.cache import CacheManager
 from wallpaper.models import SETTINGS, Wallpaper as WallpaperModel
-from wallpaper.services import Pagination as WallpaperService
 from wallpaper.views import Wallpaper as WallpaperView
-from wallpaper.pagination_service import PaginationService
+from wallpaper.services.pagination import Pagination as PaginationService
+from wallpaper.services.events import Events as EventsService
+
 
 
 class Wallpaper:

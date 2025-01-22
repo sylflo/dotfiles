@@ -2,7 +2,7 @@ from fabric.core.service import Service, Signal
 from fabric.widgets.eventbox import EventBox
 
 
-class Pagination(Service):
+class Events(Service):
     @Signal
     def next_page(self) -> None:
         pass
