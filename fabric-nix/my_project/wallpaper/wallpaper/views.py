@@ -296,12 +296,12 @@ class Wallpaper(Window):
         )
         image_widget.set_from_pixbuf(pixbuf)
 
+    def update_cache_label(self, msg: str):
+        self.updating_cache_label.set_text(msg)
+
     def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
         self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
-
-    def update_cache_label(self, msg: str):
-        self.updating_cache_label.set_text(msg)
 
     def set_wallpaper_rows(self, service, wallpaper_rows, total_pages):
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
