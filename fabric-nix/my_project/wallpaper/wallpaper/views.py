@@ -29,6 +29,8 @@ STYLE_IMG = "img"
 STYLE_PAGINATION_BUTTON = "pagination-button"
 STYLE_WALLPAPER_ROW = "wallpaper-row"
 
+DEFAULT_IMAGE_PATH = "./images/default.png"
+
 
 class BaseRow(Box):
     def __init__(self, **kwargs):
@@ -71,7 +73,7 @@ class MonitorSection(BaseRow):
             if image.exists():
                 image_name = str(image)
             else:
-                image_name = "./images/default.png"
+                image_name = DEFAULT_IMAGE_PATH
             event_box = EventBox(
                 on_button_press_event=lambda widget, _, monitor_name=monitor: service.select_monitor(
                     widget, monitor_name
@@ -135,6 +137,8 @@ class WallpaperSection(ScrolledWindow):
         else:
             transition_type = SETTINGS.animation.prev_transition_type
             transition_duration = SETTINGS.animation.prev_transition_duration
+        # TODO put revealer in init
+        # TODO Modify children rows nore properly
         self.revealer = Revealer(
             transition_type=transition_type,
             transition_duration=transition_duration,
@@ -163,37 +167,25 @@ class WallpaperSection(ScrolledWindow):
 
 
 class PaginationSection(Box):
+
+    def _create_button(self, label: str, on_click):
+        return  Button(label=label, on_clicked=on_click).build().add_style_class(STYLE_PAGINATION_BUTTON).unwrap()
+
     def __init__(self, service, nb_pages: int, **kwargs):
         self.max_pages = nb_pages
 
+        prev_button = self._create_button("Previous", lambda widget: service.previous_page())
+        next_button = self._create_button("Next", lambda widget: service.next_page())
+        page_buttons = [
+            self._create_button(str(i), lambda widget, page=i: service.go_to_page(page))
+            for i in range(1, nb_pages + 1)
+        ]
+        children = [prev_button] + page_buttons + [next_button]
         super().__init__(
             name="pagination",
             orientation="horizontal",
             h_align="center",
-            children=[
-                Button(
-                    label="Previous", on_clicked=lambda widget: service.previous_page()
-                )
-                .build()
-                .add_style_class(STYLE_PAGINATION_BUTTON)
-                .unwrap()
-            ]
-            + [
-                Button(
-                    label=str(i),
-                    on_clicked=lambda widget, page=(i): service.go_to_page(page),
-                )
-                .build()
-                .add_style_class(STYLE_PAGINATION_BUTTON)
-                .unwrap()
-                for i in range(1, nb_pages + 1)
-            ]
-            + [
-                Button(label="Next", on_clicked=lambda widget: service.next_page())
-                .build()
-                .add_style_class(STYLE_PAGINATION_BUTTON)
-                .unwrap()
-            ],
+            children=children,
             **kwargs,
         )
         self.get_prev_button().add_style_class(STYLE_DISABLED)
@@ -287,6 +279,7 @@ class Wallpaper(Window):
         widget.add_style_class(STYLE_SELECTED_IMAGE)
 
     def update_monitor_image(self, monitor, image_name):
+        # TODO get monitor with a method
         image_widget = monitor.children[0].children[0].children[0]
         pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
             image_name,
