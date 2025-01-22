@@ -29,6 +29,7 @@ STYLE_IMG = "img"
 STYLE_PAGINATION_BUTTON = "pagination-button"
 STYLE_WALLPAPER_ROW = "wallpaper-row"
 STYLE_CLEAR_CACHE_BUTTON = "clear-cache-button"
+STYLE_PAGINATION = "pagination"
 
 DEFAULT_IMAGE_PATH = "./images/default.png"
 
@@ -306,7 +307,7 @@ class Wallpaper(Window):
 
         if SETTINGS.main.pagination:
             self.layout.center_children = self.wallpaper_section
-            self.pagination = PaginationSection(service, total_pages).build().add_style_class('pagination').unwrap()
+            self.pagination = PaginationSection(service, total_pages).build().add_style_class(STYLE_PAGINATION).unwrap()
             self.layout.end_children = self.pagination
             # self.layout.end_children = self.button_clear_cache
             # self.layout.add_end(self.pagination)
