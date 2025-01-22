@@ -20,6 +20,9 @@
 }
 
 /* Pagination container */
+.pagination {
+    margin-bottom: 5px;
+}
 
 /* General button styles */
 .pagination-button {
