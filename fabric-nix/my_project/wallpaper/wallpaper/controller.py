@@ -74,6 +74,7 @@ class Wallpaper:
         self.service.connect("clear-cache", self.clear_cache)
 
     def __init__(self):
+        self._initialize_cache_directory()
         self.model = WallpaperModel(SETTINGS.main.cache_folder / "images")
         self.pagination_service = PaginationService()
         self.service = EventsService()
