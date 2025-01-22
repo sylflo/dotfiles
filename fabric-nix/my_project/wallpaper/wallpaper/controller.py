@@ -19,9 +19,9 @@ class Wallpaper:
     def _cache(self):
         cache_manager = CacheManager()
         if cache_manager.should_clear_cache():
-            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
+            self._initialize_cache_directory()
             cache_manager.clear_cache()
-            os.makedirs(f"{SETTINGS.main.cache_folder}/images", exist_ok=True)
+            self._initialize_cache_directory()
             files_processed = 0
             for cached_files in cache_manager.cache_images():
                 files_processed = len(cached_files) + files_processed
@@ -71,6 +71,15 @@ class Wallpaper:
             wallpaper_rows,
             self.total_pages,
         )
+
+
+
+    def _initialize_cache_directory(self):
+        """Ensures the cache directory exists."""
+        cache_dir = SETTINGS.main.cache_folder / "images"
+        os.makedirs(cache_dir, exist_ok=True)
+        #logger.debug(f"Cache directory initialized: {cache_dir}")
+
 
     def clear_cache(self, service):
         cache_manager = CacheManager()
