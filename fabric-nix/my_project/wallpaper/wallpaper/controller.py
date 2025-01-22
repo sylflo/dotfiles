@@ -28,7 +28,7 @@ class Wallpaper:
                 self.cache_data = cache_manager = (
                     CacheManager().get_data_from_cache_file()
                 )
-                self.total_pages = self._get_total_pages(
+                self.total_pages = self.pagination_service._get_total_pages(
                     SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
                 )
                 # Update ui accordingly
@@ -51,7 +51,7 @@ class Wallpaper:
                 print(f"Cached {files_processed} files...")
             print("All files have been cached")
         self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()
-        self.total_pages = self._get_total_pages(
+        self.total_pages = self.pagination_service._get_total_pages(
             SETTINGS.layout.img_per_row, SETTINGS.layout.row_per_page
         )
         # Update ui accordingly
@@ -105,14 +105,6 @@ class Wallpaper:
         images = self.model.get_images()
         return [images[i : i + img_per_row] for i in range(0, len(images), img_per_row)]
 
-    def _get_total_pages(self, img_per_row: int, row_per_page: int):
-        images = self.model.get_images()
-
-        items_per_page = img_per_row * row_per_page
-        total_pages = (len(images) + (items_per_page - 1)) // items_per_page
-
-        return total_pages
-
     def _get_pagination_wallpaper_rows(
         self, page_index: int, img_per_row: int, row_per_page: int
     ):
@@ -134,7 +126,6 @@ class Wallpaper:
             self.current_page = self.pagination_service.next_page()
             self._update_view(action="next")
 
-
     def previous_page(self, service):
         if self.pagination_service.has_previous():
             self.current_page = self.pagination_service.previous_page()
@@ -144,7 +135,6 @@ class Wallpaper:
         self.current_page = self.pagination_service.go_to_page(page_index)
         action = "next" if page_index > self.current_page else "previous"
         self._update_view(action=action)
-
 
     def select_monitor(self, service, widget, monitor_name):
         if widget in self.selected_monitors:
