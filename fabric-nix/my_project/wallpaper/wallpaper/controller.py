@@ -16,6 +16,9 @@ from wallpaper.services.events import Events as EventsService
 
 
 class Wallpaper:
+    def _hide_cache_label(self):
+        self._view.update_cache_label("")
+
     def _cache(self):
         cache_manager = CacheManager()
         if cache_manager.should_clear_cache():
@@ -23,12 +26,15 @@ class Wallpaper:
             cache_manager.clear_cache()
             self._initialize_cache_directory()
             files_processed = 0
+            self._view.update_cache_label("Caching files...")
             for cached_files in cache_manager.cache_images():
                 files_processed = len(cached_files) + files_processed
+                self._view.update_cache_label(f"{files_processed} files have been processed")
                 self._update_cache_ui()
-                print(f"Cached {files_processed} files...")
-            print("All files have been cached")
-        self._update_cache_ui()
+            self._view.update_cache_label("All files have been cached")
+            GLib.timeout_add(3000, self._hide_cache_label)
+        else:
+            self._update_cache_ui()
 
     def _update_cache_ui(self):
         self.cache_data = cache_manager = CacheManager().get_data_from_cache_file()

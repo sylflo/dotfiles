@@ -242,8 +242,13 @@ class Wallpaper(Window):
         ).build().add_style_class(STYLE_CLEAR_CACHE_BUTTON).unwrap()
 
         self.pagination = None
-        self.monitor_section = MonitorSection(
-            service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
+        self.updating_cache_label = Label(label="")
+        self.monitor_section = Box(
+            orientation="vertical",
+            children=[
+                MonitorSection(
+                    service, SETTINGS.config_file, monitors, SETTINGS.layout.monitor_img_size
+                ), self.updating_cache_label]
         )
         self.layout = CenterBox(
             orientation="vertical",
@@ -292,6 +297,9 @@ class Wallpaper(Window):
     def update_wallpaper_rows(self, service, action, page_index, wallpaper_rows):
         self.wallpaper_section.update_wallpaper_rows(service, action, wallpaper_rows)
         self.pagination.reset_pagination(page_index)
+
+    def update_cache_label(self, msg: str):
+        self.updating_cache_label.set_text(msg)
 
     def set_wallpaper_rows(self, service, wallpaper_rows, total_pages):
         self.wallpaper_section = WallpaperSection(service, wallpaper_rows)
