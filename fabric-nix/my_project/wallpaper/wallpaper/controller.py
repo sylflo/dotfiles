@@ -110,17 +110,17 @@ class Wallpaper:
     def next_page(self, service):
         if self.pagination_service.has_next():
             self.pagination_service.next_page()
-            self._update_view(action="next")
+            self._update_pagination_view(action="next")
 
     def previous_page(self, service):
         if self.pagination_service.has_previous():
             self.pagination_service.previous_page()
-            self._update_view(action="next")
+            self._update_pagination_view(action="next")
 
     def go_to_page(self, service, page_index: int):
         self.pagination_service.go_to_page(page_index)
         action = "next" if page_index > self.pagination_service.current_page else "previous"
-        self._update_view(action=action)
+        self._update_pagination_view(action=action)
 
     def select_monitor(self, service, widget, monitor_name):
         if widget in self.selected_monitors:
@@ -153,7 +153,7 @@ class Wallpaper:
                 self._view.update_monitor_image(widget, org_img_path)
                 shutil.copy(org_img_path, Path(SETTINGS.config_file).parent / name)
 
-    def _update_view(self, action: str):
+    def _update_pagination_view(self, action: str):
         self._view.update_wallpaper_rows(
             service=self.service,
             action=action,
