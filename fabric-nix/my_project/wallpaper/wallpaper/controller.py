@@ -65,7 +65,6 @@ class Wallpaper:
             wallpaper_rows = self._get_scrolling_wallpaper_rows(
                 SETTINGS.layout.img_per_row
             )
-        #wallpaper_rows = []
         GLib.idle_add(
             self._view.set_wallpaper_rows,
             self.service,
