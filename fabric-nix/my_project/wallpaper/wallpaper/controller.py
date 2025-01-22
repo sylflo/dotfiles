@@ -33,7 +33,7 @@ class Wallpaper:
                 )
                 # Update ui accordingly
                 if SETTINGS.main.pagination:
-                    wallpaper_rows = self._get_pagination_wallpaper_rows(
+                    wallpaper_rows = self.pagination_service.get_wallpaper_rows(
                         self.pagination_service.current_page - 1,
                         SETTINGS.layout.img_per_row,
                         SETTINGS.layout.row_per_page,
@@ -56,7 +56,7 @@ class Wallpaper:
         )
         # Update ui accordingly
         if SETTINGS.main.pagination:
-            wallpaper_rows = self._get_pagination_wallpaper_rows(
+            wallpaper_rows = self.pagination_service.get_wallpaper_rows(
                 self.pagination_service.current_page - 1,
                 SETTINGS.layout.img_per_row,
                 SETTINGS.layout.row_per_page,
@@ -104,22 +104,6 @@ class Wallpaper:
     def _get_scrolling_wallpaper_rows(self, img_per_row: int):
         images = self.model.get_images()
         return [images[i : i + img_per_row] for i in range(0, len(images), img_per_row)]
-
-    def _get_pagination_wallpaper_rows(
-        self, page_index: int, img_per_row: int, row_per_page: int
-    ):
-        images = self.model.get_images()
-
-        items_per_page = img_per_row * row_per_page
-        start_index = page_index * items_per_page
-        end_index = start_index + items_per_page
-        page_images = images[start_index:end_index]
-
-        rows = [
-            page_images[i : i + img_per_row]
-            for i in range(0, len(page_images), img_per_row)
-        ]
-        return rows
 
     def next_page(self, service):
         if self.pagination_service.has_next():
@@ -177,7 +161,7 @@ class Wallpaper:
             service=self.service,
             action=action,
             page_index=self.current_page,
-            wallpaper_rows=self._get_pagination_wallpaper_rows(
+            wallpaper_rows=self.pagination_service.get_wallpaper_rows(
                 self.current_page - 1,
                 SETTINGS.layout.img_per_row,
                 SETTINGS.layout.row_per_page,
