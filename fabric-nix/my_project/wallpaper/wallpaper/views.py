@@ -139,12 +139,7 @@ class WallpaperSection(ScrolledWindow):
         else:
             transition_type = SETTINGS.animation.prev_transition_type
             transition_duration = SETTINGS.animation.prev_transition_duration
-        self.revealer = Revealer(
-            transition_type=transition_type,
-            transition_duration=transition_duration,
-            child=Box(
-                orientation="vertical",
-                children=[
+        self.wallpaper_rows = [
                     WallpaperRow(
                         service, SETTINGS.main.cache_folder / "images", images=row
                     )
@@ -152,7 +147,22 @@ class WallpaperSection(ScrolledWindow):
                     .add_style_class(STYLE_WALLPAPER_ROW)
                     .unwrap()
                     for row in wallpaper_rows
-                ],
+                ]
+        self.revealer = Revealer(
+            transition_type=transition_type,
+            transition_duration=transition_duration,
+            child=Box(
+                orientation="vertical",
+                children=self.wallpaper_rows,
+                # children=[
+                #     WallpaperRow(
+                #         service, SETTINGS.main.cache_folder / "images", images=row
+                #     )
+                #     .build()
+                #     .add_style_class(STYLE_WALLPAPER_ROW)
+                #     .unwrap()
+                #     for row in wallpaper_rows
+                # ],
             ),
         )
         self.connect("draw", self.on_draw)
