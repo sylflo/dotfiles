@@ -79,55 +79,24 @@ def on_activate(app):
 
     LayerShell.auto_exclusive_zone_enable(window)
 
-    # CSS
-    background_path = get_random_wallpaper("/home/sylflo/Pictures/Wallpapers-tests")
     css = Gtk.CssProvider()
-    css_string = f"""
+    css_path = os.path.join(os.path.dirname(__file__), "style.css")
+    css.load_from_path(css_path)
+    Gtk.StyleContext.add_provider_for_display(
+        Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+    )
+    background_path = get_random_wallpaper("/home/sylflo/Pictures/Wallpapers-tests")
+    background_css = Gtk.CssProvider()
+    background_css.load_from_data(f"""
     .background {{
-        background-image: url("file://{background_path}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
+    background-image: url("file://{background_path}");
     }}
-    .row-box {{
-        background-color: white;
-        border: 1px solid black;
-        border-radius: 8px;
-        margin: 10px;
-        padding: 20px;
-        min-height: 100px;
-    }}
-    .label {{
-        font-size: 22px;
-        color: black;
-        font-weight: bold;
-    }}
-    .right-label {{
-        font-size: 16px;
-        color: black;
-    }}
-    .icon-wrapper {{
-        min-width: 100px;
-        align-items: center;
-        justify-content: center;
-    }}
-    .scale {{
-        margin-left: auto;
-        min-width: 200px;
-    }}
-    switch {{
-        margin-left: auto;
-    }}
-    .material-icon {{
-        font-family: "Material Symbols Rounded";
-        font-size: 100px;
-        font-weight: normal;
-        letter-spacing: normal;
-        line-height: 1;
-    }}
-    """
-    css.load_from_data(css_string.encode("utf-8"))
-    Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+    """.encode("utf-8"))
+
+    Gtk.StyleContext.add_provider_for_display(
+        Gdk.Display.get_default(), background_css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION + 1
+    )
+
 
     # Load layout
     builder = Gtk.Builder()

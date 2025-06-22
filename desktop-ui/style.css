@@ -1,0 +1,49 @@
+.background {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  .row-box {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 20px;
+    min-height: 100px;
+  }
+  
+  .label {
+    font-size: 22px;
+    color: black;
+    font-weight: bold;
+  }
+  
+  .right-label {
+    font-size: 16px;
+    color: black;
+  }
+  
+  .icon-wrapper {
+    min-width: 100px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .scale {
+    margin-left: auto;
+    min-width: 200px;
+  }
+  
+  switch {
+    margin-left: auto;
+  }
+  
+  .material-icon {
+    font-family: "Material Symbols Rounded";
+    font-size: 100px;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1;
+  }
+  
