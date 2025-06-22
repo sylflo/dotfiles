@@ -159,7 +159,7 @@ def on_activate(app):
 
     def load_page(name):
         b = Gtk.Builder()
-        b.add_from_file(f"layouts/{name}.ui")
+        b.add_from_file(f"layouts/pages/{name}.ui")
         page = b.get_object(f"{name}_page")
         back = b.get_object(f"{name}_back")
         if page is None or back is None:
