@@ -106,19 +106,6 @@ def make_row(icon_label, label_text, extra_widget=None):
     outer_box.append(row)
     return outer_box
 
-def create_generic_page(name):
-    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=40)
-    box.set_halign(Gtk.Align.CENTER)
-    box.set_valign(Gtk.Align.CENTER)
-    box.set_opacity(0.0)
-    box.set_visible(False)
-    label = Gtk.Label(label=f"⚙️ {name} Settings Page")
-    label.set_css_classes(["label"])
-    back_button = Gtk.Button(label="‹ Back")
-    box.append(label)
-    box.append(back_button)
-    return box, back_button
-
 def on_activate(app):
     window = Gtk.Window(application=app)
     window.set_default_size(1920, 1080)
