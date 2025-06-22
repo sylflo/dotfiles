@@ -249,15 +249,21 @@ def on_activate(app):
     main_box.append(center_box)
     overlay.set_child(main_box)
 
-    # Pages
-    sound_page, sound_back = create_generic_page("Sound")
-    vpn_page, vpn_back = create_generic_page("VPN")
-    # bt_page, bt_back = create_generic_page("Bluetooth")
     builder = Gtk.Builder()
+    # Pages
+    builder.add_from_file("layouts/sound.ui")
+    sound_page = builder.get_object("sound_page")
+    sound_back = builder.get_object("sound_back")
+    builder.add_from_file("layouts/vpn.ui")
+    vpn_page = builder.get_object("vpn_page")
+    vpn_back = builder.get_object("vpn_back")
     builder.add_from_file("layouts/bluetooth.ui")
     bt_page = builder.get_object("bt_page")
     bt_back = builder.get_object("bt_back")
-    wifi_page, wifi_back = create_generic_page("WiFi")
+    builder.add_from_file("layouts/wifi.ui")
+    wifi_page = builder.get_object("wifi_page")
+    wifi_back = builder.get_object("wifi_back")
+
 
     for page in [sound_page, vpn_page, bt_page, wifi_page]:
         overlay.add_overlay(page)
