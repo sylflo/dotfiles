@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkBox" id="bt_page">
+  <object class="GtkBox" id="bluetooth_page">
     <property name="orientation">vertical</property>
     <property name="spacing">40</property>
     <property name="halign">center</property>
@@ -15,7 +15,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton" id="bt_back">
+      <object class="GtkButton" id="bluetooth_back">
         <property name="label">‹ Back</property>
       </object>
     </child>

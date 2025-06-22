@@ -3,7 +3,6 @@ import random
 import gi
 from ctypes import CDLL
 
-# Load layer shell
 CDLL("/nix/store/wx6b8hcxsw80pn6vjv8469kv3gbzyvzd-gtk4-layer-shell-1.0.4/lib/libgtk4-layer-shell.so")
 
 gi.require_version("Gtk", "4.0")
@@ -15,6 +14,9 @@ TRANSITION_DURATION_MS = 3000
 STEPS = TRANSITION_DURATION_MS // TRANSITION_INTERVAL_MS
 
 def animate_transition(from_widget, to_widget, container):
+    if not from_widget or not to_widget or not container:
+        return
+
     to_widget.set_opacity(0.0)
     to_widget.set_visible(True)
     to_widget.set_margin_start(100)
@@ -29,25 +31,20 @@ def animate_transition(from_widget, to_widget, container):
     to_widget.set_margin_start(to_translate)
 
     step = {"count": 0}
-
     def animate():
         t = step["count"] / STEPS
-
         from_opacity = max(0.0, 1.0 - t)
         from_widget.set_opacity(from_opacity)
-
         slide = int(to_translate * (1.0 - t))
         to_widget.set_margin_start(slide)
         to_opacity = min(1.0, t)
         to_widget.set_opacity(to_opacity)
-
         step["count"] += 1
         if step["count"] <= STEPS:
             return True
         from_widget.set_visible(False)
         to_widget.set_margin_start(0)
         return False
-
     GLib.timeout_add(TRANSITION_INTERVAL_MS, animate)
 
 def get_random_wallpaper(folder):
@@ -67,45 +64,6 @@ def on_key_press(controller, keyval, keycode, state):
         return True
     return False
 
-def make_row(icon_label, label_text, extra_widget=None):
-    outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-    outer_box.set_halign(Gtk.Align.CENTER)
-    outer_box.set_hexpand(True)
-    outer_box.set_vexpand(False)
-    outer_box.set_size_request(960, -1)
-    outer_box.set_css_classes(["row-box"])
-
-    row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
-    row.set_hexpand(True)
-    row.set_vexpand(True)
-
-    icon_wrapper = Gtk.Box()
-    icon_wrapper.set_valign(Gtk.Align.FILL)
-    icon_wrapper.set_hexpand(False)
-    icon_wrapper.set_vexpand(True)
-    icon_wrapper.set_css_classes(["icon-wrapper"])
-
-    icon_label.set_valign(Gtk.Align.CENTER)
-    icon_label.set_hexpand(False)
-    icon_label.set_vexpand(False)
-    icon_wrapper.append(icon_label)
-    row.append(icon_wrapper)
-
-    label = Gtk.Label(label=label_text)
-    label.set_halign(Gtk.Align.START)
-    label.set_valign(Gtk.Align.CENTER)
-    label.set_hexpand(True)
-    label.set_css_classes(["label"])
-    row.append(label)
-
-    if extra_widget:
-        extra_widget.set_halign(Gtk.Align.END)
-        extra_widget.set_valign(Gtk.Align.CENTER)
-        row.append(extra_widget)
-
-    outer_box.append(row)
-    return outer_box
-
 def on_activate(app):
     window = Gtk.Window(application=app)
     window.set_default_size(1920, 1080)
@@ -121,8 +79,8 @@ def on_activate(app):
 
     LayerShell.auto_exclusive_zone_enable(window)
 
+    # CSS
     background_path = get_random_wallpaper("/home/sylflo/Pictures/Wallpapers-tests")
-
     css = Gtk.CssProvider()
     css_string = f"""
     .background {{
@@ -171,110 +129,53 @@ def on_activate(app):
     css.load_from_data(css_string.encode("utf-8"))
     Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-    overlay = Gtk.Overlay()
-
-    main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-    main_box.set_css_classes(["background"])
-    main_box.set_margin_top(100)
-    main_box.set_margin_bottom(100)
-    main_box.set_hexpand(True)
-    main_box.set_vexpand(True)
-
-    center_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-    center_box.set_halign(Gtk.Align.CENTER)
-    center_box.set_valign(Gtk.Align.FILL)
-    center_box.set_vexpand(True)
-
-    # Brightness
-    brightness = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 1)
-    brightness.set_value(75)
-    brightness.set_hexpand(True)
-    brightness.set_css_classes(["scale"])
-
-    revealer = Gtk.Revealer()
-    revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN)
-    revealer.set_transition_duration(250)
-    revealer.set_reveal_child(False)
-    revealer.set_child(brightness)
-
-    brightness_icon = Gtk.Label(label="brightness_low")
-    brightness_icon.set_css_classes(["material-icon"])
-    brightness_row = make_row(brightness_icon, "Screen Brightness")
-    brightness_row.append(revealer)
-
-    click_controller = Gtk.GestureClick()
-    click_controller.connect("pressed", lambda *_: revealer.set_reveal_child(not revealer.get_reveal_child()))
-    brightness_row.add_controller(click_controller)
-
-    arrow = Gtk.Label(label="›")
-    arrow.set_css_classes(["right-label"])
-
-    vpn_status = Gtk.Label(label="Enabled")
-    vpn_status.set_css_classes(["right-label"])
-
-    bt_toggle = Gtk.Switch()
-    bt_toggle.set_active(True)
-
-    wifi_icon = Gtk.Label(label="wifi")
-    wifi_icon.set_css_classes(["material-icon"])
-    sound_icon = Gtk.Label(label="volume_up")
-    sound_icon.set_css_classes(["material-icon"])
-    vpn_icon = Gtk.Label(label="vpn_key")
-    vpn_icon.set_css_classes(["material-icon"])
-    bluetooth_icon = Gtk.Label(label="bluetooth")
-    bluetooth_icon.set_css_classes(["material-icon"])
-
-    sound_row = make_row(sound_icon, "Sound", arrow)
-    vpn_row = make_row(vpn_icon, "VPN", vpn_status)
-    bluetooth_row = make_row(bluetooth_icon, "Bluetooth", bt_toggle)
-    wifi_row = make_row(wifi_icon, "Wifi", bt_toggle)
-
-    for row in [brightness_row, sound_row, vpn_row, bluetooth_row, wifi_row]:
-        row.set_vexpand(False)
-        center_box.append(row)
-
-    main_box.append(center_box)
-    overlay.set_child(main_box)
-
+    # Load layout
     builder = Gtk.Builder()
+    builder.add_from_file("layouts/layout.ui")
+
+    overlay = builder.get_object("overlay")
+    main_box = builder.get_object("main_box")
+
+    if overlay is None or main_box is None:
+        raise Exception("layout.ui missing overlay or main_box")
+
+    def get(obj_id):
+        o = builder.get_object(obj_id)
+        if o is None:
+            raise Exception(f"Missing object: {obj_id}")
+        return o
+
+    brightness_revealer = get("brightness_revealer")
+    brightness_row = get("brightness_row")
+    sound_row = get("sound_row")
+    vpn_row = get("vpn_row")
+    bluetooth_row = get("bluetooth_row")
+    wifi_row = get("wifi_row")
+
+    def connect_row_click(row, target=None):
+        click = Gtk.GestureClick()
+        if isinstance(target, Gtk.Revealer):
+            click.connect("pressed", lambda *_: target.set_reveal_child(not target.get_reveal_child()))
+        elif target:
+            click.connect("pressed", lambda *_: animate_transition(main_box, target, overlay))
+        row.add_controller(click)
+
+    connect_row_click(brightness_row, brightness_revealer)
+
     # Pages
-    builder.add_from_file("layouts/sound.ui")
-    sound_page = builder.get_object("sound_page")
-    sound_back = builder.get_object("sound_back")
-    builder.add_from_file("layouts/vpn.ui")
-    vpn_page = builder.get_object("vpn_page")
-    vpn_back = builder.get_object("vpn_back")
-    builder.add_from_file("layouts/bluetooth.ui")
-    bt_page = builder.get_object("bt_page")
-    bt_back = builder.get_object("bt_back")
-    builder.add_from_file("layouts/wifi.ui")
-    wifi_page = builder.get_object("wifi_page")
-    wifi_back = builder.get_object("wifi_back")
-
-
-    for page in [sound_page, vpn_page, bt_page, wifi_page]:
+    def load_page(name):
+        b = Gtk.Builder()
+        b.add_from_file(f"layouts/{name}.ui")
+        page = b.get_object(f"{name}_page")
+        back = b.get_object(f"{name}_back")
+        if page is None or back is None:
+            raise Exception(f"Missing {name}.ui ids")
         overlay.add_overlay(page)
+        connect_row_click(get(f"{name}_row"), page)
+        back.connect("clicked", lambda *_: animate_transition(page, main_box, overlay))
 
-    sound_click = Gtk.GestureClick()
-    sound_click.connect("pressed", lambda *_: animate_transition(main_box, sound_page, overlay))
-    sound_row.add_controller(sound_click)
-
-    vpn_click = Gtk.GestureClick()
-    vpn_click.connect("pressed", lambda *_: animate_transition(main_box, vpn_page, overlay))
-    vpn_row.add_controller(vpn_click)
-
-    bt_click = Gtk.GestureClick()
-    bt_click.connect("pressed", lambda *_: animate_transition(main_box, bt_page, overlay))
-    bluetooth_row.add_controller(bt_click)
-
-    wifi_click = Gtk.GestureClick()
-    wifi_click.connect("pressed", lambda *_: animate_transition(main_box, wifi_page, overlay))
-    wifi_row.add_controller(wifi_click)
-
-    sound_back.connect("clicked", lambda *_: animate_transition(sound_page, main_box, overlay))
-    vpn_back.connect("clicked", lambda *_: animate_transition(vpn_page, main_box, overlay))
-    bt_back.connect("clicked", lambda *_: animate_transition(bt_page, main_box, overlay))
-    wifi_back.connect("clicked", lambda *_: animate_transition(wifi_page, main_box, overlay))
+    for name in ["sound", "vpn", "bluetooth", "wifi"]:
+        load_page(name)
 
     controller = Gtk.EventControllerKey()
     controller.connect("key-pressed", on_key_press)
