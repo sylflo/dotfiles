@@ -252,7 +252,11 @@ def on_activate(app):
     # Pages
     sound_page, sound_back = create_generic_page("Sound")
     vpn_page, vpn_back = create_generic_page("VPN")
-    bt_page, bt_back = create_generic_page("Bluetooth")
+    # bt_page, bt_back = create_generic_page("Bluetooth")
+    builder = Gtk.Builder()
+    builder.add_from_file("layouts/bluetooth.ui")
+    bt_page = builder.get_object("bt_page")
+    bt_back = builder.get_object("bt_back")
     wifi_page, wifi_back = create_generic_page("WiFi")
 
     for page in [sound_page, vpn_page, bt_page, wifi_page]:
