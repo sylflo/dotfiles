@@ -13,9 +13,26 @@ TRANSITION_INTERVAL_MS = 100
 TRANSITION_DURATION_MS = 3000
 STEPS = TRANSITION_DURATION_MS // TRANSITION_INTERVAL_MS
 
+
+def set_background_image(path):
+    css = Gtk.CssProvider()
+    css.load_from_data(f"""
+    .background {{
+        background-image: url("file://{path}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }}
+    """.encode("utf-8"))
+    Gtk.StyleContext.add_provider_for_display(
+        Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION + 1
+    )
+
+
 def animate_transition(from_widget, to_widget, container):
     if not from_widget or not to_widget or not container:
         return
+
 
     to_widget.set_opacity(0.0)
     to_widget.set_visible(True)
@@ -32,6 +49,7 @@ def animate_transition(from_widget, to_widget, container):
 
     step = {"count": 0}
     def animate():
+        background_path = get_random_wallpaper("/home/sylflo/Pictures/Wallpapers-tests")
         t = step["count"] / STEPS
         from_opacity = max(0.0, 1.0 - t)
         from_widget.set_opacity(from_opacity)
@@ -44,6 +62,7 @@ def animate_transition(from_widget, to_widget, container):
             return True
         from_widget.set_visible(False)
         to_widget.set_margin_start(0)
+        set_background_image(background_path)
         return False
     GLib.timeout_add(TRANSITION_INTERVAL_MS, animate)
 
@@ -86,17 +105,7 @@ def on_activate(app):
         Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
     )
     background_path = get_random_wallpaper("/home/sylflo/Pictures/Wallpapers-tests")
-    background_css = Gtk.CssProvider()
-    background_css.load_from_data(f"""
-    .background {{
-    background-image: url("file://{background_path}");
-    }}
-    """.encode("utf-8"))
-
-    Gtk.StyleContext.add_provider_for_display(
-        Gdk.Display.get_default(), background_css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION + 1
-    )
-
+    set_background_image(background_path)
 
     # Load layout
     builder = Gtk.Builder()
